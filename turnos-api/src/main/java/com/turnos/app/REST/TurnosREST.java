@@ -11,11 +11,37 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.turnos.app.DAO.MedicosDAO;
+import com.turnos.app.ENTITIES.Medico;
+
 @RestController
-@RequestMapping("/Turnos")
+@RequestMapping("/Medicos")
 public class TurnosREST {
+	
+	@Autowired
+	private MedicosDAO medicosDAO;
+	
 	@GetMapping
-	public String hello() {
-		return "Hola mundo";
+	public ResponseEntity<List<Medico>> getMedicos(){		
+		List<Medico> medicos = medicosDAO.findAll();
+		return ResponseEntity.ok(medicos);
 	}
+	
+	@RequestMapping(value="{medicoID}")
+	public ResponseEntity<Medico> getMedicoByID(@PathVariable("medicoID") Long id){		
+		Optional<Medico> optionalMedico = medicosDAO.findById(id);
+			if(optionalMedico.isPresent()) {
+				return ResponseEntity.ok(optionalMedico.get());
+			}
+			else {
+				return ResponseEntity.noContent().build();
+			}	
+	}
+	
+	@PostMapping
+	public ResponseEntity<Medico> createMedico(@RequestBody Medico medico){
+		Medico nuevoMedico = medicosDAO.save(medico);
+		return ResponseEntity.ok(nuevoMedico);
+	}
+	
 }
