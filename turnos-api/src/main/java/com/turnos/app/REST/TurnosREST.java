@@ -11,27 +11,27 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.turnos.app.DAO.MedicosDAO;
-import com.turnos.app.ENTITIES.Medico;
+import com.turnos.app.DAO.TurnosDAO;
+import com.turnos.app.ENTITIES.Turno;
 
 @RestController
-@RequestMapping("/Medicos")
+@RequestMapping("/Turnos")
 public class TurnosREST {
 	
 	@Autowired
-	private MedicosDAO medicosDAO;
+	private TurnosDAO turnoesDAO;
 	
 	@GetMapping
-	public ResponseEntity<List<Medico>> getMedicos(){		
-		List<Medico> medicos = medicosDAO.findAll();
-		return ResponseEntity.ok(medicos);
+	public ResponseEntity<List<Turno>> getTurnos(){		
+		List<Turno> turnoes = turnoesDAO.findAll();
+		return ResponseEntity.ok(turnoes);
 	}
 	
-	@RequestMapping(value="{medicoID}")
-	public ResponseEntity<Medico> getMedicoByID(@PathVariable("medicoID") Long id){		
-		Optional<Medico> optionalMedico = medicosDAO.findById(id);
-			if(optionalMedico.isPresent()) {
-				return ResponseEntity.ok(optionalMedico.get());
+	@RequestMapping(value="{turnoID}")
+	public ResponseEntity<Turno> getTurnoByID(@PathVariable("turnoID") Long id){		
+		Optional<Turno> optionalTurno = turnoesDAO.findById(id);
+			if(optionalTurno.isPresent()) {
+				return ResponseEntity.ok(optionalTurno.get());
 			}
 			else {
 				return ResponseEntity.noContent().build();
@@ -39,9 +39,8 @@ public class TurnosREST {
 	}
 	
 	@PostMapping
-	public ResponseEntity<Medico> createMedico(@RequestBody Medico medico){
-		Medico nuevoMedico = medicosDAO.save(medico);
-		return ResponseEntity.ok(nuevoMedico);
-	}
-	
+	public ResponseEntity<Turno> createTurno(@RequestBody Turno turno){
+		Turno nuevoTurno = turnoesDAO.save(turno);
+		return ResponseEntity.ok(nuevoTurno);
+	}	
 }

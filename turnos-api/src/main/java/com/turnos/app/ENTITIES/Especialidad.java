@@ -16,14 +16,6 @@ public class Especialidad {
 	@Column
 	private String Especialidad;
 	
-	@ManyToMany(fetch = FetchType.LAZY,
-            cascade = {
-                CascadeType.PERSIST,
-                CascadeType.MERGE
-            },
-            mappedBy = "especialidades")
-    private Set<Medico> medicos = new HashSet<>();
-
 	public Long getId() {
 		return id;
 	}
