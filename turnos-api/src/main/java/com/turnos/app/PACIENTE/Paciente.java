@@ -1,7 +1,8 @@
-package com.turnos.app.ENTITIES;
+package com.turnos.app.PACIENTE;
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+
 import com.turnos.app.VALIDACIONES.*;
 
 @Entity
@@ -15,7 +16,6 @@ public class Paciente {
 	
 	@Column(nullable=false, unique=true)
 	@NotEmpty(message = "Legajo: Campo requerido")
-	@LegajoUnico
 	private String legajo;
 	
 	@Column(nullable=false)
@@ -92,6 +92,11 @@ public class Paciente {
 
 	public void setFecha_de_nacimiento(java.sql.Date fecha_de_nacimiento) {
 		this.fecha_de_nacimiento = fecha_de_nacimiento;
-	}	
-	
+	}
+
+	@Override
+	public String toString() {
+		return "Paciente [id=" + id + ", legajo=" + legajo + ", nombre=" + nombre + ", apellido=" + apellido
+				+ ", documento=" + documento + ", sexo=" + sexo + ", fecha_de_nacimiento=" + fecha_de_nacimiento + "]";
+	}		
 }

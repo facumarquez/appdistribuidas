@@ -1,9 +1,11 @@
-package com.turnos.app.ENTITIES;
+package com.turnos.app.MEDICO;
 
 import java.util.Date;
 import java.util.Set;
 
 import javax.persistence.*;
+
+import com.turnos.app.ESPECIALIDAD.Especialidad;
 
 @Entity
 @Table(name="medicos")

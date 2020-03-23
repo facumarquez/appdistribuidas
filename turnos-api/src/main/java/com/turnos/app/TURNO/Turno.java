@@ -1,6 +1,9 @@
-package com.turnos.app.ENTITIES;
+package com.turnos.app.TURNO;
 
 import javax.persistence.*;
+
+import com.turnos.app.MEDICO.Medico;
+import com.turnos.app.PACIENTE.Paciente;
 
 
 @Entity

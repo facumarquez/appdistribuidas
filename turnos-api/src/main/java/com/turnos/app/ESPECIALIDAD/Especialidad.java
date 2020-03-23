@@ -1,4 +1,4 @@
-package com.turnos.app.ENTITIES;
+package com.turnos.app.ESPECIALIDAD;
 
 import java.util.HashSet;
 import java.util.Set;

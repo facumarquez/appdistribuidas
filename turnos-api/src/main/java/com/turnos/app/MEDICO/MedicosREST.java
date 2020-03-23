@@ -1,4 +1,4 @@
-package com.turnos.app.REST;
+package com.turnos.app.MEDICO;
 import java.util.List;
 import java.util.Optional;
 
@@ -10,9 +10,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import com.turnos.app.DAO.MedicosDAO;
-import com.turnos.app.ENTITIES.Medico;
 
 @RestController
 @RequestMapping("/Medicos")
@@ -42,6 +39,5 @@ public class MedicosREST {
 	public ResponseEntity<Medico> createMedico(@RequestBody Medico medico){
 		Medico nuevoMedico = medicosDAO.save(medico);
 		return ResponseEntity.ok(nuevoMedico);
-	}
-	
+	}	
 }

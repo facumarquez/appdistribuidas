@@ -1,4 +1,4 @@
-package com.turnos.app.REST;
+package com.turnos.app.ESPECIALIDAD;
 import java.util.List;
 import java.util.Optional;
 
@@ -10,9 +10,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import com.turnos.app.DAO.EspecialidadesDAO;
-import com.turnos.app.ENTITIES.Especialidad;
 
 @RestController
 @RequestMapping("/Especialidades")

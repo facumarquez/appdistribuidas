@@ -1,8 +1,6 @@
-package com.turnos.app.DAO;
+package com.turnos.app.MEDICO;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-
-import com.turnos.app.ENTITIES.Medico;
 
 public interface MedicosDAO extends JpaRepository<Medico, Long> {
 
