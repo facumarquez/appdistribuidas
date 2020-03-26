@@ -1,49 +1,46 @@
 package com.turnos.app.PACIENTE;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.validation.Valid;
 
 import java.util.List;
 import java.util.Optional;
 
-
 @Service
-@Transactional(readOnly = true)
+@Transactional(readOnly = false)
 public class PacientesServiceImpl implements PacientesService {
-	
-	@PersistenceContext
-    EntityManager entityManager;
 	
 	@Autowired
 	PacientesDAO pacientesDAO;
 	
-    //@SuppressWarnings("unchecked")
+    @Transactional(readOnly = true)
 	public List<Paciente> findByLegajo(String legajo) {
     	return pacientesDAO.findByLegajo(legajo);
     }    
 
-	public Paciente save(@Valid Paciente paciente) {
-		return pacientesDAO.save(paciente);
+	public Paciente save(Paciente paciente) {
+			return pacientesDAO.save(paciente);
 	}
-
+	
+	@Transactional(readOnly = true)
 	public Paciente findOneByLegajo(String value) {
-		// TODO Auto-generated method stub
-		return null;
-		//return pacientesDAO.findOneByLegajo(value);
+		return pacientesDAO.findOneByLegajo(value);
 	}
-
+	
+	@Transactional(readOnly = true)
 	public List<Paciente> findAll() {
-		// TODO Auto-generated method stub
 		return pacientesDAO.findAll();
 	}
 
+	@Transactional(readOnly = true)
 	public Optional<Paciente> findById(Long id) {
-		// TODO Auto-generated method stub
 		return pacientesDAO.findById(id);
+	}
+	
+	public ResponseEntity<Void> deleteByID(Long pacienteID) {
+		pacientesDAO.deleteById(pacienteID);
+		return ResponseEntity.ok(null);
 	}
 }

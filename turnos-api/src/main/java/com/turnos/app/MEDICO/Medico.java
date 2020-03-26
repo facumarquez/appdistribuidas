@@ -1,6 +1,5 @@
 package com.turnos.app.MEDICO;
 
-import java.util.Date;
 import java.util.Set;
 
 import javax.persistence.*;
@@ -85,10 +84,6 @@ public class Medico {
 
 	public void setEspecialidades(Set<Especialidad> especialidades) {
 		this.especialidades = especialidades;
-	}	
-	
+	}		
 	
 }
-
-
-
