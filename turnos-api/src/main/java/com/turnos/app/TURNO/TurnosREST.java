@@ -4,6 +4,7 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -16,17 +17,19 @@ import org.springframework.web.bind.annotation.RestController;
 public class TurnosREST {
 	
 	@Autowired
-	private TurnosDAO turnoesDAO;
+	private TurnosServiceImpl turnosService;
 	
+	// GET: http://localhost:1317/Turnos
 	@GetMapping
 	public ResponseEntity<List<Turno>> getTurnos(){		
-		List<Turno> turnoes = turnoesDAO.findAll();
-		return ResponseEntity.ok(turnoes);
+		List<Turno> turnos = turnosService.findAll();
+		return ResponseEntity.ok(turnos);
 	}
 	
+	// GET: http://localhost:1317/Turnos/1
 	@RequestMapping(value="{turnoID}")
 	public ResponseEntity<Turno> getTurnoByID(@PathVariable("turnoID") Long id){		
-		Optional<Turno> optionalTurno = turnoesDAO.findById(id);
+		Optional<Turno> optionalTurno = turnosService.findById(id);
 			if(optionalTurno.isPresent()) {
 				return ResponseEntity.ok(optionalTurno.get());
 			}
@@ -35,9 +38,18 @@ public class TurnosREST {
 			}	
 	}
 	
+	// POST: http://localhost:1317/Turnos
 	@PostMapping
 	public ResponseEntity<Turno> createTurno(@RequestBody Turno turno){
-		Turno nuevoTurno = turnoesDAO.save(turno);
+		Turno nuevoTurno = turnosService.save(turno);
 		return ResponseEntity.ok(nuevoTurno);
 	}	
+	
+	// DELETE: http://localhost:1317/Turnos/1
+	@DeleteMapping(value="/{turnoID}")
+	//http://localhost:1317/Turnos/2
+	public ResponseEntity<Void> deleteTurno(@PathVariable("turnoID") Long id){
+		turnosService.deleteByID(id);
+		return ResponseEntity.ok(null);
+	}
 }

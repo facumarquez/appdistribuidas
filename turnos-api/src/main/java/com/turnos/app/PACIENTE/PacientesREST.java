@@ -43,7 +43,7 @@ public class PacientesREST {
 		return ResponseEntity.ok(nuevoPaciente);
 	}
 	
-	// DELETE: http://localhost:1317/Pacientes
+	// DELETE: http://localhost:1317/Pacientes/1
 	@DeleteMapping(value="/{pacienteID}")
 	//http://localhost:1317/Pacientes/2
 	public ResponseEntity<Void> deletePaciente(@PathVariable("pacienteID") Long id){

@@ -4,6 +4,7 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -43,5 +44,13 @@ public class EspecialidadesREST {
 		Especialidad nuevaEspecialidad = especialidadesDAO.save(especialidad);
 		return ResponseEntity.ok(nuevaEspecialidad);
 	}
+	
+	// DELETE: http://localhost:1317/Especialidad/1
+		@DeleteMapping(value="/{especialidadID}")
+		//http://localhost:1317/Medicos/2
+		public ResponseEntity<Void> deleteMedico(@PathVariable("especialidadID") Long id){
+			especialidadesDAO.deleteById(id);
+			return ResponseEntity.ok(null);
+		}
 	
 }
