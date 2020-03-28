@@ -20,7 +20,7 @@ public class HorariosREST {
 	private HorariosDAO horariosDAO;
 	
 	@GetMapping
-	public ResponseEntity<List<Horario>> getEspecialidades(){		
+	public ResponseEntity<List<Horario>> getHorarios(){		
 		List<Horario> horarios = horariosDAO.findAll();
 		return ResponseEntity.ok(horarios);
 	}
