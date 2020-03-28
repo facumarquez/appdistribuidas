@@ -4,7 +4,7 @@ import javax.persistence.*;
 
 @Entity
 @Table(name="Horarios")
-public class Horarios {
+public class Horario {
 
 	@Id
 	@Column(name="idHorario")
