@@ -1,75 +1,41 @@
 package com.turnos.app.PACIENTE;
+import java.util.Set;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
+import com.turnos.app.AGENDAMEDICO.AgendaMedico;
+import com.turnos.app.PAGOSPACIENTE.PagoPaciente;
+import com.turnos.app.USUARIO.Usuario;
 import com.turnos.app.VALIDACIONES.*;
 
 @Entity
 @Table(name="pacientes")
-public class Paciente {
+@PrimaryKeyJoinColumn(name="idUsuario")
+public class Paciente extends Usuario {
 
-	@Id
-	@Column(name="id")
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
-	
-	@Column(nullable=false, unique=true)
-	@NotEmpty(message = "Legajo: Campo requerido")
-	private String legajo;
-	
-	@Column(nullable=false)
-	@NotEmpty(message = "Nombre: Campo requerido")
-	private String nombre;
-	
-	@Column(nullable=false)
-	@NotEmpty(message = "Apellido: Campo requerido")
-	private String apellido;
-	
-	@Column(nullable=false, unique=true )
+	private static final long serialVersionUID = 5048310680793495937L;
+
+	@Column(name="dni", nullable=false, unique=true )
 	@NotEmpty(message = "Documento: Campo requerido")
 	private String documento;
 	
-	@Column(nullable=false)
-	@NotEmpty(message = "Sexo: Campo requerido")
-	private String sexo;
+	//TODO
+	/*
+	@OneToMany(cascade = CascadeType.ALL,
+            fetch = FetchType.LAZY,
+            mappedBy = "pacientes")
+
+	private Set<AgendaPaciente> agendas;
+	*/
+
+	@OneToMany(cascade = CascadeType.ALL,
+            fetch = FetchType.LAZY,
+            mappedBy = "pacientes")
+
+	private Set<PagoPaciente> pagos;
 	
-	@Column(nullable=false)
-	@NotNull(message = "Fecha de nacimiento: Campo requerido")
-	private java.sql.Date fecha_de_nacimiento;
-
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
-
-	public String getLegajo() {
-		return legajo;
-	}
-	
-	public void setLegajo(String legajo) {
-		this.legajo = legajo;
-	}
-
-	public String getNombre() {
-		return nombre;
-	}
-
-	public void setNombre(String nombre) {
-		this.nombre = nombre;
-	}
-
-	public String getApellido() {
-		return apellido;
-	}
-
-	public void setApellido(String apellido) {
-		this.apellido = apellido;
-	}
-
 	public String getDocumento() {
 		return documento;
 	}
@@ -78,25 +44,19 @@ public class Paciente {
 		this.documento = documento;
 	}
 
-	public String getSexo() {
-		return sexo;
+	public Set<PagoPaciente> getPagos() {
+		return pagos;
 	}
 
-	public void setSexo(String sexo) {
-		this.sexo = sexo;
+	public void setPagos(Set<PagoPaciente> pagos) {
+		this.pagos = pagos;
 	}
 
-	public java.sql.Date getFecha_de_nacimiento() {
-		return fecha_de_nacimiento;
-	}
-
-	public void setFecha_de_nacimiento(java.sql.Date fecha_de_nacimiento) {
-		this.fecha_de_nacimiento = fecha_de_nacimiento;
-	}
-
+	/*
 	@Override
 	public String toString() {
 		return "Paciente [id=" + id + ", legajo=" + legajo + ", nombre=" + nombre + ", apellido=" + apellido
 				+ ", documento=" + documento + ", sexo=" + sexo + ", fecha_de_nacimiento=" + fecha_de_nacimiento + "]";
 	}		
+	*/
 }

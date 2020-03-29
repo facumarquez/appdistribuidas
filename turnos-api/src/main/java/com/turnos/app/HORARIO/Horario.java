@@ -1,4 +1,4 @@
-package com.turnos.app.HORARIOS;
+package com.turnos.app.HORARIO;
 import javax.persistence.*;
 
 
@@ -12,10 +12,10 @@ public class Horario {
 	private Long id;
 	
 	@Column
-	private String HorarioDesde;
+	private String horarioDesde;
 	
 	@Column
-	private String HorarioHasta;
+	private String horarioHasta;
 	
 	
 	public Long getId() {
@@ -25,20 +25,22 @@ public class Horario {
 	public void setId(Long id) {
 		this.id = id;
 	}
-	
+
 	public String getHorarioDesde() {
-		return HorarioDesde;
+		return horarioDesde;
 	}
 
 	public void setHorarioDesde(String horarioDesde) {
-		HorarioDesde = horarioDesde;
+		this.horarioDesde = horarioDesde;
 	}
 
 	public String getHorarioHasta() {
-		return HorarioHasta;
+		return horarioHasta;
 	}
 
 	public void setHorarioHasta(String horarioHasta) {
-		HorarioHasta = horarioHasta;
+		this.horarioHasta = horarioHasta;
 	}
+	
+
 }

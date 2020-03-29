@@ -7,12 +7,12 @@ import javax.persistence.*;
 public class Especialidad {
 	
 	@Id
-	@Column(name="id")
+	@Column(name="idEspecialidad")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
 	@Column
-	private String Especialidad;
+	private String especialidad;
 	
 	public Long getId() {
 		return id;
@@ -23,12 +23,14 @@ public class Especialidad {
 	}
 
 	public String getEspecialidad() {
-		return Especialidad;
+		return especialidad;
 	}
 
 	public void setEspecialidad(String especialidad) {
-		Especialidad = especialidad;
+		this.especialidad = especialidad;
 	}
+
+	
 
 }
 
