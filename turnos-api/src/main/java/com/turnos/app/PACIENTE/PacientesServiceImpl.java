@@ -16,17 +16,17 @@ public class PacientesServiceImpl implements PacientesService {
 	PacientesDAO pacientesDAO;
 	
     @Transactional(readOnly = true)
-	public List<Paciente> findByLegajo(String legajo) {
-    	return pacientesDAO.findByLegajo(legajo);
+	public List<Paciente> findByDocumento(String dni) {
+    	return pacientesDAO.findByDocumento(dni);
     }    
-
+    
 	public Paciente save(Paciente paciente) {
 			return pacientesDAO.save(paciente);
 	}
 	
 	@Transactional(readOnly = true)
-	public Paciente findOneByLegajo(String value) {
-		return pacientesDAO.findOneByLegajo(value);
+	public Paciente findOneByDocumento(String value) {
+		return pacientesDAO.findOneByDocumento(value);
 	}
 	
 	@Transactional(readOnly = true)

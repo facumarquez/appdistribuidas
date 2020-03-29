@@ -7,8 +7,8 @@ public interface PacientesService {
 	
 	public Paciente save(Paciente paciente);
 	
-	public List<Paciente> findByLegajo(String legajo);
+	public List<Paciente> findByDocumento(String dni);
 	
-	public Paciente findOneByLegajo(String legajo);
+	public Paciente findOneByDocumento(String dni);
 	
 }

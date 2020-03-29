@@ -28,8 +28,8 @@ public class AgendaMedico {
 
 
 	@OneToMany(cascade = CascadeType.ALL,
-	            fetch = FetchType.LAZY,
-	            mappedBy = "AgendaMedicos")
+	            fetch = FetchType.LAZY)//,
+	            //mappedBy = "AgendaMedicos")
 
 	private Set<AgendaMedicoFecha> fechasAgenda;
 	

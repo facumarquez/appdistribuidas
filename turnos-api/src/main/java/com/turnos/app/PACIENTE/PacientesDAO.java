@@ -6,8 +6,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface PacientesDAO extends JpaRepository<Paciente, Long>  {
 
-		List<Paciente> findByLegajo(String legajo);
+		List<Paciente> findByDocumento(String documento);
 
-		Paciente findOneByLegajo(String legajo);
+		Paciente findOneByDocumento(String documento);
 		
 }

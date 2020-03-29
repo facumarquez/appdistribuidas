@@ -17,7 +17,7 @@ public class Medico extends Usuario {
 	private static final long serialVersionUID = -1478467835353334404L;
 
 	@Column(nullable=false)
-	private String matricula;
+	private String legajo;
 	
 	
 	@ManyToMany(fetch = FetchType.LAZY,
@@ -32,19 +32,12 @@ public class Medico extends Usuario {
 	private Set<Especialidad> especialidades;
 
 	@OneToMany(cascade = CascadeType.ALL,
-            fetch = FetchType.LAZY,
-            mappedBy = "medicos")
+            fetch = FetchType.LAZY)//,
+            //mappedBy = "medicos")
 
 	private Set<AgendaMedico> agendas;
 	
 	
-	public String getMatricula() {
-		return matricula;
-	}
-
-	public void setMatricula(String matricula) {
-		this.matricula = matricula;
-	}
 
 	public Set<Especialidad> getEspecialidades() {
 		return especialidades;
@@ -60,6 +53,14 @@ public class Medico extends Usuario {
 
 	public void setAgendas(Set<AgendaMedico> agendas) {
 		this.agendas = agendas;
+	}
+
+	public String getLegajo() {
+		return legajo;
+	}
+
+	public void setLegajo(String legajo) {
+		this.legajo = legajo;
 	}		
 	
 	

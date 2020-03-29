@@ -31,8 +31,8 @@ public class Paciente extends Usuario {
 	*/
 
 	@OneToMany(cascade = CascadeType.ALL,
-            fetch = FetchType.LAZY,
-            mappedBy = "pacientes")
+            fetch = FetchType.LAZY)//,
+            //mappedBy = "pacientes")
 
 	private Set<PagoPaciente> pagos;
 	

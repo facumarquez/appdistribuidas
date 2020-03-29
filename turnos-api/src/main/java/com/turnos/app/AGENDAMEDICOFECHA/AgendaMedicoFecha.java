@@ -31,8 +31,8 @@ public class AgendaMedicoFecha {
 	private Especialidad especialidad;
 
 	@OneToMany(cascade = CascadeType.ALL,
-            fetch = FetchType.LAZY,
-            mappedBy = "AgendaMedico_Fechas")
+            fetch = FetchType.LAZY)//,
+            //mappedBy = "AgendaMedico_Fecha")
 
 	private Set<AgendaMedicoHorarios> horariosAgenda;
 	
