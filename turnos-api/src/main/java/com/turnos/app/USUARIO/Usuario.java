@@ -19,6 +19,7 @@ import javax.validation.constraints.NotNull;
 @Inheritance(strategy = InheritanceType.JOINED)
 public class Usuario implements Serializable  {
 	
+	
 	private static final long serialVersionUID = -3359031128100969764L;
 
 	@Id
