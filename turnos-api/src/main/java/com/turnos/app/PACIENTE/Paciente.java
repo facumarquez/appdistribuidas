@@ -1,40 +1,23 @@
 package com.turnos.app.PACIENTE;
-import java.util.Set;
-
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.PrimaryKeyJoinColumn;
+import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
 
-import com.turnos.app.AGENDAMEDICO.AgendaMedico;
-import com.turnos.app.PAGOSPACIENTE.PagoPaciente;
 import com.turnos.app.USUARIO.Usuario;
-import com.turnos.app.VALIDACIONES.*;
 
 @Entity
 @Table(name="pacientes")
-@PrimaryKeyJoinColumn(name="idUsuario")
+@PrimaryKeyJoinColumn(name="id_usuario")
 public class Paciente extends Usuario {
 
 	private static final long serialVersionUID = 5048310680793495937L;
 
-	@Column(name="dni", nullable=false, unique=true )
+	@Column(name="documento", nullable=false, length=10, unique=true )
 	@NotEmpty(message = "Documento: Campo requerido")
 	private String documento;
 	
-	//TODO
-	/*
-	@OneToMany(cascade = CascadeType.ALL,
-            fetch = FetchType.LAZY,
-            mappedBy = "pacientes")
-
-	private Set<AgendaPaciente> agendas;
-	*/
-
-	@OneToMany(cascade = CascadeType.ALL,
-            fetch = FetchType.LAZY)//,
-            //mappedBy = "pacientes")
-
-	private Set<PagoPaciente> pagos;
 	
 	public String getDocumento() {
 		return documento;
@@ -43,15 +26,7 @@ public class Paciente extends Usuario {
 	public void setDocumento(String documento) {
 		this.documento = documento;
 	}
-
-	public Set<PagoPaciente> getPagos() {
-		return pagos;
-	}
-
-	public void setPagos(Set<PagoPaciente> pagos) {
-		this.pagos = pagos;
-	}
-
+	
 	/*
 	@Override
 	public String toString() {

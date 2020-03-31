@@ -12,22 +12,22 @@ import javax.persistence.Table;
 import com.turnos.app.PACIENTE.Paciente;
 
 @Entity
-@Table(name="PagosPacientes")
+@Table(name="pagos_pacientes")
 public class PagoPaciente {
 	
 	@Id
-	@Column(name="idPagoPaciente")
+	@Column(name="id_pago_paciente")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
 	@ManyToOne
-	@JoinColumn(name="idUsuario")
+	@JoinColumn(name="id_usuario",nullable=false)
 	private Paciente paciente;
 	
-	@Column
+	@Column(nullable=false)
 	private int mes;
 	
-	@Column
+	@Column(nullable=false)
 	private int anio;
 
 	public Long getId() {

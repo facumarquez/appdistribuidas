@@ -3,18 +3,18 @@ import javax.persistence.*;
 
 
 @Entity
-@Table(name="Horarios")
+@Table(name="horarios")
 public class Horario {
 
 	@Id
-	@Column(name="idHorario")
+	@Column(name="id_horario")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
-	@Column
+	@Column(nullable=false,length=10)
 	private String horarioDesde;
 	
-	@Column
+	@Column(nullable=false,length=10)
 	private String horarioHasta;
 	
 	

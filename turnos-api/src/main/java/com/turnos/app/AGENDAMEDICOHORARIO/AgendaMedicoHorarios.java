@@ -12,23 +12,23 @@ import com.turnos.app.AGENDAMEDICOFECHA.AgendaMedicoFecha;
 
 
 @Entity
-@Table(name="AgendaMedico_Horarios")
+@Table(name="agenda_medico_horarios")
 
 public class AgendaMedicoHorarios {
 	@Id
-	@Column(name="id_AgendaMedico_horario")
+	@Column(name="id_agenda_medico_horario")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
-	@Column
+	@Column(nullable=false,length=8)
 	private String horaDesde;
 	
-	@Column
+	@Column(nullable=false,length=8)
 	private String horaHasta;
 	
 	
 	@ManyToOne
-	@JoinColumn(name="idAgendaMedico_Fecha")
+	@JoinColumn(name="id_agenda_medico_fecha",nullable=false)
 	private AgendaMedicoFecha agendaMedicoFecha;
 
 
@@ -70,9 +70,4 @@ public class AgendaMedicoHorarios {
 	public void setAgendaMedicoFecha(AgendaMedicoFecha agendaMedicoFecha) {
 		this.agendaMedicoFecha = agendaMedicoFecha;
 	}
-
-
-
-	
-	
 }

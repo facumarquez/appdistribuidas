@@ -11,12 +11,12 @@ import com.turnos.app.USUARIO.Usuario;
 
 @Entity
 @Table(name="medicos")
-@PrimaryKeyJoinColumn(name="idUsuario")
+@PrimaryKeyJoinColumn(name="id_usuario")
 public class Medico extends Usuario {
 	
 	private static final long serialVersionUID = -1478467835353334404L;
 
-	@Column(nullable=false)
+	@Column(nullable=false, length=10)
 	private String legajo;
 	
 	
@@ -25,20 +25,13 @@ public class Medico extends Usuario {
 	                CascadeType.PERSIST,
 	                CascadeType.MERGE
 	            })
-	    @JoinTable(name = "Medicos_Especialidades",
+	    @JoinTable(name = "medicos_especialidades",
 	            joinColumns = { @JoinColumn(name = "id_usuario") },
 	            inverseJoinColumns = { @JoinColumn(name = "id_especialidad") })
 	
 	private Set<Especialidad> especialidades;
 
-	@OneToMany(cascade = CascadeType.ALL,
-            fetch = FetchType.LAZY)//,
-            //mappedBy = "medicos")
-
-	private Set<AgendaMedico> agendas;
 	
-	
-
 	public Set<Especialidad> getEspecialidades() {
 		return especialidades;
 	}
@@ -47,21 +40,11 @@ public class Medico extends Usuario {
 		this.especialidades = especialidades;
 	}
 
-	public Set<AgendaMedico> getAgendas() {
-		return agendas;
-	}
-
-	public void setAgendas(Set<AgendaMedico> agendas) {
-		this.agendas = agendas;
-	}
-
 	public String getLegajo() {
 		return legajo;
 	}
 
 	public void setLegajo(String legajo) {
 		this.legajo = legajo;
-	}		
-	
-	
+	}
 }

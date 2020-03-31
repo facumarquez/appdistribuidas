@@ -1,7 +1,6 @@
 package com.turnos.app.USUARIO;
 
 import java.io.Serializable;
-import java.sql.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -15,7 +14,7 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
 @Entity
-@Table(name="Usuarios")
+@Table(name="usuarios")
 @Inheritance(strategy = InheritanceType.JOINED)
 public class Usuario implements Serializable  {
 	
@@ -23,40 +22,38 @@ public class Usuario implements Serializable  {
 	private static final long serialVersionUID = -3359031128100969764L;
 
 	@Id
-	@Column(name="idUsuario")
+	@Column(name="id_usuario")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long idUsuario;
 	
-	@Column(nullable=false)
+	@Column(nullable=false,length=15)
 	private String nombre;
 	
-	@Column(nullable=false)
+	@Column(nullable=false,length=15)
 	private String apellido;
 	
-	@Column(nullable=false)
+	@Column(nullable=false, length=10)
 	private String usuario;
 	
-	@Column(nullable=false)
+	@Column(nullable=false, length=20)
 	private String password;
 	
-	@Column(nullable=false)
+	@Column(nullable=false, length=20)
 	private String mail;
 	
-	@Column(nullable=false)
+	@Column(nullable=false, length=1)
 	@NotEmpty(message = "Sexo: Campo requerido")
 	private String sexo;
 	
-	@Column(nullable=false)
+	@Column(nullable=false, length=8)
 	@NotNull(message = "Fecha de nacimiento: Campo requerido")
-	private java.sql.Date fecha_de_nacimiento;
+	private String fecha_nacimiento;
 	
-	
-
-	public Long getId() {
+	public Long getIdUsuario() {
 		return idUsuario;
 	}
 
-	public void setId(Long idUsuario) {
+	public void setIdUsuario(Long idUsuario) {
 		this.idUsuario = idUsuario;
 	}
 
@@ -109,25 +106,26 @@ public class Usuario implements Serializable  {
 		this.sexo = sexo;
 	}
 
-	public java.sql.Date getFecha_de_nacimiento() {
-		return fecha_de_nacimiento;
+	
+
+	public String getFecha_nacimiento() {
+		return fecha_nacimiento;
 	}
 
-	public void setFecha_de_nacimiento(java.sql.Date fecha_de_nacimiento) {
-		this.fecha_de_nacimiento = fecha_de_nacimiento;
+	public void setFecha_nacimiento(String fecha_nacimiento) {
+		this.fecha_nacimiento = fecha_nacimiento;
 	}
-	
-	
+
 	public Usuario() {
     }
 	
-    public Usuario(String nombre,String apellido, String usuario, String pass, String mail,String sexo, Date fechaNac) {
+    public Usuario(String nombre,String apellido, String usuario, String pass, String mail,String sexo, String fechaNac) {
         this.nombre = nombre;
         this.apellido = apellido;
         this.usuario = usuario;
         this.password = pass;
         this.mail = mail;
         this.sexo = sexo;
-        this.fecha_de_nacimiento= fechaNac;
+        this.fecha_nacimiento= fechaNac;
     }
 }

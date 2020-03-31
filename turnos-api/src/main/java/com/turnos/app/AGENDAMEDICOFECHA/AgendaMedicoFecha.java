@@ -1,41 +1,39 @@
 package com.turnos.app.AGENDAMEDICOFECHA;
-import java.util.Set;
-
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 
 import com.turnos.app.AGENDAMEDICO.AgendaMedico;
-import com.turnos.app.AGENDAMEDICOHORARIO.AgendaMedicoHorarios;
 import com.turnos.app.ESPECIALIDAD.Especialidad;
 
 
 @Entity
-@Table(name="AgendaMedico_Fechas")
+@Table(name="agenda_medico_fechas")
 
 public class AgendaMedicoFecha {
 	@Id
-	@Column(name="idAgendaMedico_Fecha")
+	@Column(name="id_agendamedico_fecha")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
-	@Column
+	
+	@Column(nullable=false,length=8)
 	private String fecha;
 	
 	
 	@ManyToOne
-	@JoinColumn(name="idAgendaMedico")
+	@JoinColumn(name="id_agenda_medico",nullable=false)
 	private AgendaMedico agendaMedico;
 	
 	
 	@ManyToOne
-	@JoinColumn(name="idEspecialidad")
+	@JoinColumn(name="id_especialidad",nullable=false)
 	private Especialidad especialidad;
-
-	@OneToMany(cascade = CascadeType.ALL,
-            fetch = FetchType.LAZY)//,
-            //mappedBy = "AgendaMedico_Fecha")
-
-	private Set<AgendaMedicoHorarios> horariosAgenda;
-	
 
 	public Long getId() {
 		return id;
@@ -73,14 +71,5 @@ public class AgendaMedicoFecha {
 
 	public void setAgendaMedico(AgendaMedico agendaMedico) {
 		this.agendaMedico = agendaMedico;
-	}
-	
-	public Set<AgendaMedicoHorarios> getHorarios() {
-		return horariosAgenda;
-	}
-
-
-	public void setHorarios(Set<AgendaMedicoHorarios> horarios) {
-		this.horariosAgenda = horarios;
 	}
 }
