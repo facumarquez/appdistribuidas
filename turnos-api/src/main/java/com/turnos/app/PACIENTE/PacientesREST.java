@@ -1,6 +1,7 @@
 package com.turnos.app.PACIENTE;
 import java.util.List;
 import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -24,12 +25,25 @@ public class PacientesREST {
 		List<Paciente> pacientes = pacientesService.findAll();
 		return ResponseEntity.ok(pacientes);
 	}
+
  	// GET: http://localhost:1317/Pacientes/1
  	@RequestMapping(value="/{pacienteID}")
 	public ResponseEntity<Paciente> getPacienteByID(@PathVariable("pacienteID") Long id){		
 		Optional<Paciente> optionalPaciente = pacientesService.findById(id);
 		if(optionalPaciente.isPresent()) {
 			return ResponseEntity.ok(optionalPaciente.get());
+		}
+		else {
+			return ResponseEntity.noContent().build();
+		}	
+	}
+ 	
+	// GET: http://localhost:1317/Pacientes/doc/1
+ 	@RequestMapping(value="/doc/{documento}")
+	public ResponseEntity<Paciente> getPacienteByDocumento(@PathVariable("documento") String dni){		
+ 		Optional<Paciente> paciente = pacientesService.findByDocumento(dni);
+ 		if(paciente.isPresent()) {
+			return ResponseEntity.ok(paciente.get());
 		}
 		else {
 			return ResponseEntity.noContent().build();
