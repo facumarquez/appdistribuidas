@@ -36,9 +36,9 @@ public class AgendaMedicoREST {
  	// GET: http://localhost:1317/AgendaMedicos/1
  	@RequestMapping(value="/{idAgendaMedico}")
 	public ResponseEntity<AgendaMedico> getAgendaMedicoByID(@PathVariable("idAgendaMedico") Long id){		
-		Optional<AgendaMedico> optionalMedico = agendaMedicoService.findById(id);
-		if(optionalMedico.isPresent()) {
-			return ResponseEntity.ok(optionalMedico.get());
+		Optional<AgendaMedico> optionalAgendaMedico = agendaMedicoService.findById(id);
+		if(optionalAgendaMedico.isPresent()) {
+			return ResponseEntity.ok(optionalAgendaMedico.get());
 		}
 		else {
 			return ResponseEntity.noContent().build();
