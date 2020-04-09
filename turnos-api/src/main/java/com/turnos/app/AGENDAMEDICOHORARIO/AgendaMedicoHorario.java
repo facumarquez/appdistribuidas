@@ -14,7 +14,7 @@ import com.turnos.app.AGENDAMEDICOFECHA.AgendaMedicoFecha;
 @Entity
 @Table(name="agenda_medico_horarios")
 
-public class AgendaMedicoHorarios {
+public class AgendaMedicoHorario {
 	@Id
 	@Column(name="id_agenda_medico_horario")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
