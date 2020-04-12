@@ -13,6 +13,7 @@
 	<artifactId>turnos-api</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>turnos-api</name>
+	<packaging>jar</packaging>
 	<description>Aplicación de gestión de Colegios</description>
 
 	<properties>
