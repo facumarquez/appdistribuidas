@@ -1,4 +1,6 @@
 package com.turnos.app.AGENDAMEDICOFECHA;
+import java.util.List;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -6,9 +8,12 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.turnos.app.AGENDAMEDICO.AgendaMedico;
+import com.turnos.app.AGENDAMEDICOHORARIO.AgendaMedicoHorario;
 import com.turnos.app.ESPECIALIDAD.Especialidad;
 
 
@@ -34,6 +39,10 @@ public class AgendaMedicoFecha {
 	@ManyToOne
 	@JoinColumn(name="id_especialidad",nullable=false)
 	private Especialidad especialidad;
+	
+	@OneToMany(mappedBy = "agendaMedicoFecha")
+	@JsonIgnoreProperties("agendaMedicoFecha")
+    private List<AgendaMedicoHorario> horarios;
 
 	public Long getId() {
 		return id;
@@ -71,5 +80,14 @@ public class AgendaMedicoFecha {
 
 	public void setAgendaMedico(AgendaMedico agendaMedico) {
 		this.agendaMedico = agendaMedico;
+	}
+	
+	public List<AgendaMedicoHorario> getHorarios() {
+		return horarios;
+	}
+
+
+	public void setHorarios(List<AgendaMedicoHorario> horarios) {
+		this.horarios = horarios;
 	}
 }

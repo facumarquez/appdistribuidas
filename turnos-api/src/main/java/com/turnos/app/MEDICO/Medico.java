@@ -1,5 +1,6 @@
 package com.turnos.app.MEDICO;
 
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -9,9 +10,12 @@ import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.turnos.app.AGENDAMEDICO.AgendaMedico;
 import com.turnos.app.ESPECIALIDAD.Especialidad;
 import com.turnos.app.USUARIO.Usuario;
 
@@ -35,14 +39,18 @@ public class Medico extends Usuario {
 	            joinColumns = { @JoinColumn(name = "id_usuario") },
 	            inverseJoinColumns = { @JoinColumn(name = "id_especialidad") })
 	
-	private Set<Especialidad> especialidades;
+	private List<Especialidad> especialidades;
 
+	@OneToMany(mappedBy = "medico")
+	@JsonIgnoreProperties("medico")
+    private List<AgendaMedico> agendas;
 	
-	public Set<Especialidad> getEspecialidades() {
+	
+	public List<Especialidad> getEspecialidades() {
 		return especialidades;
 	}
 
-	public void setEspecialidades(Set<Especialidad> especialidades) {
+	public void setEspecialidades(List<Especialidad> especialidades) {
 		this.especialidades = especialidades;
 	}
 
@@ -52,5 +60,13 @@ public class Medico extends Usuario {
 
 	public void setLegajo(String legajo) {
 		this.legajo = legajo;
+	}
+	
+	public List<AgendaMedico> getAgendas() {
+		return agendas;
+	}
+
+	public void setAgendas(List<AgendaMedico> agendas) {
+		this.agendas = agendas;
 	}
 }
