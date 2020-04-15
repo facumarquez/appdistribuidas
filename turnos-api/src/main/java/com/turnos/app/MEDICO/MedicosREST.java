@@ -1,6 +1,8 @@
 package com.turnos.app.MEDICO;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -10,6 +12,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.turnos.app.ESPECIALIDAD.Especialidad;
 
 @RestController
 @RequestMapping("/Medicos")
@@ -35,6 +39,23 @@ public class MedicosREST {
 			return ResponseEntity.noContent().build();
 		}	
 	}
+ 	
+ 	// GET: http://localhost:1317/Medicos/especialidades/1
+ 	@RequestMapping(value="/especialidades/{idMedico}")
+	public ResponseEntity<List<Especialidad>> obtenerEspecialidadesPorIdMedico(@PathVariable("idMedico") Long id){		
+		Optional<Medico> optionalMedico = medicosService.findById(id);
+		if(optionalMedico.isPresent()) {
+			if (!optionalMedico.get().getEspecialidades().isEmpty()) {
+				return ResponseEntity.ok(optionalMedico.get().getEspecialidades());
+			}
+			else {
+				return ResponseEntity.noContent().build();	
+			}
+		}else {
+			return ResponseEntity.noContent().build();
+		}
+	}
+ 	
  	
  	// POST: http://localhost:1317/Medicos
 	@PostMapping
