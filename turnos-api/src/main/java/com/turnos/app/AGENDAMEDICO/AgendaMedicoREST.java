@@ -47,9 +47,17 @@ public class AgendaMedicoREST {
 
  	// POST: http://localhost:1317/AgendaMedicos
 	@PostMapping
-	public ResponseEntity<AgendaMedico> createAgendaMedico(@RequestBody AgendaMedico medico){
-		AgendaMedico nuevaAgendaMedico = agendaMedicoService.crearAgenda(medico);
-		return ResponseEntity.ok(nuevaAgendaMedico);
+	public ResponseEntity<AgendaMedico> crearAgendaMedico(@RequestBody AgendaMedico agendaMedico){
+		
+	Optional<AgendaMedico> agendaMedicoExistente = agendaMedicoService.findByMedicoYPeriodo(Optional.of(agendaMedico.getMedico()), agendaMedico.getMes(), 
+																													agendaMedico.getAnio());
+		
+		if(!agendaMedicoExistente.isPresent()) {
+			AgendaMedico nuevaAgendaMedico = agendaMedicoService.crearAgenda(agendaMedico);
+			return ResponseEntity.ok(nuevaAgendaMedico);
+		}else {
+			return ResponseEntity.ok(agendaMedicoExistente.get());
+		}
 	}
 	
 	@DeleteMapping(value="/{idAgendaMedico}")
