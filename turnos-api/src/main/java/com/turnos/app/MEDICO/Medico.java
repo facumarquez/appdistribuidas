@@ -1,7 +1,6 @@
 package com.turnos.app.MEDICO;
 
 import java.util.List;
-import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
