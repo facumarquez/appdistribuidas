@@ -52,7 +52,7 @@ public class AgendaMedicoHorarioREST {
 		return ResponseEntity.ok(nuevoHorarioAgendaMedico);
 	}
 	
- 	// GET: http://localhost:1317/AgendaMedicoHorarios/horaDesded/horaHasta/idAgendaMedicoFecha
+ 	// GET: http://localhost:1317/AgendaMedicoHorarios/horaDesde/horaHasta/idAgendaMedicoFecha
  	@RequestMapping(value="/{horaDesde}/{horaHasta}/{idAgendaMedicoFecha}")
  	public ResponseEntity<AgendaMedicoHorario> getAgendaMedicoHorarioByRangoHorarioYFechaAgenda(@PathVariable("horaDesde") String horaDesde, 
  																					@PathVariable("horaHasta") String horaHasta,
