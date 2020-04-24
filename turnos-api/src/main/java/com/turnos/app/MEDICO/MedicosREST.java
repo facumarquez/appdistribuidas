@@ -20,7 +20,7 @@ public class MedicosREST {
 	
     @Autowired
 	private MedicosServiceImpl medicosService;
-	
+    
     // GET: http://localhost:1317/Medicos
     @GetMapping
 	public ResponseEntity<List<Medico>> getMedicos(){		

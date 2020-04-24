@@ -13,7 +13,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.turnos.app.AGENDAMEDICO.AgendaMedico;
 import com.turnos.app.ESPECIALIDAD.Especialidad;
 import com.turnos.app.USUARIO.Usuario;
@@ -37,11 +37,11 @@ public class Medico extends Usuario {
 	    @JoinTable(name = "medicos_especialidades",
 	            joinColumns = { @JoinColumn(name = "id_usuario") },
 	            inverseJoinColumns = { @JoinColumn(name = "id_especialidad") })
-	
+	@JsonIgnore
 	private List<Especialidad> especialidades;
 
 	@OneToMany(mappedBy = "medico")
-	@JsonIgnoreProperties("medico")
+	@JsonIgnore
     private List<AgendaMedico> agendas;
 	
 	

@@ -1,6 +1,17 @@
 package com.turnos.app.ESPECIALIDAD;
 
-import javax.persistence.*;
+import java.util.List;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.ManyToMany;
+import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.turnos.app.MEDICO.Medico;
 
 @Entity
 @Table(name="especialidades")
@@ -13,6 +24,10 @@ public class Especialidad {
 	
 	@Column(nullable=false,length=20)
 	private String especialidad;
+	
+	@ManyToMany(mappedBy = "especialidades")
+	@JsonIgnore
+    private List<Medico> medicos;
 	
 	public Long getId() {
 		return id;
@@ -30,8 +45,13 @@ public class Especialidad {
 		this.especialidad = especialidad;
 	}
 
-	
+	public List<Medico> getMedicos() {
+		return medicos;
+	}
 
+	public void setMedicos(List<Medico> medicos) {
+		this.medicos = medicos;
+	}
 }
 
 
