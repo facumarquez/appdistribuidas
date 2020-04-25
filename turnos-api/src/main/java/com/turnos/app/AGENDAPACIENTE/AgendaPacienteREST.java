@@ -69,7 +69,7 @@ public class AgendaPacienteREST {
 	
  	// GET: http://localhost:1317/AgendaPacientes/1/1/1
  	@RequestMapping(value="/{idPaciente}/{idMedico}/{idEspecialidad}")
- 	public ResponseEntity<AgendaPaciente> obtenerAgendaPacientePorPacienteYEspecialidadYMedico
+ 	public ResponseEntity<AgendaPaciente> obtenerAgendaPacientePorPacienteYMedicoYEspecialidad
  																(@PathVariable("idPaciente") Long idPaciente,
 																		@PathVariable("idMedico") Long idMedico,
 																				@PathVariable("idEspecialidad") Long idEspecialidad){	
