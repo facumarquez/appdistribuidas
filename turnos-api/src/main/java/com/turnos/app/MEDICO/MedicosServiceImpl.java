@@ -5,6 +5,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.turnos.app.USUARIO.Usuario;
+
 import java.util.List;
 import java.util.Optional;
 
@@ -42,5 +44,10 @@ public class MedicosServiceImpl implements MedicosService {
 	public ResponseEntity<Void> deleteByID(Long medicoID) {
 		medicosDAO.deleteById(medicoID);
 		return ResponseEntity.ok(null);
+	}
+	
+	@Transactional(readOnly = true)
+	public Optional<Usuario> findByUserAndPass(String user, String pass) {
+		return medicosDAO.findByUsuarioAndPassword(user, pass);
 	}
 }

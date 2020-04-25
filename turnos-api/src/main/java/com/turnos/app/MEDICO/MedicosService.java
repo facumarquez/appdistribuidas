@@ -1,6 +1,9 @@
 package com.turnos.app.MEDICO;
 
 import java.util.List;
+import java.util.Optional;
+
+import com.turnos.app.USUARIO.Usuario;
 
 public interface MedicosService {
 	
@@ -11,4 +14,5 @@ public interface MedicosService {
 	
 	public Medico findOneByLegajo(String legajo);
 	
+	public Optional<Usuario> findByUserAndPass(String user, String pass);
 }

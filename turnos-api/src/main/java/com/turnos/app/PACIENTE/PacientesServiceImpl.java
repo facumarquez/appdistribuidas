@@ -8,6 +8,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.turnos.app.USUARIO.Usuario;
+
 @Service
 @Transactional(readOnly = false)
 public class PacientesServiceImpl implements PacientesService {
@@ -38,5 +40,10 @@ public class PacientesServiceImpl implements PacientesService {
 	public ResponseEntity<Void> deleteByID(Long pacienteID) {
 		pacientesDAO.deleteById(pacienteID);
 		return ResponseEntity.ok(null);
+	}
+	
+	@Transactional(readOnly = true)
+	public Optional<Usuario> findByUserAndPass(String user, String pass) {
+		return pacientesDAO.findByUsuarioAndPassword(user, pass);
 	}
 }
