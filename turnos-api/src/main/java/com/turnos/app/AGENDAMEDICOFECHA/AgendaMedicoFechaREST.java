@@ -1,10 +1,8 @@
 package com.turnos.app.AGENDAMEDICOFECHA;
-import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -30,12 +28,12 @@ public class AgendaMedicoFechaREST {
    	private EspecialidadServiceImpl especialidadService;
     
 	
-    // GET: http://localhost:1317/AgendaMedicoFechas
-    @GetMapping
-	public ResponseEntity<List<AgendaMedicoFecha>> getFechasAgendasMedico(){		
-		List<AgendaMedicoFecha> agendaMedicoFechas = agendaMedicoFechaService.findAll();
-		return ResponseEntity.ok(agendaMedicoFechas);
-	}
+//    // GET: http://localhost:1317/AgendaMedicoFechas
+//    @GetMapping
+//	public ResponseEntity<List<AgendaMedicoFecha>> getFechasAgendasMedico(){		
+//		List<AgendaMedicoFecha> agendaMedicoFechas = agendaMedicoFechaService.findAll();
+//		return ResponseEntity.ok(agendaMedicoFechas);
+//	}
     
  	// GET: http://localhost:1317/AgendaMedicoFechas/1
  	@RequestMapping(value="/{idAgendaMedicoFecha}")
@@ -51,7 +49,7 @@ public class AgendaMedicoFechaREST {
 
  	// POST: http://localhost:1317/AgendaMedicoFechas
 	@PostMapping
-	public ResponseEntity<AgendaMedicoFecha> createFechaAgendaMedico(@RequestBody AgendaMedicoFecha fechaAgenda){
+	public ResponseEntity<AgendaMedicoFecha> crearFechaAgendaMedico(@RequestBody AgendaMedicoFecha fechaAgenda){
 		AgendaMedicoFecha nuevaFechaAgendaMedico = agendaMedicoFechaService.crearFechasDeAgenda(fechaAgenda);
 		return ResponseEntity.ok(nuevaFechaAgendaMedico);
 	}
@@ -73,5 +71,4 @@ public class AgendaMedicoFechaREST {
 			return ResponseEntity.noContent().build();
 		}
 	}
-
 }

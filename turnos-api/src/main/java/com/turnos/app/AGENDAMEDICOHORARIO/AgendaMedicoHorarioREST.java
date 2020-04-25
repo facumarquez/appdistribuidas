@@ -1,10 +1,8 @@
 package com.turnos.app.AGENDAMEDICOHORARIO;
-import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -26,12 +24,12 @@ public class AgendaMedicoHorarioREST {
     
    
 	
-    // GET: http://localhost:1317/AgendaMedicoHorarios
-    @GetMapping
-	public ResponseEntity<List<AgendaMedicoHorario>> getHorariosAgendasMedico(){		
-		List<AgendaMedicoHorario> agendaMedicoHorarios = agendaMedicoHorarioService.findAll();
-		return ResponseEntity.ok(agendaMedicoHorarios);
-	}
+//    // GET: http://localhost:1317/AgendaMedicoHorarios
+//    @GetMapping
+//	public ResponseEntity<List<AgendaMedicoHorario>> getHorariosAgendasMedico(){		
+//		List<AgendaMedicoHorario> agendaMedicoHorarios = agendaMedicoHorarioService.findAll();
+//		return ResponseEntity.ok(agendaMedicoHorarios);
+//	}
     
  	// GET: http://localhost:1317/AgendaMedicoHorarios/1
  	@RequestMapping(value="/{idAgendaMedicoHorario}")
@@ -47,7 +45,7 @@ public class AgendaMedicoHorarioREST {
 
  	// POST: http://localhost:1317/AgendaMedicoHorarios
 	@PostMapping
-	public ResponseEntity<AgendaMedicoHorario> createHorarioAgendaMedico(@RequestBody AgendaMedicoHorario horarioAgenda){
+	public ResponseEntity<AgendaMedicoHorario> crearHorarioAgendaMedico(@RequestBody AgendaMedicoHorario horarioAgenda){
 		AgendaMedicoHorario nuevoHorarioAgendaMedico = agendaMedicoHorarioService.crearHorariosDeAgenda(horarioAgenda);
 		return ResponseEntity.ok(nuevoHorarioAgendaMedico);
 	}
