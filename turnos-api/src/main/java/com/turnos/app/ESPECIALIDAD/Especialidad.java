@@ -23,7 +23,7 @@ public class Especialidad {
 	private Long id;
 	
 	@Column(nullable=false,length=20)
-	private String especialidad;
+	private String nombre;
 	
 	@ManyToMany(mappedBy = "especialidades")
 	@JsonIgnore
@@ -37,12 +37,12 @@ public class Especialidad {
 		this.id = id;
 	}
 
-	public String getEspecialidad() {
-		return especialidad;
+	public String getNombre() {
+		return nombre;
 	}
 
-	public void setEspecialidad(String especialidad) {
-		this.especialidad = especialidad;
+	public void setNombre(String nombre) {
+		this.nombre = nombre;
 	}
 
 	public List<Medico> getMedicos() {
