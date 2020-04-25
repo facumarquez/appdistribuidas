@@ -26,6 +26,11 @@ public class AgendaMedicoTurno {
 	@Column(nullable=false,length=8)
 	private String turnoHasta;
 	
+	@Column(nullable=false)
+	private Boolean disponible;
+	
+	@Column(nullable=false)
+	private Boolean confirmado;
 	
 	@ManyToOne
 	@JoinColumn(name="id_agenda_medico_horario",nullable=false)
@@ -69,5 +74,24 @@ public class AgendaMedicoTurno {
 
 	public void setAgendaMedicoHorario(AgendaMedicoHorario agendaMedicoHorario) {
 		this.agendaMedicoHorario = agendaMedicoHorario;
+	}
+	
+	public Boolean getDisponible() {
+		return disponible;
+	}
+
+
+	public void setDisponible(Boolean disponible) {
+		this.disponible = disponible;
+	}
+
+
+	public Boolean getConfirmado() {
+		return confirmado;
+	}
+
+
+	public void setConfirmado(Boolean confirmado) {
+		this.confirmado = confirmado;
 	}
 }
