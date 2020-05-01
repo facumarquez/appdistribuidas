@@ -18,6 +18,9 @@ public class Paciente extends Usuario {
 	@NotEmpty(message = "Documento: Campo requerido")
 	private String documento;
 	
+	@Column(nullable=false)
+	private Boolean cuotaAlDia;
+	
 	
 	public String getDocumento() {
 		return documento;
@@ -25,6 +28,14 @@ public class Paciente extends Usuario {
 
 	public void setDocumento(String documento) {
 		this.documento = documento;
+	}
+	
+	public Boolean getCuotaAlDia() {
+		return cuotaAlDia;
+	}
+
+	public void setCuotaAlDia(Boolean cuotaAlDia) {
+		this.cuotaAlDia = cuotaAlDia;
 	}
 	
 	/*
