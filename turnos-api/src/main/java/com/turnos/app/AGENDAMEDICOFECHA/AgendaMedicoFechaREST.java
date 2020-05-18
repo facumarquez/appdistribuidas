@@ -47,6 +47,7 @@ public class AgendaMedicoFechaREST {
 		}	
 	}
 
+ 	//TODO: se debe recibir listado.......
  	// POST: http://localhost:1317/AgendaMedicoFechas
 	@PostMapping
 	public ResponseEntity<AgendaMedicoFecha> crearFechaAgendaMedico(@RequestBody AgendaMedicoFecha fechaAgenda){
