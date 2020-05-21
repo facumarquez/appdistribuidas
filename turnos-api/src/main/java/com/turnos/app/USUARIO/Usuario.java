@@ -50,6 +50,9 @@ public class Usuario implements Serializable  {
 	@NotNull(message = "Fecha de nacimiento: Campo requerido")
 	private String fecha_nacimiento;
 	
+	@Column(nullable=false, length=20)
+	private String telefono;
+	
 	public Long getIdUsuario() {
 		return idUsuario;
 	}
@@ -116,11 +119,19 @@ public class Usuario implements Serializable  {
 	public void setFecha_nacimiento(String fecha_nacimiento) {
 		this.fecha_nacimiento = fecha_nacimiento;
 	}
+	
+	public String getTelefono() {
+		return telefono;
+	}
+
+	public void setTelefono(String telefono) {
+		this.telefono = telefono;
+	}
 
 	public Usuario() {
     }
 	
-    public Usuario(String nombre,String apellido, String usuario, String pass, String mail,String sexo, String fechaNac) {
+    public Usuario(String nombre,String apellido, String usuario, String pass, String mail,String sexo, String fechaNac, String telefono) {
         this.nombre = nombre;
         this.apellido = apellido;
         this.usuario = usuario;
@@ -128,5 +139,6 @@ public class Usuario implements Serializable  {
         this.mail = mail;
         this.sexo = sexo;
         this.fecha_nacimiento= fechaNac;
+        this.telefono= telefono;
     }
 }
