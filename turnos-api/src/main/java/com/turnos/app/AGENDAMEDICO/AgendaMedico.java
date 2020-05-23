@@ -15,7 +15,6 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.turnos.app.AGENDAMEDICOFECHA.AgendaMedicoFecha;
 import com.turnos.app.MEDICO.Medico;
 
-
 @Entity
 @Table(name="agenda_medicos")
 public class AgendaMedico {
@@ -34,7 +33,10 @@ public class AgendaMedico {
 	
 	@Column(nullable=false)
 	private int anio;
-
+	
+	@Column(nullable=false,length=8)
+	private String fechaCreacion;
+	
 	@OneToMany(mappedBy = "agendaMedico")
 	@JsonIgnoreProperties("agendaMedico")
     private List<AgendaMedicoFecha> fechas;
@@ -84,6 +86,14 @@ public class AgendaMedico {
 		this.medico = medico;
 		this.mes = mes;
 		this.anio = anio;
+	}
+	
+	public String getFechaCreacion() {
+		return fechaCreacion;
+	}
+
+	public void setFechaCreacion(String fechaCreacion) {
+		this.fechaCreacion = fechaCreacion;
 	}
 
 	public AgendaMedico() {
