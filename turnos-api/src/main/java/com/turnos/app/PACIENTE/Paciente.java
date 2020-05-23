@@ -1,10 +1,15 @@
 package com.turnos.app.PACIENTE;
+import java.util.List;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.OneToMany;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.turnos.app.AGENDAPACIENTE.AgendaPaciente;
 import com.turnos.app.USUARIO.Usuario;
 
 @Entity
@@ -21,6 +26,9 @@ public class Paciente extends Usuario {
 	@Column(nullable=false)
 	private Boolean cuotaAlDia;
 	
+	@OneToMany(mappedBy = "paciente")
+	@JsonIgnoreProperties("paciente")
+    private List<AgendaPaciente> agendas;
 	
 	public String getDocumento() {
 		return documento;
@@ -36,6 +44,14 @@ public class Paciente extends Usuario {
 
 	public void setCuotaAlDia(Boolean cuotaAlDia) {
 		this.cuotaAlDia = cuotaAlDia;
+	}
+	
+	public List<AgendaPaciente> getAgendas() {
+		return agendas;
+	}
+
+	public void setAgendas(List<AgendaPaciente> agendas) {
+		this.agendas = agendas;
 	}
 	
 	/*
