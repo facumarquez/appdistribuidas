@@ -1,6 +1,8 @@
 package com.turnos.app.AGENDAMEDICOTURNO;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -15,6 +17,7 @@ import com.turnos.app.AGENDAMEDICOHORARIO.AgendaMedicoHorario;
 @Table(name="agenda_medico_turnos")
 
 public class AgendaMedicoTurno {
+	
 	@Id
 	@Column(name="id_agenda_medico_turno")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,10 +30,9 @@ public class AgendaMedicoTurno {
 	private String turnoHasta;
 	
 	@Column(nullable=false)
-	private Boolean disponible;
+	@Enumerated(EnumType.ORDINAL)
+	private EstadoTurno estado;
 	
-	@Column(nullable=false)
-	private Boolean confirmado;
 	
 	@ManyToOne
 	@JoinColumn(name="id_agenda_medico_horario",nullable=false)
@@ -76,22 +78,30 @@ public class AgendaMedicoTurno {
 		this.agendaMedicoHorario = agendaMedicoHorario;
 	}
 	
-	public Boolean getDisponible() {
-		return disponible;
+	public EstadoTurno getEstado() {
+		return estado;
 	}
 
 
-	public void setDisponible(Boolean disponible) {
-		this.disponible = disponible;
+	public void setEstado(EstadoTurno estado) {
+		this.estado = estado;
 	}
 
 
-	public Boolean getConfirmado() {
-		return confirmado;
+	public AgendaMedicoTurno(String turnoDesde, String turnoHasta, EstadoTurno estado,
+			AgendaMedicoHorario agendaMedicoHorario) {
+		super();
+		this.turnoDesde = turnoDesde;
+		this.turnoHasta = turnoHasta;
+		this.estado = estado;
+		this.agendaMedicoHorario = agendaMedicoHorario;
 	}
 
 
-	public void setConfirmado(Boolean confirmado) {
-		this.confirmado = confirmado;
+	public AgendaMedicoTurno() {
+		super();
+		// TODO Auto-generated constructor stub
 	}
+	
+	
 }

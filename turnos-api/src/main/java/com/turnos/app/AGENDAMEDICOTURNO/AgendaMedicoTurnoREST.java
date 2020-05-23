@@ -4,6 +4,7 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -67,5 +68,12 @@ public class AgendaMedicoTurnoREST {
 		else {
 			return ResponseEntity.noContent().build();
 		}
+	}
+ 	
+	// DELETE: http://localhost:1317/AgendaMedicoTurnos/1
+	@DeleteMapping(value="/{idAgendaMedicoTurno}")
+	public ResponseEntity<Void> deleteTurno(@PathVariable("idAgendaMedicoTurno") Long id){
+		agendaMedicoTurnoService.deleteByID(id);
+		return ResponseEntity.ok(null);
 	}
 }
