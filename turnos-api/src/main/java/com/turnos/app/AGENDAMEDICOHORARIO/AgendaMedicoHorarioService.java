@@ -7,7 +7,7 @@ import com.turnos.app.AGENDAMEDICOFECHA.AgendaMedicoFecha;
 public interface AgendaMedicoHorarioService {
 	
 	
-	public AgendaMedicoHorario crearHorariosDeAgenda(AgendaMedicoHorario horariosAgenda);
+	public AgendaMedicoHorario guardarHorarioDeAgenda(AgendaMedicoHorario horariosAgenda);
 	
 	public Optional<AgendaMedicoHorario> buscarPorRangoHorarioYFecha(String horaDesde,String horaHasta,
 																			Optional<AgendaMedicoFecha> agendaMedicoFecha);

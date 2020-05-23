@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,13 +29,18 @@ public class AgendaMedicoHorarioServiceImpl implements AgendaMedicoHorarioServic
 	}
 	
 	@Override
-	public AgendaMedicoHorario crearHorariosDeAgenda(AgendaMedicoHorario horariosAgenda) {
-		return agendaMedicoHorarioDAO.save(horariosAgenda);
+	public AgendaMedicoHorario guardarHorarioDeAgenda(AgendaMedicoHorario horarioAgenda) {
+		return agendaMedicoHorarioDAO.save(horarioAgenda);
 	}
 
 	@Override
 	public Optional<AgendaMedicoHorario> buscarPorRangoHorarioYFecha(String horaDesde, String horaHasta,
 			Optional<AgendaMedicoFecha> agendaMedicoFecha) {
 		return agendaMedicoHorarioDAO.findByHoraDesdeAndHoraHastaAndAgendaMedicoFecha(horaDesde, horaHasta, agendaMedicoFecha);
+	}
+	
+	public ResponseEntity<Void> deleteByID(Long idAgendaMedicoHorario) {
+		agendaMedicoHorarioDAO.deleteById(idAgendaMedicoHorario);
+		return ResponseEntity.ok(null);
 	}
 }
