@@ -7,10 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.turnos.app.ESPECIALIDAD.Especialidad;
-import com.turnos.app.MEDICO.Medico;
-import com.turnos.app.PACIENTE.Paciente;
-
 @Service
 @Transactional(readOnly = false)
 public class AgendaPacienteServiceImpl implements AgendaPacienteService {
@@ -19,17 +15,10 @@ public class AgendaPacienteServiceImpl implements AgendaPacienteService {
 	AgendaPacienteDAO agendaPacienteDAO;
 	
 	
-	public AgendaPaciente crearAgenda(AgendaPaciente agenda) {
+	public AgendaPaciente guardarAgenda(AgendaPaciente agenda) {
 		return agendaPacienteDAO.save(agenda);
 	}
 
-	@Override
-	public Optional<AgendaPaciente> findByPacienteAndMedicoAndEspecialidad(Optional<Paciente> paciente, 
-																	Optional<Medico> medico, Optional<Especialidad> especialidad) {
-		
-		return agendaPacienteDAO.findByPacienteAndMedicoAndEspecialidad(paciente, medico, especialidad);
-	}
-	
 	@Transactional(readOnly = true)
 	public List<AgendaPaciente> findAll() {
 		return agendaPacienteDAO.findAll();
