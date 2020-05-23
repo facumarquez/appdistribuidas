@@ -64,4 +64,16 @@ public class PacientesREST {
 		pacientesService.deleteByID(id);
 		return ResponseEntity.ok(null);
 	}
+	
+ 	// GET: http://localhost:1317/Pacientes/1/pagoAlDia/
+ 	@RequestMapping(value="/{idPaciente}/pagoAlDia/")
+	public boolean pacienteAlDia(@PathVariable("idPaciente") Long id){		
+		Optional<Paciente> paciente = pacientesService.findById(id);
+		if(paciente.isPresent()) {
+			return paciente.get().getCuotaAlDia();
+		}
+		else {
+			return false;
+		}	
+	}
 }
