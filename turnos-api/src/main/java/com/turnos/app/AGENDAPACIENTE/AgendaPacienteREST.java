@@ -1,5 +1,8 @@
 package com.turnos.app.AGENDAPACIENTE;
+import java.util.Date;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -7,12 +10,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.turnos.app.ESPECIALIDAD.Especialidad;
-import com.turnos.app.ESPECIALIDAD.EspecialidadServiceImpl;
-import com.turnos.app.MEDICO.Medico;
-import com.turnos.app.MEDICO.MedicosServiceImpl;
+import com.turnos.app.AGENDAMEDICOTURNO.EstadoTurno;
+import com.turnos.app.HELPERS.FechaHelper;
 import com.turnos.app.PACIENTE.Paciente;
 import com.turnos.app.PACIENTE.PacientesServiceImpl;
 
@@ -26,65 +28,63 @@ public class AgendaPacienteREST {
     @Autowired
 	private PacientesServiceImpl pacienteService;
     
-    @Autowired
-	private MedicosServiceImpl medicoService;
-    
-    @Autowired
-	private EspecialidadServiceImpl especialidadService;
 	
-//	// GET: http://localhost:1317/AgendaMedicos
-//	@GetMapping 
-//    public ResponseEntity<List<AgendaMedico>> getAgendasMedico(){
-//    	List<AgendaMedico> agendaMedico = agendaMedicoService.findAll(); 
-//    	return ResponseEntity.ok(agendaMedico); 
-//	}
-	 
-    
-// 	// GET: http://localhost:1317/AgendaMedicos/1
-// 	@RequestMapping(value="/{idAgendaMedico}")
-//	public ResponseEntity<AgendaMedico> getAgendaMedicoByID(@PathVariable("idAgendaMedico") Long id){		
-//		Optional<AgendaMedico> optionalAgendaMedico = agendaMedicoService.findById(id);
-//		if(optionalAgendaMedico.isPresent()) {
-//			return ResponseEntity.ok(optionalAgendaMedico.get());
-//		}
-//		else {
-//			return ResponseEntity.noContent().build();
-//		}	
-//	}
-
  	// POST: http://localhost:1317/AgendaPacientes
 	@PostMapping
 	public ResponseEntity<AgendaPaciente> crearAgendaPaciente(@RequestBody AgendaPaciente agendaPaciente){
 		
-		AgendaPaciente nuevaAgendaPaciente = agendaPacienteService.crearAgenda(agendaPaciente);
+		AgendaPaciente nuevaAgendaPaciente = agendaPacienteService.guardarAgenda(agendaPaciente);
 		return ResponseEntity.ok(nuevaAgendaPaciente);
 	}
 	
-//	@DeleteMapping(value="/{idAgendaMedico}")
-//	//http://localhost:1317/AgendaMedicos/1
-//	public ResponseEntity<Void> deleteAgendaMedico(@PathVariable("idAgendaMedico") Long id){
-//		agendaMedicoService.borrarAgendaPorID(id);
-//		return ResponseEntity.ok(null);
-//	}
-	
- 	// GET: http://localhost:1317/AgendaPacientes/1/1/1
- 	@RequestMapping(value="/{idPaciente}/{idMedico}/{idEspecialidad}")
- 	public ResponseEntity<AgendaPaciente> obtenerAgendaPacientePorPacienteYMedicoYEspecialidad
- 																(@PathVariable("idPaciente") Long idPaciente,
-																		@PathVariable("idMedico") Long idMedico,
-																				@PathVariable("idEspecialidad") Long idEspecialidad){	
-
- 		Optional<Paciente> paciente = pacienteService.findById(idPaciente);
- 		Optional<Medico> medico = medicoService.findById(idMedico);
- 		Optional<Especialidad> especialidad = especialidadService.findById(idEspecialidad);
+    // GET: http://localhost:1317/AgendaPacientes/Pacientes/1/TurnosPendientes/
+  	@RequestMapping(value="/Pacientes/{idPaciente}/TurnosPendientes")
+ 	public ResponseEntity<List<AgendaPaciente>> obtenerTurnosPendientesPorPaciente(@PathVariable("idPaciente") Long id){		
  		
-		Optional<AgendaPaciente> agendaPaciente= agendaPacienteService.findByPacienteAndMedicoAndEspecialidad
-																								(paciente, medico, especialidad);
-		if(agendaPaciente.isPresent()) {
-			return ResponseEntity.ok(agendaPaciente.get());
-		}
-		else {
+  		Date fechaActual = new Date();
+		String fechaJapones = FechaHelper.convertirFechaAFormatoJapones(fechaActual);
+			
+  		Optional<Paciente> paciente = pacienteService.findById(id);
+ 		if(paciente.isPresent() && !paciente.get().getAgendas().isEmpty()) {
+ 			
+ 			 
+ 			//filtros los turnos pendientes de atencion cuya fecha es mayor o igual a la del día...
+ 			List<AgendaPaciente> agendaTurnosPendientes = paciente.get().getAgendas().stream().filter
+ 										(t->t.getFechaTurno().compareTo(fechaJapones) >= 0)  //fecha del dia o mayor a hoy...
+ 										.collect(Collectors.toList()); 
+ 			
+ 				return ResponseEntity.ok(agendaTurnosPendientes);
+ 		}
+ 		else {
+ 			return ResponseEntity.noContent().build();	
+ 		}
+ 	}
+  	
+    //PUT: http://localhost:1317/AgendaPacientes/1/ConfirmarTurno
+ 	@RequestMapping(value = "/{idAgendaPaciente}/ConfirmarTurno", method = RequestMethod.PUT)
+    public ResponseEntity<AgendaPaciente> confirmarTurnoPaciente(@PathVariable("idAgendaPaciente") long idAgendaPaciente) {
+ 		
+ 		 Optional<AgendaPaciente> agendaPaciente = agendaPacienteService.findById(idAgendaPaciente);
+ 		 if(agendaPaciente.isPresent()) {
+ 			agendaPaciente.get().getTurno().setEstado(EstadoTurno.CONFIRMADO);
+ 			return ResponseEntity.ok(agendaPacienteService.guardarAgenda(agendaPaciente.get()));
+ 		 }
+ 		 else {
 			return ResponseEntity.noContent().build();
-		}
-	}
+ 		 }	
+    }
+ 	
+    //PUT: http://localhost:1317/AgendaPacientes/1/AnularTurno
+ 	@RequestMapping(value = "/{idAgendaPaciente}/AnularTurno", method = RequestMethod.PUT)
+    public ResponseEntity<AgendaPaciente> anularTurnoPaciente(@PathVariable("idAgendaPaciente") long idUsuario) {
+ 		
+ 		 Optional<AgendaPaciente> agendaPaciente = agendaPacienteService.findById(idUsuario);
+ 		 if(agendaPaciente.isPresent()) {
+ 			agendaPaciente.get().getTurno().setEstado(EstadoTurno.ANULADO);
+ 			return ResponseEntity.ok(agendaPacienteService.guardarAgenda(agendaPaciente.get()));
+ 		 }
+ 		 else {
+			return ResponseEntity.noContent().build();
+ 		 }	
+    }
 }

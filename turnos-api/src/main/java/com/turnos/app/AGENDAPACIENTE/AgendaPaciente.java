@@ -21,14 +21,6 @@ public class AgendaPaciente {
 	@JoinColumn(name="id_paciente",nullable=false)
 	private Paciente paciente;
 	
-	@ManyToOne
-	@JoinColumn(name="id_especialidad",nullable=false)
-	private Especialidad especialidad;
-	
-	
-	@ManyToOne
-    @JoinColumn(name = "id_medico",nullable=false)
-	private Medico medico;
 	
 	@ManyToOne
     @JoinColumn(name = "id_turno",nullable=false)
@@ -43,14 +35,6 @@ public class AgendaPaciente {
 		this.paciente = paciente;
 	}
 
-	public Especialidad getEspecialidad() {
-		return especialidad;
-	}
-
-	public void setEspecialidad(Especialidad especialidad) {
-		this.especialidad = especialidad;
-	}
-
 	public AgendaMedicoTurno getTurno() {
 		return turno;
 	}
@@ -59,6 +43,16 @@ public class AgendaPaciente {
 		this.turno = turno;
 	}
 
+	@Transient
+	public Especialidad getEspecialidad() {
+		return this.getTurno().getAgendaMedicoHorario().getAgendaMedicoFecha().getEspecialidad();
+	}
+	
+	@Transient
+	public Medico getMedico() {
+		return this.getTurno().getAgendaMedicoHorario().getAgendaMedicoFecha().getAgendaMedico().getMedico();
+	}
+	
 	@Transient
 	public String getFechaTurno() {
 		return this.getTurno().getAgendaMedicoHorario().getAgendaMedicoFecha().getFecha();
@@ -70,7 +64,6 @@ public class AgendaPaciente {
 				this.getTurno().getAgendaMedicoHorario().getHoraHasta();
 	}
 
-
 	public Long getId() {
 		return id;
 	}
@@ -78,13 +71,4 @@ public class AgendaPaciente {
 	public void setId(Long id) {
 		this.id = id;
 	}
-
-	public Medico getMedico() {
-		return medico;
-	}
-
-	public void setMedico(Medico medico) {
-		this.medico = medico;
-	}
-	
 }
