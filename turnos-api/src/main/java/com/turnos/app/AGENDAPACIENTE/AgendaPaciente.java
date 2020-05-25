@@ -2,6 +2,7 @@ package com.turnos.app.AGENDAPACIENTE;
 
 import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.turnos.app.AGENDAMEDICOTURNO.AgendaMedicoTurno;
 import com.turnos.app.ESPECIALIDAD.Especialidad;
 import com.turnos.app.MEDICO.Medico;
@@ -19,11 +20,13 @@ public class AgendaPaciente {
 	
 	@ManyToOne
 	@JoinColumn(name="id_paciente",nullable=false)
+	@JsonIgnore
 	private Paciente paciente;
 	
 	
 	@ManyToOne
     @JoinColumn(name = "id_turno",nullable=false)
+	@JsonIgnore
 	private AgendaMedicoTurno turno;
 	
 
@@ -59,9 +62,13 @@ public class AgendaPaciente {
 	}
 
 	@Transient
-	public String getHorarioTurno() {
-		return this.getTurno().getAgendaMedicoHorario().getHoraDesde() + "-" + 
-				this.getTurno().getAgendaMedicoHorario().getHoraHasta();
+	public String getTurnoDesde() {
+		return this.getTurno().getAgendaMedicoHorario().getHoraDesde();
+	}
+	
+	@Transient
+	public String getTurnoHasta() {
+		return this.getTurno().getAgendaMedicoHorario().getHoraHasta();
 	}
 
 	public Long getId() {

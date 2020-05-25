@@ -8,7 +8,7 @@ import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.turnos.app.AGENDAPACIENTE.AgendaPaciente;
 import com.turnos.app.USUARIO.Usuario;
 
@@ -27,7 +27,7 @@ public class Paciente extends Usuario {
 	private Boolean cuotaAlDia;
 	
 	@OneToMany(mappedBy = "paciente")
-	@JsonIgnoreProperties("paciente")
+	@JsonIgnore
     private List<AgendaPaciente> agendas;
 	
 	public String getDocumento() {
