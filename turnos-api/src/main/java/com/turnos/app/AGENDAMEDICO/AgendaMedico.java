@@ -11,7 +11,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.turnos.app.AGENDAMEDICOFECHA.AgendaMedicoFecha;
 import com.turnos.app.MEDICO.Medico;
 
@@ -38,7 +38,7 @@ public class AgendaMedico {
 	private String fechaCreacion;
 	
 	@OneToMany(mappedBy = "agendaMedico")
-	@JsonIgnoreProperties("agendaMedico")
+	@JsonIgnore
     private List<AgendaMedicoFecha> fechas;
 	
 	public Long getId() {
