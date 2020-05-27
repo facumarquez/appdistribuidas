@@ -44,9 +44,21 @@ public class UsuarioREST {
 	}
  	
     //GET: http://localhost:1317/Usuarios/1
-  	@RequestMapping(value="/{usuarioID}")
- 	public ResponseEntity<Usuario> getUsuarioByID(@PathVariable("usuarioID") Long id){		
+  	@RequestMapping(value="/{idUsuario}")
+ 	public ResponseEntity<Usuario> getUsuarioByID(@PathVariable("idUsuario") Long id){		
  		Optional<Usuario> usuario = usuarioService.findById(id);
+ 		if(usuario.isPresent()) {
+ 			return ResponseEntity.ok(usuario.get());
+ 		}
+ 		else {
+ 			return ResponseEntity.noContent().build();
+ 		}	
+ 	}
+  	
+    //GET: http://localhost:1317/Usuarios/NombreUsuario/test
+  	@RequestMapping(value="/NombreUsuario/{nombreUsuario}")
+ 	public ResponseEntity<Usuario> getUsuarioByNombreUsuario(@PathVariable("nombreUsuario") String nombreUsuario){		
+ 		Optional<Usuario> usuario = usuarioService.findByUsuario(nombreUsuario);
  		if(usuario.isPresent()) {
  			return ResponseEntity.ok(usuario.get());
  		}

@@ -22,4 +22,9 @@ public class UsuarioServiceImpl implements UsuarioService {
 	public Usuario save(Usuario usuario) {
 		return usuarioDAO.save(usuario);
 	}
+	
+	@Transactional(readOnly = true)
+	public Optional<Usuario> findByUsuario(String user) {
+		return usuarioDAO.findByUsuario(user);
+	}
 }
