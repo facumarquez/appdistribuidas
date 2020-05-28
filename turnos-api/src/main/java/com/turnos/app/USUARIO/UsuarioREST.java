@@ -55,18 +55,6 @@ public class UsuarioREST {
  		}	
  	}
   	
-    //GET: http://localhost:1317/Usuarios/NombreUsuario/test
-  	@RequestMapping(value="/NombreUsuario/{nombreUsuario}")
- 	public ResponseEntity<Usuario> getUsuarioByNombreUsuario(@PathVariable("nombreUsuario") String nombreUsuario){		
- 		Optional<Usuario> usuario = usuarioService.findByUsuario(nombreUsuario);
- 		if(usuario.isPresent()) {
- 			return ResponseEntity.ok(usuario.get());
- 		}
- 		else {
- 			return ResponseEntity.noContent().build();
- 		}	
- 	}
-  	
      //PUT: http://localhost:1317/Usuarios/1
   	 @RequestMapping(value = "/{idUsuario}", method = RequestMethod.PUT)
      public ResponseEntity<Usuario> actualizarUsuario(@PathVariable("idUsuario") long idUsuario, @RequestBody Usuario nuevoUsuario) {

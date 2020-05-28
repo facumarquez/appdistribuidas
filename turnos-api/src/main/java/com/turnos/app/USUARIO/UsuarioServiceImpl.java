@@ -23,8 +23,4 @@ public class UsuarioServiceImpl implements UsuarioService {
 		return usuarioDAO.save(usuario);
 	}
 	
-	@Transactional(readOnly = true)
-	public Optional<Usuario> findByUsuario(String user) {
-		return usuarioDAO.findByUsuario(user);
-	}
 }
