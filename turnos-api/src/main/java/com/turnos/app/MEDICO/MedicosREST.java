@@ -39,6 +39,19 @@ public class MedicosREST {
 		}	
 	}
  	
+  	//GET: http://localhost:1317/Medicos/NombreUsuario/test
+  	@RequestMapping(value="/NombreUsuario/{nombreUsuario}")
+ 	public ResponseEntity<Medico> getMedicoByNombreUsuario(@PathVariable("nombreUsuario") String nombreUsuario){		
+ 		Optional<Medico> medico = medicosService.findByUsuario(nombreUsuario);
+ 		if(medico.isPresent()) {
+ 			return ResponseEntity.ok(medico.get());
+ 		}
+ 		else {
+ 			return ResponseEntity.noContent().build();
+ 		}	
+ 	}
+  	
+ 	
  	// GET: http://localhost:1317/Medicos/1/especialidades/
  	@RequestMapping(value="/{idMedico}/especialidades")
 	public ResponseEntity<List<Especialidad>> obtenerEspecialidadesPorIdMedico(@PathVariable("idMedico") Long id){		
