@@ -50,9 +50,4 @@ public class MedicosServiceImpl implements MedicosService {
 	public Optional<Usuario> findByUserAndPass(String user, String pass) {
 		return medicosDAO.findByUsuarioAndPassword(user, pass);
 	}
-	
-	@Transactional(readOnly = true)
-	public Optional<Medico> findByUsuario(String user) {
-		return medicosDAO.findByUsuario(user);
-	}
 }

@@ -14,7 +14,4 @@ public interface MedicosDAO extends JpaRepository<Medico, Long>  {
 		Medico findOneByLegajo(String legajo);
 		
 		Optional<Usuario> findByUsuarioAndPassword(String usuario,String password);
-		
-		Optional<Medico> findByUsuario(String usuario);
-		
 }
