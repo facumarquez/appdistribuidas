@@ -19,11 +19,6 @@ public class AgendaMedicoFechaServiceImpl implements AgendaMedicoFechaService{
 	
 	
 	@Transactional(readOnly = true)
-	public List<AgendaMedicoFecha> findAll() {
-		return agendaMedicoFechaDAO.findAll();
-	}
-
-	@Transactional(readOnly = true)
 	public Optional<AgendaMedicoFecha> findById(Long id) {
 		return agendaMedicoFechaDAO.findById(id);
 	}
@@ -34,9 +29,8 @@ public class AgendaMedicoFechaServiceImpl implements AgendaMedicoFechaService{
 	}
 
 	@Override
-	public Optional<AgendaMedicoFecha> buscarPorFechaYMedicoYEspecialidad(String fecha,
+	public List<AgendaMedicoFecha> buscarPorEspecialidad_Medico_Fecha_Horario(String fecha,
 			Optional<AgendaMedico> agendaMedico, Optional<Especialidad> especialidad) {
 		return agendaMedicoFechaDAO.findByFechaAndAgendaMedicoAndEspecialidad(fecha, agendaMedico, especialidad);
 	}
-	
 }

@@ -1,4 +1,6 @@
 package com.turnos.app.AGENDAMEDICOFECHA;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +15,8 @@ import com.turnos.app.AGENDAMEDICO.AgendaMedico;
 import com.turnos.app.AGENDAMEDICO.AgendaMedicoServiceImpl;
 import com.turnos.app.ESPECIALIDAD.Especialidad;
 import com.turnos.app.ESPECIALIDAD.EspecialidadServiceImpl;
+import com.turnos.app.MEDICO.Medico;
+import com.turnos.app.MEDICO.MedicosServiceImpl;
 
 @RestController
 @RequestMapping("/AgendaMedicoFechas")
@@ -27,14 +31,10 @@ public class AgendaMedicoFechaREST {
     @Autowired
    	private EspecialidadServiceImpl especialidadService;
     
-	
-//    // GET: http://localhost:1317/AgendaMedicoFechas
-//    @GetMapping
-//	public ResponseEntity<List<AgendaMedicoFecha>> getFechasAgendasMedico(){		
-//		List<AgendaMedicoFecha> agendaMedicoFechas = agendaMedicoFechaService.findAll();
-//		return ResponseEntity.ok(agendaMedicoFechas);
-//	}
+    @Autowired
+   	private MedicosServiceImpl medicoService;
     
+	
  	// GET: http://localhost:1317/AgendaMedicoFechas/1
  	@RequestMapping(value="/{idAgendaMedicoFecha}")
 	public ResponseEntity<AgendaMedicoFecha> getAgendaMedicoFechasByID(@PathVariable("idAgendaMedicoFecha") Long id){		
@@ -47,26 +47,52 @@ public class AgendaMedicoFechaREST {
 		}	
 	}
 
- 	//TODO: se debe recibir listado.......
+ 	//TODO: documentar.....
  	// POST: http://localhost:1317/AgendaMedicoFechas
 	@PostMapping
-	public ResponseEntity<AgendaMedicoFecha> crearFechaAgendaMedico(@RequestBody AgendaMedicoFecha fechaAgenda){
-		AgendaMedicoFecha nuevaFechaAgendaMedico = agendaMedicoFechaService.crearFechasDeAgenda(fechaAgenda);
-		return ResponseEntity.ok(nuevaFechaAgendaMedico);
+	public ResponseEntity<List<AgendaMedicoFecha>> crearFechasAgendaMedico(@RequestBody List<AgendaMedicoFecha> fechasAgenda){
+		
+		List<AgendaMedicoFecha> fechasCreadas= new ArrayList<AgendaMedicoFecha>();
+		
+		for (AgendaMedicoFecha fecha : fechasAgenda) {
+			fechasCreadas.add(agendaMedicoFechaService.crearFechasDeAgenda(fecha));
+		}
+		
+		return ResponseEntity.ok(fechasCreadas);
 	}
 	
- 	// GET: http://localhost:1317/AgendaMedicoFechas/aaaammdd/1/1
- 	@RequestMapping(value="/{fecha}/{idAgendaMedico}/{idEspecialidad}")
- 	public ResponseEntity<AgendaMedicoFecha> getAgendaMedicoFechaByMedicoYEspecialidad(@PathVariable("fecha") String fecha, 
- 																					@PathVariable("idAgendaMedico") Long idAgendaMedico,
- 																					@PathVariable("idEspecialidad") Long idEspecialidad){	
+	
+	
+ 	// GET: http://localhost:1317/AgendaMedicoFechas/AgendaMedicos/{idAgendaMedico}/
+ 	@RequestMapping(value="/AgendaMedicos/{idAgendaMedico}")
+ 	public ResponseEntity<List<AgendaMedicoFecha>> getFechasPorAgendaMedico(@PathVariable("idAgendaMedico") Long idAgendaMedico){	
+ 		Optional<AgendaMedico> agendaMedico= agendaMedicoService.findById(idAgendaMedico);
+		
+ 		if(agendaMedico.isPresent() && !agendaMedico.get().getFechas().isEmpty() ) {
+			return ResponseEntity.ok(agendaMedico.get().getFechas());
+		}
+		else {
+			return ResponseEntity.noContent().build();
+		}
+	}
+ 	
+	//TODO: a medio terminar....
+ 	// GET: http://localhost:1317/AgendaMedicoFechas/1/1/aaaammdd/M
+ 	@RequestMapping(value="/{idEspecialidad}/{idMedico}/{fecha}/{horario}")
+ 	public ResponseEntity<List<AgendaMedicoFecha>> getAgendaMedicoFechaByEspecialidad_Medico_Fecha_Horario(
+ 																					@PathVariable("idEspecialidad") Long idEspecialidad,
+ 																					@PathVariable("idMedico") Long idMedico,
+ 																					@PathVariable("fecha") String fecha,
+ 																					@PathVariable("horario") String horario){	
 
- 		Optional<AgendaMedico> agendaMedico = agendaMedicoService.findById(idAgendaMedico);
  		Optional<Especialidad> especialidad = especialidadService.findById(idEspecialidad);
+ 		Optional<Medico> medico = medicoService.findById(idMedico);
  		
-		Optional<AgendaMedicoFecha> agendaMedicoFecha= agendaMedicoFechaService.buscarPorFechaYMedicoYEspecialidad(fecha, agendaMedico, especialidad);
-		if(agendaMedicoFecha.isPresent()) {
-			return ResponseEntity.ok(agendaMedicoFecha.get());
+ 		//List <AgendaMedicoFecha> fechas = agendaMedicoFechaService.buscarPorEspecialidad_Medico_Fecha_Horario
+ 		//																								(especialidad,medico);
+ 	    List <AgendaMedicoFecha> fechas = null; 
+ 		if(!fechas.isEmpty()) {
+			return ResponseEntity.ok(fechas);
 		}
 		else {
 			return ResponseEntity.noContent().build();
