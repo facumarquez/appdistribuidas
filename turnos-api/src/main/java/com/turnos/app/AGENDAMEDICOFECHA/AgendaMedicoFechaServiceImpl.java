@@ -29,8 +29,15 @@ public class AgendaMedicoFechaServiceImpl implements AgendaMedicoFechaService{
 	}
 
 	@Override
+	public List<AgendaMedicoFecha> buscarFechasPorEspecialidadYAgendaMedico(Optional<Especialidad> especialidad, Optional<AgendaMedico> agendaMedico) {
+		return agendaMedicoFechaDAO.findByEspecialidadAndAgendaMedico(especialidad,agendaMedico);
+	}
+	
+	/*
+	@Override
 	public List<AgendaMedicoFecha> buscarPorEspecialidad_Medico_Fecha_Horario(String fecha,
 			Optional<AgendaMedico> agendaMedico, Optional<Especialidad> especialidad) {
 		return agendaMedicoFechaDAO.findByFechaAndAgendaMedicoAndEspecialidad(fecha, agendaMedico, especialidad);
 	}
+	*/
 }

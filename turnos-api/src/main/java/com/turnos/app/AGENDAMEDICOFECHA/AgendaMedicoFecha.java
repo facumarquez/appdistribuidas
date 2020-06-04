@@ -11,7 +11,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.turnos.app.AGENDAMEDICO.AgendaMedico;
 import com.turnos.app.AGENDAMEDICOHORARIO.AgendaMedicoHorario;
 import com.turnos.app.ESPECIALIDAD.Especialidad;
@@ -33,15 +33,17 @@ public class AgendaMedicoFecha {
 	
 	@ManyToOne
 	@JoinColumn(name="id_agenda_medico",nullable=false)
+	@JsonIgnore
 	private AgendaMedico agendaMedico;
 	
 	
 	@ManyToOne
 	@JoinColumn(name="id_especialidad",nullable=false)
+	@JsonIgnore
 	private Especialidad especialidad;
 	
 	@OneToMany(mappedBy = "agendaMedicoFecha")
-	@JsonIgnoreProperties("agendaMedicoFecha")
+	@JsonIgnore
     private List<AgendaMedicoHorario> horarios;
 
 	public Long getId() {

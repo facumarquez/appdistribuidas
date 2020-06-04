@@ -11,7 +11,10 @@ import com.turnos.app.ESPECIALIDAD.Especialidad;
 
 public interface AgendaMedicoFechaDAO extends JpaRepository<AgendaMedicoFecha, Long>  {
 
+	List<AgendaMedicoFecha> findByEspecialidadAndAgendaMedico(Optional<Especialidad> especialidad ,Optional<AgendaMedico> agendaMedico);
+	
+	/*
 	List<AgendaMedicoFecha> findByFechaAndAgendaMedicoAndEspecialidad(String fecha,Optional<AgendaMedico> agendaMedico,
 																				Optional<Especialidad> especialidad);
-	
+	*/
 }

@@ -76,6 +76,32 @@ public class AgendaMedicoFechaREST {
 		}
 	}
  	
+ 	//TODO: ver si incluir el filtro de fecha especifica y horario o hacer otro metodo....
+ 	// GET: http://localhost:1317/AgendaMedicoFechas/1/1/6/2020
+ 	@RequestMapping(value="/{idEspecialidad}/{idMedico}/{mes}/{anio}")
+ 	public ResponseEntity<List<AgendaMedicoFecha>> getAgendaMedicoFechasByEspecialidad_Medico(
+ 																					@PathVariable("idEspecialidad") Long idEspecialidad,
+ 																					@PathVariable("idMedico") Long idMedico,
+ 																					@PathVariable("mes") int mes,
+ 																					@PathVariable("anio") int anio){	
+ 	 		
+ 	 		
+ 		Optional<Especialidad> especialidad = especialidadService.findById(idEspecialidad);
+ 		Optional<Medico> medico = medicoService.findById(idMedico);
+ 	 		
+ 		Optional<AgendaMedico> agendaMedico = agendaMedicoService.findByMedicoYPeriodo(medico, mes, anio);
+ 	 		
+ 		List <AgendaMedicoFecha> fechas = agendaMedicoFechaService.buscarFechasPorEspecialidadYAgendaMedico(especialidad, agendaMedico);
+ 	 	     
+ 		if(!fechas.isEmpty()) {
+ 			return ResponseEntity.ok(fechas);
+ 		}
+ 		else {
+ 			return ResponseEntity.noContent().build();
+ 		}
+ 	}
+ 	
+ 	/*
 	//TODO: a medio terminar....
  	// GET: http://localhost:1317/AgendaMedicoFechas/1/1/aaaammdd/M
  	@RequestMapping(value="/{idEspecialidad}/{idMedico}/{fecha}/{horario}")
@@ -98,4 +124,5 @@ public class AgendaMedicoFechaREST {
 			return ResponseEntity.noContent().build();
 		}
 	}
+	*/
 }
