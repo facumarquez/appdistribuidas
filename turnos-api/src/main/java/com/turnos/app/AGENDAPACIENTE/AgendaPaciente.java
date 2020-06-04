@@ -63,12 +63,12 @@ public class AgendaPaciente {
 
 	@Transient
 	public String getTurnoDesde() {
-		return this.getTurno().getAgendaMedicoHorario().getHoraDesde();
+		return this.getTurno().getTurnoDesde();
 	}
 	
 	@Transient
 	public String getTurnoHasta() {
-		return this.getTurno().getAgendaMedicoHorario().getHoraHasta();
+		return this.getTurno().getTurnoHasta();
 	}
 
 	public Long getId() {
