@@ -65,6 +65,8 @@ public class PacientesREST {
 		return ResponseEntity.ok(null);
 	}
 	
+	
+	//TODO: borrar aca y en la documentacion porque no hace falta....
  	// GET: http://localhost:1317/Pacientes/1/pagoAlDia/
  	@RequestMapping(value="/{idPaciente}/pagoAlDia/")
 	public boolean pacienteAlDia(@PathVariable("idPaciente") Long id){		

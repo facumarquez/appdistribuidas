@@ -66,12 +66,18 @@ public class AgendaPacienteREST {
   	
     //PUT: http://localhost:1317/AgendaPacientes/1/ConfirmarTurno
  	@RequestMapping(value = "/{idAgendaPaciente}/ConfirmarTurno", method = RequestMethod.PUT)
-    public ResponseEntity<AgendaPaciente> confirmarTurnoPaciente(@PathVariable("idAgendaPaciente") long idAgendaPaciente) {
+    public ResponseEntity<AgendaPaciente> confirmarTurnoPaciente(@PathVariable("idAgendaPaciente") long idAgendaPaciente) throws Exception {
  		
  		 Optional<AgendaPaciente> agendaPaciente = agendaPacienteService.findById(idAgendaPaciente);
  		 if(agendaPaciente.isPresent()) {
- 			agendaPaciente.get().getTurno().setEstado(EstadoTurno.CONFIRMADO);
- 			return ResponseEntity.ok(agendaPacienteService.guardarAgenda(agendaPaciente.get()));
+ 			 if (agendaPaciente.get().getTurno().getEstado().equals(EstadoTurno.CANCELADO)){
+ 				 throw new Exception("El turno ha sido cancelado por el sistema debido a un problema con el profesional. "
+ 				 		+ "Será contactado para su reprogramación");
+ 			 }
+ 			 else {
+ 				agendaPaciente.get().getTurno().setEstado(EstadoTurno.CONFIRMADO);
+ 	 			return ResponseEntity.ok(agendaPacienteService.guardarAgenda(agendaPaciente.get()));
+ 			 }
  		 }
  		 else {
 			return ResponseEntity.noContent().build();
