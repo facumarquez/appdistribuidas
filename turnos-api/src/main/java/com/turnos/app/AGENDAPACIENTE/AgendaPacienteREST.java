@@ -64,32 +64,45 @@ public class AgendaPacienteREST {
  		}
  	}
   	
+  	//TODO: se debe probar la llamada o ver si hacer un control de errores mas sofisticado.
     //PUT: http://localhost:1317/AgendaPacientes/1/ConfirmarTurno
  	@RequestMapping(value = "/{idAgendaPaciente}/ConfirmarTurno", method = RequestMethod.PUT)
     public ResponseEntity<AgendaPaciente> confirmarTurnoPaciente(@PathVariable("idAgendaPaciente") long idAgendaPaciente) throws Exception {
  		
  		 Optional<AgendaPaciente> agendaPaciente = agendaPacienteService.findById(idAgendaPaciente);
  		 if(agendaPaciente.isPresent()) {
- 			 if (agendaPaciente.get().getTurno().getEstado().equals(EstadoTurno.CANCELADO)){
+ 			if (agendaPaciente.get().getTurno().getEstado().equals(EstadoTurno.CANCELADO)){
  				 throw new Exception("El turno ha sido cancelado por el sistema debido a un problema con el profesional. "
  				 		+ "Será contactado para su reprogramación");
- 			 }
- 			 else {
+ 			}
+ 			if (agendaPaciente.get().getTurno().getEstado().equals(EstadoTurno.CONFIRMADO)){
+				 throw new Exception("El turno ya ha sido confirmado");
+			}
+ 			if (agendaPaciente.get().getTurno().getEstado().equals(EstadoTurno.CANCELADO)){
+				 throw new Exception("El turno no puede confirmarse porque está cancelado");
+			}
+ 			if (agendaPaciente.get().getTurno().getEstado().equals(EstadoTurno.ANULADO)){
+				 throw new Exception("El turno no puede confirmarse porque está anulado");
+			}
+ 			if (agendaPaciente.get().getTurno().getEstado().equals(EstadoTurno.RESERVADO)){
  				agendaPaciente.get().getTurno().setEstado(EstadoTurno.CONFIRMADO);
- 	 			return ResponseEntity.ok(agendaPacienteService.guardarAgenda(agendaPaciente.get()));
- 			 }
+ 	 		}
  		 }
  		 else {
 			return ResponseEntity.noContent().build();
- 		 }	
+ 		 }
+ 		return ResponseEntity.ok(agendaPacienteService.guardarAgenda(agendaPaciente.get()));	
     }
  	
     //PUT: http://localhost:1317/AgendaPacientes/1/AnularTurno
  	@RequestMapping(value = "/{idAgendaPaciente}/AnularTurno", method = RequestMethod.PUT)
-    public ResponseEntity<AgendaPaciente> anularTurnoPaciente(@PathVariable("idAgendaPaciente") long idUsuario) {
+    public ResponseEntity<AgendaPaciente> anularTurnoPaciente(@PathVariable("idAgendaPaciente") long idUsuario) throws Exception {
  		
  		 Optional<AgendaPaciente> agendaPaciente = agendaPacienteService.findById(idUsuario);
  		 if(agendaPaciente.isPresent()) {
+ 			if (agendaPaciente.get().getTurno().getEstado().equals(EstadoTurno.CANCELADO)){
+ 				throw new Exception("No se puede anular un turno cancelado");
+ 			}
  			agendaPaciente.get().getTurno().setEstado(EstadoTurno.ANULADO);
  			return ResponseEntity.ok(agendaPacienteService.guardarAgenda(agendaPaciente.get()));
  		 }

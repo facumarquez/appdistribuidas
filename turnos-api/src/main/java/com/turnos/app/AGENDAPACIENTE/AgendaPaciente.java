@@ -70,6 +70,11 @@ public class AgendaPaciente {
 	public String getTurnoHasta() {
 		return this.getTurno().getTurnoHasta();
 	}
+	
+	@Transient
+	public String getEstadoTurno() {
+		return this.getTurno().getEstado().toString();
+	}
 
 	public Long getId() {
 		return id;

@@ -92,7 +92,7 @@ public class AgendaMedicoFechaREST {
  		Optional<AgendaMedico> agendaMedico = agendaMedicoService.findByMedicoYPeriodo(medico, mes, anio);
  	 		
  		List <AgendaMedicoFecha> fechas = agendaMedicoFechaService.buscarFechasPorEspecialidadYAgendaMedico(especialidad, agendaMedico);
- 	 	     
+ 	 	//TODO: ver que tenga turnos libres.....     
  		if(!fechas.isEmpty()) {
  			return ResponseEntity.ok(fechas);
  		}
