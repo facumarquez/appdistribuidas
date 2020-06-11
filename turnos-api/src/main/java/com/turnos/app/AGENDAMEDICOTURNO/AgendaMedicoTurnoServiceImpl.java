@@ -1,13 +1,18 @@
 package com.turnos.app.AGENDAMEDICOTURNO;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.turnos.app.AGENDAMEDICOFECHA.AgendaMedicoFecha;
 import com.turnos.app.AGENDAMEDICOHORARIO.AgendaMedicoHorario;
 
 @Service
@@ -43,4 +48,24 @@ public class AgendaMedicoTurnoServiceImpl implements AgendaMedicoTurnoService{
 		agendaMedicoTurnoDAO.deleteById(idAgendaMedicoTurno);
 		return ResponseEntity.ok(null);
 	}
+	
+ 	public List<AgendaMedicoTurno> obtenerTurnosPorFecha(AgendaMedicoFecha agendaMedicoFecha) {
+ 			
+ 		List <AgendaMedicoTurno> turnosDisponibles = new ArrayList<AgendaMedicoTurno>();
+ 		
+ 		for (AgendaMedicoHorario  horario : agendaMedicoFecha.getHorarios()) {
+ 			//traigo los turnos libres solamente....
+			turnosDisponibles.addAll(horario.getTurnos().stream().filter
+						(t->t.getEstado().equals(EstadoTurno.DISPONIBLE)).collect(Collectors.toList())); 
+ 		}
+ 			
+ 		//ordeno los turnos por campo desde
+ 		Comparator<AgendaMedicoTurno> comparadorTurnos = (AgendaMedicoTurno t1, AgendaMedicoTurno t2) -> {
+ 			return (t1.getTurnoDesde().compareTo(t2.getTurnoDesde()));
+ 		};
+ 		
+ 		Collections.sort(turnosDisponibles, comparadorTurnos);
+ 		
+ 		return turnosDisponibles;
+ 	}
 }

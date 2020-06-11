@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.turnos.app.AGENDAMEDICO.AgendaMedico;
 import com.turnos.app.AGENDAMEDICO.AgendaMedicoServiceImpl;
+import com.turnos.app.AGENDAMEDICOTURNO.AgendaMedicoTurno;
+import com.turnos.app.AGENDAMEDICOTURNO.AgendaMedicoTurnoServiceImpl;
 import com.turnos.app.ESPECIALIDAD.Especialidad;
 import com.turnos.app.ESPECIALIDAD.EspecialidadServiceImpl;
 import com.turnos.app.MEDICO.Medico;
@@ -33,6 +35,9 @@ public class AgendaMedicoFechaREST {
     
     @Autowired
    	private MedicosServiceImpl medicoService;
+    
+    @Autowired
+	private AgendaMedicoTurnoServiceImpl agendaMedicoTurnoService;
     
 	
  	// GET: http://localhost:1317/AgendaMedicoFechas/1
@@ -100,6 +105,23 @@ public class AgendaMedicoFechaREST {
  			return ResponseEntity.noContent().build();
  		}
  	}
+ 	
+ 	// GET: http://localhost:1317/AgendaMedicoFechas/1/TurnosDisponibles
+ 	@RequestMapping(value="/{idAgendaMedicoFecha}/TurnosDisponibles")
+ 	public ResponseEntity<List<AgendaMedicoTurno>> getTurnosDeUnafechaEspecifica(@PathVariable("idAgendaMedicoFecha") Long idAgendaMedicoFecha){	
+
+ 		Optional<AgendaMedicoFecha> agendaMedicoFecha = agendaMedicoFechaService.findById(idAgendaMedicoFecha);
+ 		
+ 		List<AgendaMedicoTurno> turnos = agendaMedicoTurnoService.obtenerTurnosPorFecha(agendaMedicoFecha.get());
+ 		
+ 		 		
+ 		if(turnos != null & turnos.size() > 0) {
+			return ResponseEntity.ok(turnos);
+		}
+		else {
+			return ResponseEntity.noContent().build();
+		}
+	}
  	
  	/*
 	//TODO: a medio terminar....

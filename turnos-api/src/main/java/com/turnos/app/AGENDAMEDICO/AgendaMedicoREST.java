@@ -59,11 +59,15 @@ public class AgendaMedicoREST {
 		}
 	}
  	
- 	// POST: http://localhost:1317/AgendaMedicos/1/ConfirmarAgenda/
-	@PostMapping(value="/{idAgendaMedico}/ConfirmarAgenda/")
-	public ResponseEntity<AgendaMedico> confirmarAgendaMedico(@PathVariable("idAgendaMedico") Long idAgendaMedico){
-
-		agendaMedicoService.confirmarAgenda(idAgendaMedico);
-		return ResponseEntity.ok(null);
+ 	// POST: http://localhost:1317/AgendaMedicos/1/ConfirmarAgenda
+	@PostMapping(value="/{idAgendaMedico}/ConfirmarAgenda")
+	public boolean confirmarAgendaMedico(@PathVariable("idAgendaMedico") Long idAgendaMedico){
+		
+		try {
+			agendaMedicoService.confirmarAgenda(idAgendaMedico);
+			return true;
+		} catch (Exception e) {
+			return false;
+		}		
 	}
 }
