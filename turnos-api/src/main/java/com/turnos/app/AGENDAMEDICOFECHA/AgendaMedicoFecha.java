@@ -33,13 +33,11 @@ public class AgendaMedicoFecha {
 	
 	@ManyToOne
 	@JoinColumn(name="id_agenda_medico",nullable=false)
-	@JsonIgnore
 	private AgendaMedico agendaMedico;
 	
 	
 	@ManyToOne
 	@JoinColumn(name="id_especialidad",nullable=false)
-	@JsonIgnore
 	private Especialidad especialidad;
 	
 	@OneToMany(mappedBy = "agendaMedicoFecha")

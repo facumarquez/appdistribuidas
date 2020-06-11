@@ -100,6 +100,10 @@ public class AgendaPacienteREST {
  		
  		 Optional<AgendaPaciente> agendaPaciente = agendaPacienteService.findById(idUsuario);
  		 if(agendaPaciente.isPresent()) {
+ 			if (agendaPaciente.get().getTurno().getEstado().equals(EstadoTurno.ANULADO)){
+ 				throw new Exception("El turno ya ha sido anulado anteriormente");
+ 			}
+ 			
  			if (agendaPaciente.get().getTurno().getEstado().equals(EstadoTurno.CANCELADO)){
  				throw new Exception("No se puede anular un turno cancelado");
  			}
