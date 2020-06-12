@@ -62,7 +62,7 @@ public class AgendaMedicoREST {
  	// POST: http://localhost:1317/AgendaMedicos/1/ConfirmarAgenda
 	@PostMapping(value="/{idAgendaMedico}/ConfirmarAgenda")
 	public boolean confirmarAgendaMedico(@PathVariable("idAgendaMedico") Long idAgendaMedico){
-		
+		//TODO: validar que el periodo sea mayor o igual al mes del sistema
 		try {
 			agendaMedicoService.confirmarAgenda(idAgendaMedico);
 			return true;

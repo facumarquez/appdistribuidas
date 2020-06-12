@@ -86,11 +86,12 @@ public class AgendaMedicoFechaREST {
  	//DOCUMENTAR
  	// GET: http://localhost:1317/AgendaMedicoFechas/1/1/6/2020/T
  	@RequestMapping(value="/{idEspecialidad}/{idMedico}/{mes}/{anio}/{horario}")
- 	public ResponseEntity<HashSet<AgendaMedicoFecha>> getAgendaMedicoFechasByEspecialidad_Medico(
+ 	public ResponseEntity<HashSet<AgendaMedicoFecha>> getAgendaMedicoFechasByEspecialidad_Medico_Periodo_Horario(
  																					@PathVariable("idEspecialidad") Long idEspecialidad,
  																					@PathVariable("idMedico") Long idMedico,
  																					@PathVariable("mes") int mes,
- 																					@PathVariable("anio") int anio,@PathVariable("horario") String horario){	
+ 																					@PathVariable("anio") int anio,
+ 																					@PathVariable("horario") String horario){	
  	 		
  		HashSet <AgendaMedicoFecha> fechasConTurnosDisponibles = new HashSet<AgendaMedicoFecha>();
  		
@@ -126,29 +127,4 @@ public class AgendaMedicoFechaREST {
 			return ResponseEntity.noContent().build();
 		}
 	}
- 	
- 	/*
-	//TODO: a medio terminar....
- 	// GET: http://localhost:1317/AgendaMedicoFechas/1/1/aaaammdd/M
- 	@RequestMapping(value="/{idEspecialidad}/{idMedico}/{fecha}/{horario}")
- 	public ResponseEntity<List<AgendaMedicoFecha>> getAgendaMedicoFechaByEspecialidad_Medico_Fecha_Horario(
- 																					@PathVariable("idEspecialidad") Long idEspecialidad,
- 																					@PathVariable("idMedico") Long idMedico,
- 																					@PathVariable("fecha") String fecha,
- 																					@PathVariable("horario") String horario){	
-
- 		Optional<Especialidad> especialidad = especialidadService.findById(idEspecialidad);
- 		Optional<Medico> medico = medicoService.findById(idMedico);
- 		
- 		//List <AgendaMedicoFecha> fechas = agendaMedicoFechaService.buscarPorEspecialidad_Medico_Fecha_Horario
- 		//																								(especialidad,medico);
- 	    List <AgendaMedicoFecha> fechas = null; 
- 		if(!fechas.isEmpty()) {
-			return ResponseEntity.ok(fechas);
-		}
-		else {
-			return ResponseEntity.noContent().build();
-		}
-	}
-	*/
 }

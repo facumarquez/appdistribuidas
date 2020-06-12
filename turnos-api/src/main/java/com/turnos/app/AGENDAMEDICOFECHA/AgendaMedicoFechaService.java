@@ -13,8 +13,4 @@ public interface AgendaMedicoFechaService {
 	
 	public List<AgendaMedicoFecha> buscarFechasPorEspecialidadYAgendaMedico(Optional<Especialidad> especialidad,
 																						Optional<AgendaMedico> agendaMedico);
-	/*
-	public List<AgendaMedicoFecha> buscarPorEspecialidad_Medico_Fecha_Horario(String fecha,
-															Optional<AgendaMedico> agendaMedico, Optional<Especialidad> especialidad);
-	*/
 }
