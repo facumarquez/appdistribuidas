@@ -28,6 +28,12 @@ public class AgendaMedicoFechaServiceImpl implements AgendaMedicoFechaService{
 		return agendaMedicoFechaDAO.findById(id);
 	}
 	
+	@Transactional(readOnly = true)
+	public List<AgendaMedicoFecha> findByFecha(String fecha) {
+		return agendaMedicoFechaDAO.findByFecha(fecha);
+	}
+	
+	
 	@Override
 	public AgendaMedicoFecha crearFechasDeAgenda(AgendaMedicoFecha fechasAgenda) {
 		return agendaMedicoFechaDAO.save(fechasAgenda);
@@ -42,7 +48,6 @@ public class AgendaMedicoFechaServiceImpl implements AgendaMedicoFechaService{
 	public HashSet <AgendaMedicoFecha>  buscarFechasConTurnosDisponibles(List <AgendaMedicoFecha> fechas, String horario) {
 		
 		String horaHasta = "12:00";
-		
 		HashSet <AgendaMedicoFecha>  fechasConTurnosDisponibles = new HashSet<AgendaMedicoFecha>();
 		
 		List <AgendaMedicoTurno> turnosDisponibles = fechas.stream()
@@ -70,12 +75,4 @@ public class AgendaMedicoFechaServiceImpl implements AgendaMedicoFechaService{
  		
  		return fechasConTurnosDisponibles;
 	}
-	
-	/*
-	@Override
-	public List<AgendaMedicoFecha> buscarPorEspecialidad_Medico_Fecha_Horario(String fecha,
-			Optional<AgendaMedico> agendaMedico, Optional<Especialidad> especialidad) {
-		return agendaMedicoFechaDAO.findByFechaAndAgendaMedicoAndEspecialidad(fecha, agendaMedico, especialidad);
-	}
-	*/
 }

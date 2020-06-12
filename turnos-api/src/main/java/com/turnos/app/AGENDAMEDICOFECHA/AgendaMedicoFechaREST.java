@@ -83,7 +83,7 @@ public class AgendaMedicoFechaREST {
 	}
  	
  	//TODO: ver si incluir el filtro de fecha especifica y horario o hacer otro metodo....
- 	//DOCUMENTAR
+ 	//DOCUMENTAR: idMedico optional
  	// GET: http://localhost:1317/AgendaMedicoFechas/1/1/6/2020/T
  	@RequestMapping(value="/{idEspecialidad}/{idMedico}/{mes}/{anio}/{horario}")
  	public ResponseEntity<HashSet<AgendaMedicoFecha>> getAgendaMedicoFechasByEspecialidad_Medico_Periodo_Horario(
@@ -120,6 +120,42 @@ public class AgendaMedicoFechaREST {
  		
  		List<AgendaMedicoTurno> turnos = agendaMedicoTurnoService.obtenerTurnosPorFecha(agendaMedicoFecha.get());
  		
+ 		if(turnos != null & turnos.size() > 0) {
+			return ResponseEntity.ok(turnos);
+		}
+		else {
+			return ResponseEntity.noContent().build();
+		}
+	}
+ 	
+ 	// GET: http://localhost:1317/AgendaMedicoFechas/20200101/MedicosDisponibles
+ 	@RequestMapping(value="/{fecha}/MedicosDisponibles")
+ 	public ResponseEntity<List<Medico>> getMedicosPorFechaDeAtencion(@PathVariable("fecha") String fecha){	
+
+ 		
+ 		List<AgendaMedicoFecha> fechasAgenda = agendaMedicoFechaService.findByFecha(fecha);
+ 		
+ 		List<Medico> medicos = medicoService.obtenerMedicosPorFecha(fechasAgenda);
+ 		
+ 		if(medicos != null & medicos.size() > 0) {
+			return ResponseEntity.ok(medicos);
+		}
+		else {
+			return ResponseEntity.noContent().build();
+		}
+	}
+ 	
+ 	// GET: http://localhost:1317/AgendaMedicoFechas/20200101/Medicos/1/TurnosDisponibles
+ 	@RequestMapping(value="/{fecha}/Medicos/{idMedico}/TurnosDisponibles")
+ 	public ResponseEntity<List<AgendaMedicoTurno>> getTurnosDeUnMedicoEspecifico(@PathVariable("fecha") String fecha,
+ 																					@PathVariable("idMedico") long idMedico) throws Exception{	
+
+ 		Optional<Medico> medico = medicoService.findById(idMedico);
+ 		
+ 		List<AgendaMedicoFecha> fechasAgenda = agendaMedicoFechaService.findByFecha(fecha);
+ 		
+ 		List<AgendaMedicoTurno> turnos = agendaMedicoTurnoService.obtenerTurnosPorFechaYMedico(fechasAgenda,medico.get());
+
  		if(turnos != null & turnos.size() > 0) {
 			return ResponseEntity.ok(turnos);
 		}

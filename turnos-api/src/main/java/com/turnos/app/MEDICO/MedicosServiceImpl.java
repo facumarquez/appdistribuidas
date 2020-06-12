@@ -1,14 +1,19 @@
 package com.turnos.app.MEDICO;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.turnos.app.AGENDAMEDICOFECHA.AgendaMedicoFecha;
 import com.turnos.app.USUARIO.Usuario;
-
-import java.util.List;
-import java.util.Optional;
 
 @Service
 @Transactional(readOnly = false)
@@ -50,4 +55,25 @@ public class MedicosServiceImpl implements MedicosService {
 	public Optional<Usuario> findByUserAndPass(String user, String pass) {
 		return medicosDAO.findByUsuarioAndPassword(user, pass);
 	}
+	
+	public List<Medico> obtenerMedicosPorFecha(List<AgendaMedicoFecha> fechasAgenda) {
+		
+		HashSet<Medico> medicos = new HashSet<Medico>();
+		
+		List<Medico> medicosOrdenado = new ArrayList<Medico>();
+		
+ 		for (AgendaMedicoFecha fecha : fechasAgenda) {
+			medicos.add(fecha.getAgendaMedico().getMedico());
+		}
+		
+ 		medicosOrdenado.addAll(medicos);
+ 		
+		Comparator<Medico> comparadorMedicos = (Medico m1, Medico m2) -> {
+ 			return (m1.getApellido().compareTo(m2.getApellido()));
+ 		};
+ 		
+ 		Collections.sort(medicosOrdenado,comparadorMedicos);
+
+ 		return medicosOrdenado;
+ 	}
 }

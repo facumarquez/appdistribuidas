@@ -13,5 +13,6 @@ public interface AgendaMedicoFechaDAO extends JpaRepository<AgendaMedicoFecha, L
 
 	List<AgendaMedicoFecha> findByEspecialidadAndAgendaMedico(Optional<Especialidad> especialidad ,Optional<AgendaMedico> agendaMedico);
 	
-
+	List <AgendaMedicoFecha> findByFecha(String fecha);
+	
 }
