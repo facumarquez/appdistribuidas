@@ -1,5 +1,6 @@
 package com.turnos.app.AGENDAMEDICOFECHA;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 
@@ -82,24 +83,28 @@ public class AgendaMedicoFechaREST {
 	}
  	
  	//TODO: ver si incluir el filtro de fecha especifica y horario o hacer otro metodo....
- 	// GET: http://localhost:1317/AgendaMedicoFechas/1/1/6/2020
- 	@RequestMapping(value="/{idEspecialidad}/{idMedico}/{mes}/{anio}")
- 	public ResponseEntity<List<AgendaMedicoFecha>> getAgendaMedicoFechasByEspecialidad_Medico(
+ 	//DOCUMENTAR
+ 	// GET: http://localhost:1317/AgendaMedicoFechas/1/1/6/2020/T
+ 	@RequestMapping(value="/{idEspecialidad}/{idMedico}/{mes}/{anio}/{horario}")
+ 	public ResponseEntity<HashSet<AgendaMedicoFecha>> getAgendaMedicoFechasByEspecialidad_Medico(
  																					@PathVariable("idEspecialidad") Long idEspecialidad,
  																					@PathVariable("idMedico") Long idMedico,
  																					@PathVariable("mes") int mes,
- 																					@PathVariable("anio") int anio){	
+ 																					@PathVariable("anio") int anio,@PathVariable("horario") String horario){	
  	 		
- 	 		
+ 		HashSet <AgendaMedicoFecha> fechasConTurnosDisponibles = new HashSet<AgendaMedicoFecha>();
+ 		
  		Optional<Especialidad> especialidad = especialidadService.findById(idEspecialidad);
  		Optional<Medico> medico = medicoService.findById(idMedico);
  	 		
  		Optional<AgendaMedico> agendaMedico = agendaMedicoService.findByMedicoYPeriodo(medico, mes, anio);
  	 		
  		List <AgendaMedicoFecha> fechas = agendaMedicoFechaService.buscarFechasPorEspecialidadYAgendaMedico(especialidad, agendaMedico);
- 	 	//TODO: ver que tenga turnos libres.....     
- 		if(!fechas.isEmpty()) {
- 			return ResponseEntity.ok(fechas);
+ 	 	
+ 		fechasConTurnosDisponibles = agendaMedicoFechaService.buscarFechasConTurnosDisponibles(fechas, horario);
+ 		
+ 		if(!fechasConTurnosDisponibles.isEmpty()) {
+ 			return ResponseEntity.ok(fechasConTurnosDisponibles);
  		}
  		else {
  			return ResponseEntity.noContent().build();
@@ -114,7 +119,6 @@ public class AgendaMedicoFechaREST {
  		
  		List<AgendaMedicoTurno> turnos = agendaMedicoTurnoService.obtenerTurnosPorFecha(agendaMedicoFecha.get());
  		
- 		 		
  		if(turnos != null & turnos.size() > 0) {
 			return ResponseEntity.ok(turnos);
 		}
