@@ -77,4 +77,9 @@ public class AgendaMedicoServiceImpl implements AgendaMedicoService {
 			
 		return ResponseEntity.ok(null);
 	}
+	
+	
+	public List<AgendaMedico> findByPeriodo(int mes, int anio) {
+		return agendaMedicoDAO.findByMesAndAnio(mes,anio);
+	}
 }

@@ -84,8 +84,8 @@ public class AgendaMedicoFechaREST {
  	
  	//TODO: ver si incluir el filtro de fecha especifica y horario o hacer otro metodo....
  	//DOCUMENTAR: idMedico optional
- 	// GET: http://localhost:1317/AgendaMedicoFechas/1/1/6/2020/T
- 	@RequestMapping(value="/{idEspecialidad}/{idMedico}/{mes}/{anio}/{horario}")
+ 	// GET: http://localhost:1317/AgendaMedicoFechas/1/1/1/2020/T
+ 	@RequestMapping(value= "/{idEspecialidad}/{idMedico}/{mes}/{anio}/{horario}")
  	public ResponseEntity<HashSet<AgendaMedicoFecha>> getAgendaMedicoFechasByEspecialidad_Medico_Periodo_Horario(
  																					@PathVariable("idEspecialidad") Long idEspecialidad,
  																					@PathVariable("idMedico") Long idMedico,
@@ -96,6 +96,7 @@ public class AgendaMedicoFechaREST {
  		HashSet <AgendaMedicoFecha> fechasConTurnosDisponibles = new HashSet<AgendaMedicoFecha>();
  		
  		Optional<Especialidad> especialidad = especialidadService.findById(idEspecialidad);
+ 		
  		Optional<Medico> medico = medicoService.findById(idMedico);
  	 		
  		Optional<AgendaMedico> agendaMedico = agendaMedicoService.findByMedicoYPeriodo(medico, mes, anio);
@@ -112,21 +113,32 @@ public class AgendaMedicoFechaREST {
  		}
  	}
  	
- 	// GET: http://localhost:1317/AgendaMedicoFechas/1/TurnosDisponibles
- 	@RequestMapping(value="/{idAgendaMedicoFecha}/TurnosDisponibles")
- 	public ResponseEntity<List<AgendaMedicoTurno>> getTurnosDeUnafechaEspecifica(@PathVariable("idAgendaMedicoFecha") Long idAgendaMedicoFecha){	
+ 	//TODO: DOCUMENTAR: 
+ 	// GET: http://localhost:1317/AgendaMedicoFechas/1/1/2020/T
+ 	@RequestMapping(value= "/{idEspecialidad}/{mes}/{anio}/{horario}")
+ 	public ResponseEntity<HashSet<AgendaMedicoFecha>> getAgendaMedicoFechasByEspecialidad_Periodo_Horario(
+ 																					@PathVariable("idEspecialidad") Long idEspecialidad,
+ 																					@PathVariable("mes") int mes,
+ 																					@PathVariable("anio") int anio,
+ 																					@PathVariable("horario") String horario){	
+ 	 		
+ 		HashSet <AgendaMedicoFecha> fechasConTurnosDisponibles = new HashSet<AgendaMedicoFecha>();
+ 		Optional<Especialidad> especialidad = especialidadService.findById(idEspecialidad);
+ 		List<AgendaMedico> agendasDeMedicos = agendaMedicoService.findByPeriodo(mes, anio);
+ 		List <AgendaMedicoFecha> fechas = new ArrayList<AgendaMedicoFecha>();
+ 		
+ 	 	for (AgendaMedico agenda : agendasDeMedicos) {
+ 	 		 fechas = agendaMedicoFechaService.buscarFechasPorEspecialidadYAgendaMedico(especialidad, Optional.of(agenda));
+ 	 	 	 fechasConTurnosDisponibles.addAll(agendaMedicoFechaService.buscarFechasConTurnosDisponibles(fechas, horario));
+		}
 
- 		Optional<AgendaMedicoFecha> agendaMedicoFecha = agendaMedicoFechaService.findById(idAgendaMedicoFecha);
- 		
- 		List<AgendaMedicoTurno> turnos = agendaMedicoTurnoService.obtenerTurnosPorFecha(agendaMedicoFecha.get());
- 		
- 		if(turnos != null & turnos.size() > 0) {
-			return ResponseEntity.ok(turnos);
-		}
-		else {
-			return ResponseEntity.noContent().build();
-		}
-	}
+ 	 	if(!fechasConTurnosDisponibles.isEmpty()) {
+ 			return ResponseEntity.ok(fechasConTurnosDisponibles);
+ 		}
+ 		else {
+ 			return ResponseEntity.noContent().build();
+ 		}
+ 	}
  	
  	// GET: http://localhost:1317/AgendaMedicoFechas/20200101/MedicosDisponibles
  	@RequestMapping(value="/{fecha}/MedicosDisponibles")
@@ -139,6 +151,22 @@ public class AgendaMedicoFechaREST {
  		
  		if(medicos != null & medicos.size() > 0) {
 			return ResponseEntity.ok(medicos);
+		}
+		else {
+			return ResponseEntity.noContent().build();
+		}
+	}
+ 	
+ 	// GET: http://localhost:1317/AgendaMedicoFechas/1/TurnosDisponibles
+ 	@RequestMapping(value="/{idAgendaMedicoFecha}/TurnosDisponibles")
+ 	public ResponseEntity<List<AgendaMedicoTurno>> getTurnosDeUnafechaEspecifica(@PathVariable("idAgendaMedicoFecha") Long idAgendaMedicoFecha){	
+
+ 		Optional<AgendaMedicoFecha> agendaMedicoFecha = agendaMedicoFechaService.findById(idAgendaMedicoFecha);
+ 		
+ 		List<AgendaMedicoTurno> turnos = agendaMedicoTurnoService.obtenerTurnosPorFecha(agendaMedicoFecha.get());
+ 		
+ 		if(turnos != null & turnos.size() > 0) {
+			return ResponseEntity.ok(turnos);
 		}
 		else {
 			return ResponseEntity.noContent().build();
