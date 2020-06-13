@@ -86,7 +86,7 @@ public class AgendaMedicoFechaREST {
  	//DOCUMENTAR: idMedico optional
  	// GET: http://localhost:1317/AgendaMedicoFechas/1/1/1/2020/T
  	@RequestMapping(value= "/{idEspecialidad}/{idMedico}/{mes}/{anio}/{horario}")
- 	public ResponseEntity<HashSet<AgendaMedicoFecha>> getAgendaMedicoFechasByEspecialidad_Medico_Periodo_Horario(
+ 	public ResponseEntity<List<AgendaMedicoFecha>> getAgendaMedicoFechasByEspecialidad_Medico_Periodo_Horario(
  																					@PathVariable("idEspecialidad") Long idEspecialidad,
  																					@PathVariable("idMedico") Long idMedico,
  																					@PathVariable("mes") int mes,
@@ -106,7 +106,7 @@ public class AgendaMedicoFechaREST {
  		fechasConTurnosDisponibles = agendaMedicoFechaService.buscarFechasConTurnosDisponibles(fechas, horario);
  		
  		if(!fechasConTurnosDisponibles.isEmpty()) {
- 			return ResponseEntity.ok(fechasConTurnosDisponibles);
+ 			return ResponseEntity.ok(new ArrayList<AgendaMedicoFecha>(fechasConTurnosDisponibles));
  		}
  		else {
  			return ResponseEntity.noContent().build();
@@ -116,7 +116,7 @@ public class AgendaMedicoFechaREST {
  	//TODO: DOCUMENTAR: 
  	// GET: http://localhost:1317/AgendaMedicoFechas/1/1/2020/T
  	@RequestMapping(value= "/{idEspecialidad}/{mes}/{anio}/{horario}")
- 	public ResponseEntity<HashSet<AgendaMedicoFecha>> getAgendaMedicoFechasByEspecialidad_Periodo_Horario(
+ 	public ResponseEntity<List<AgendaMedicoFecha>> getAgendaMedicoFechasByEspecialidad_Periodo_Horario(
  																					@PathVariable("idEspecialidad") Long idEspecialidad,
  																					@PathVariable("mes") int mes,
  																					@PathVariable("anio") int anio,
@@ -133,7 +133,7 @@ public class AgendaMedicoFechaREST {
 		}
 
  	 	if(!fechasConTurnosDisponibles.isEmpty()) {
- 			return ResponseEntity.ok(fechasConTurnosDisponibles);
+ 			return ResponseEntity.ok(new ArrayList<AgendaMedicoFecha>(fechasConTurnosDisponibles));
  		}
  		else {
  			return ResponseEntity.noContent().build();
