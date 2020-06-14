@@ -109,7 +109,7 @@ public class AgendaMedicoFechaREST {
  			return ResponseEntity.ok(new ArrayList<AgendaMedicoFecha>(fechasConTurnosDisponibles));
  		}
  		else {
- 			return ResponseEntity.noContent().build();
+ 			return ResponseEntity.ok(new ArrayList<AgendaMedicoFecha>());
  		}
  	}
  	
