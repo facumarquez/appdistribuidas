@@ -85,6 +85,7 @@ public class AgendaMedicoFechaREST {
  	//TODO: ver si incluir el filtro de fecha especifica y horario o hacer otro metodo....
  	//DOCUMENTAR: idMedico optional
  	// GET: http://localhost:1317/AgendaMedicoFechas/1/1/1/2020/T
+ 	//TODO: ver que devuelva  un "nocontent" para que no rompa retrofit
  	@RequestMapping(value= "/{idEspecialidad}/{idMedico}/{mes}/{anio}/{horario}")
  	public ResponseEntity<List<AgendaMedicoFecha>> getAgendaMedicoFechasByEspecialidad_Medico_Periodo_Horario(
  																					@PathVariable("idEspecialidad") Long idEspecialidad,
@@ -115,6 +116,7 @@ public class AgendaMedicoFechaREST {
  	
  	//TODO: DOCUMENTAR: 
  	// GET: http://localhost:1317/AgendaMedicoFechas/1/1/2020/T
+ 	//TODO: ver que devuelva  un "nocontent" para que no rompa retrofit
  	@RequestMapping(value= "/{idEspecialidad}/{mes}/{anio}/{horario}")
  	public ResponseEntity<List<AgendaMedicoFecha>> getAgendaMedicoFechasByEspecialidad_Periodo_Horario(
  																					@PathVariable("idEspecialidad") Long idEspecialidad,
@@ -136,7 +138,7 @@ public class AgendaMedicoFechaREST {
  			return ResponseEntity.ok(new ArrayList<AgendaMedicoFecha>(fechasConTurnosDisponibles));
  		}
  		else {
- 			return ResponseEntity.noContent().build();
+ 			return ResponseEntity.ok(new ArrayList<AgendaMedicoFecha>());
  		}
  	}
  	
