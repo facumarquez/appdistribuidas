@@ -23,6 +23,12 @@ public class AgendaMedicoTurnoServiceImpl implements AgendaMedicoTurnoService{
 	@Autowired
 	AgendaMedicoTurnoDAO agendaMedicoTurnoDAO;
 	
+	//TODO: ver mas adelante si hace falta....
+	@Transactional(readOnly = false)
+	public AgendaMedicoTurno guardarTurno(AgendaMedicoTurno turno) {
+
+		return agendaMedicoTurnoDAO.save(turno);
+	}
 	
 	@Transactional(readOnly = true)
 	public List<AgendaMedicoTurno> findAll() {

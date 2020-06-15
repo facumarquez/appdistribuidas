@@ -37,6 +37,7 @@ public class AgendaMedicoHorarioREST {
 		}	
 	}
 
+	//TODO: sacar en el futuro
  	// POST: http://localhost:1317/AgendaMedicoHorarios
 	@PostMapping
 	public ResponseEntity<AgendaMedicoHorario> crearHorarioAgendaMedico(@RequestBody AgendaMedicoHorario horarioAgenda){

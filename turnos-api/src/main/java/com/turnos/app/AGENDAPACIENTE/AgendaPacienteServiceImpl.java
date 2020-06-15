@@ -7,6 +7,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.turnos.app.AGENDAMEDICOTURNO.AgendaMedicoTurno;
+import com.turnos.app.AGENDAMEDICOTURNO.AgendaMedicoTurnoDAO;
+import com.turnos.app.AGENDAMEDICOTURNO.EstadoTurno;
+
 @Service
 @Transactional(readOnly = false)
 public class AgendaPacienteServiceImpl implements AgendaPacienteService {
@@ -14,9 +18,18 @@ public class AgendaPacienteServiceImpl implements AgendaPacienteService {
 	@Autowired
 	AgendaPacienteDAO agendaPacienteDAO;
 	
+	@Autowired
+	AgendaMedicoTurnoDAO agendaMedicoTurnoDAO;
 	
+	@Transactional(readOnly = false)
 	public AgendaPaciente guardarAgenda(AgendaPaciente agenda) {
-		return agendaPacienteDAO.save(agenda);
+		
+		AgendaPaciente pacienteNuevo = agendaPacienteDAO.save(agenda);
+		AgendaMedicoTurno turno = pacienteNuevo.getTurno();
+		turno.setEstado(EstadoTurno.RESERVADO);
+		agendaMedicoTurnoDAO.save(turno);
+		pacienteNuevo.setTurno(turno);
+		return pacienteNuevo;
 	}
 
 	@Transactional(readOnly = true)

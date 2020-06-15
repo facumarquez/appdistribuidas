@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.turnos.app.AGENDAMEDICOTURNO.AgendaMedicoTurno;
 import com.turnos.app.AGENDAMEDICOTURNO.EstadoTurno;
 import com.turnos.app.HELPERS.FechaHelper;
 import com.turnos.app.PACIENTE.Paciente;
@@ -34,9 +33,6 @@ public class AgendaPacienteREST {
 	@PostMapping
 	public ResponseEntity<AgendaPaciente> crearAgendaPaciente(@RequestBody AgendaPaciente agendaPaciente){
 		
-		AgendaMedicoTurno turno = agendaPaciente.getTurno();
-		turno.setEstado(EstadoTurno.RESERVADO);
-	    agendaPaciente.setTurno(turno);	
 		AgendaPaciente nuevaAgendaPaciente = agendaPacienteService.guardarAgenda(agendaPaciente);
 		return ResponseEntity.ok(nuevaAgendaPaciente);
 	}
