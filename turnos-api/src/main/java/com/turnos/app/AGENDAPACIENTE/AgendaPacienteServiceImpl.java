@@ -30,12 +30,12 @@ public class AgendaPacienteServiceImpl implements AgendaPacienteService {
 	@Transactional(readOnly = false)
 	public AgendaPaciente guardarAgenda_ReservarTurno(AgendaPaciente agenda) {
 		
-		AgendaPaciente pacienteNuevo = agendaPacienteDAO.save(agenda);
-		AgendaMedicoTurno turno = pacienteNuevo.getTurno();
+		AgendaPaciente agendaPacienteNuevo = agendaPacienteDAO.save(agenda);
+		AgendaMedicoTurno turno = agendaPacienteNuevo.getTurno();
 		turno.setEstado(EstadoTurno.RESERVADO);
 		agendaMedicoTurnoDAO.save(turno);
-		pacienteNuevo.setTurno(turno);
-		return pacienteNuevo;
+		agendaPacienteNuevo.setTurno(turno);
+		return agendaPacienteNuevo;
 	}
 
 	@Transactional(readOnly = true)
