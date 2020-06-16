@@ -33,7 +33,7 @@ public class AgendaPacienteREST {
 	@PostMapping
 	public ResponseEntity<AgendaPaciente> crearAgendaPaciente(@RequestBody AgendaPaciente agendaPaciente){
 		
-		AgendaPaciente nuevaAgendaPaciente = agendaPacienteService.guardarAgenda(agendaPaciente);
+		AgendaPaciente nuevaAgendaPaciente = agendaPacienteService.guardarAgenda_ReservarTurno(agendaPaciente);
 		return ResponseEntity.ok(nuevaAgendaPaciente);
 	}
 	
