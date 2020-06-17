@@ -31,7 +31,11 @@ public class AgendaPacienteREST {
 	
  	// POST: http://localhost:1317/AgendaPacientes
 	@PostMapping
-	public ResponseEntity<AgendaPaciente> crearAgendaPaciente(@RequestBody AgendaPaciente agendaPaciente){
+	public ResponseEntity<AgendaPaciente> crearAgendaPaciente(@RequestBody AgendaPaciente agendaPaciente) throws Exception{
+		
+		if (agendaPaciente.getPaciente().getIdUsuario().equals(agendaPaciente.getMedico().getIdUsuario())) {
+			throw new Exception("Paciente y médico no pueden ser la misma persona");
+		}
 		
 		AgendaPaciente nuevaAgendaPaciente = agendaPacienteService.guardarAgenda_ReservarTurno(agendaPaciente);
 		return ResponseEntity.ok(nuevaAgendaPaciente);
