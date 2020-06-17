@@ -10,6 +10,6 @@ import com.turnos.app.AGENDAMEDICOFECHA.AgendaMedicoFecha;
 public interface AgendaMedicoHorarioDAO extends JpaRepository<AgendaMedicoHorario, Long>  {
 
 	Optional<AgendaMedicoHorario> findByHoraDesdeAndHoraHastaAndAgendaMedicoFecha(String horaDesde,String horaHasta, 
-																				  Optional<AgendaMedicoFecha> agendaMedicoFecha);
+																				  AgendaMedicoFecha agendaMedicoFecha);
 	
 }

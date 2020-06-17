@@ -1,6 +1,7 @@
 package com.turnos.app.AGENDAMEDICOFECHA;
 
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
@@ -11,6 +12,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.turnos.app.AGENDAMEDICO.AgendaMedico;
+import com.turnos.app.AGENDAMEDICOHORARIO.AgendaMedicoHorario;
+import com.turnos.app.AGENDAMEDICOHORARIO.AgendaMedicoHorarioDAO;
 import com.turnos.app.AGENDAMEDICOTURNO.AgendaMedicoTurno;
 import com.turnos.app.AGENDAMEDICOTURNO.EstadoTurno;
 import com.turnos.app.ESPECIALIDAD.Especialidad;
@@ -21,6 +24,9 @@ public class AgendaMedicoFechaServiceImpl implements AgendaMedicoFechaService{
 	
 	@Autowired
 	AgendaMedicoFechaDAO agendaMedicoFechaDAO;
+	
+	@Autowired
+	AgendaMedicoHorarioDAO agendaMedicoHorarioDAO;
 	
 	
 	@Transactional(readOnly = true)
@@ -35,8 +41,23 @@ public class AgendaMedicoFechaServiceImpl implements AgendaMedicoFechaService{
 	
 	
 	@Override
-	public AgendaMedicoFecha crearFechasDeAgenda(AgendaMedicoFecha fechasAgenda) {
-		return agendaMedicoFechaDAO.save(fechasAgenda);
+	@Transactional(readOnly = false)
+	public List<AgendaMedicoFecha> crearFechasDeAgenda(List <AgendaMedicoFecha> fechasAgenda) {
+		
+		List<AgendaMedicoFecha> fechasCreadas = new ArrayList<AgendaMedicoFecha>();
+		
+		for (AgendaMedicoFecha fecha : fechasAgenda) {
+			Optional <AgendaMedicoFecha> fechaEspecifica  = agendaMedicoFechaDAO.findByFechaAndAgendaMedico(fecha.getFecha(), fecha.getAgendaMedico());
+			
+			if (!fechaEspecifica.isPresent()) {
+				fechasCreadas.add(agendaMedicoFechaDAO.save(fecha));
+			}else {
+				fechasCreadas.add(fechaEspecifica.get());
+			}
+			
+		}
+		//TODO: ver como validar que ya hay una fecha con otra especialidad para el mismo dia......
+		return fechasCreadas;
 	}
 
 	@Override
@@ -74,5 +95,19 @@ public class AgendaMedicoFechaServiceImpl implements AgendaMedicoFechaService{
  		
  		
  		return fechasConTurnosDisponibles;
+	}
+	
+	
+	public List<AgendaMedicoHorario> buscarHorariosPorFechas(List<AgendaMedicoFecha> fechas) {
+		
+		List<AgendaMedicoHorario> horarios = new ArrayList<AgendaMedicoHorario>();
+		
+		for (AgendaMedicoFecha fecha : fechas) {
+			AgendaMedicoFecha fechaBuscada = agendaMedicoFechaDAO.findById(fecha.getId()).get();
+			if (fechaBuscada.getHorarios() != null) {
+				horarios.addAll(fechaBuscada.getHorarios());
+			}
+		}
+		return horarios;
 	}
 }

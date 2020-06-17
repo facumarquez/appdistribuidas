@@ -1,4 +1,5 @@
 package com.turnos.app.AGENDAMEDICOHORARIO;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,9 +41,10 @@ public class AgendaMedicoHorarioREST {
 	//TODO: sacar en el futuro
  	// POST: http://localhost:1317/AgendaMedicoHorarios
 	@PostMapping
-	public ResponseEntity<AgendaMedicoHorario> crearHorarioAgendaMedico(@RequestBody AgendaMedicoHorario horarioAgenda){
-		AgendaMedicoHorario nuevoHorarioAgendaMedico = agendaMedicoHorarioService.guardarHorarioDeAgenda(horarioAgenda);
-		return ResponseEntity.ok(nuevoHorarioAgendaMedico);
+	public ResponseEntity<List<AgendaMedicoHorario>> crearHorarioAgendaMedico(@RequestBody List<AgendaMedicoHorario> horariosAgenda){
+		
+		return ResponseEntity.ok(agendaMedicoHorarioService.crearHorariosDeAgenda(horariosAgenda));
+		
 	}
 	
  	// GET: http://localhost:1317/AgendaMedicoHorarios/2/12/15
@@ -78,10 +80,21 @@ public class AgendaMedicoHorarioREST {
  		 if(horario.isPresent()) {
  			horario.get().setHoraDesde(nuevoHorario.getHoraDesde().trim());
  			horario.get().setHoraHasta(nuevoHorario.getHoraHasta().trim());
-   			return ResponseEntity.ok(agendaMedicoHorarioService.guardarHorarioDeAgenda(horario.get()));
+   			//return ResponseEntity.ok(agendaMedicoHorarioService.guardarHorarioDeAgenda(horario.get()));
+   			//TODO: ver como arrelgar esto....
+ 			return ResponseEntity.ok(null);
    		 }
    		 else {
   			return ResponseEntity.noContent().build();
    		 }	
     }
+ 	
+ 	//TODO:Documentar y probar
+	//DELETE: http://localhost:1317/AgendaMedicoHorarios
+	@DeleteMapping(value="/")
+	public ResponseEntity<Void> deleteHorarios(@RequestBody List<AgendaMedicoHorario> horariosAgenda){
+		
+		agendaMedicoHorarioService.deleteHorarios(horariosAgenda);
+		return ResponseEntity.ok(null);
+	}
 }

@@ -1,5 +1,6 @@
 package com.turnos.app.AGENDAMEDICOHORARIO;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -29,18 +30,42 @@ public class AgendaMedicoHorarioServiceImpl implements AgendaMedicoHorarioServic
 	}
 	
 	@Override
-	public AgendaMedicoHorario guardarHorarioDeAgenda(AgendaMedicoHorario horarioAgenda) {
-		return agendaMedicoHorarioDAO.save(horarioAgenda);
+	@Transactional(readOnly = false)
+	public List<AgendaMedicoHorario> crearHorariosDeAgenda(List <AgendaMedicoHorario> horariosAgenda) {
+		
+		List<AgendaMedicoHorario> horariosCreados = new ArrayList<AgendaMedicoHorario>();
+		
+		for (AgendaMedicoHorario horario : horariosAgenda) {
+			Optional <AgendaMedicoHorario> horarioEspecifico  = agendaMedicoHorarioDAO.findByHoraDesdeAndHoraHastaAndAgendaMedicoFecha
+																		(horario.getHoraDesde(), horario.getHoraHasta(), horario.getAgendaMedicoFecha());
+			
+			if (!horarioEspecifico.isPresent()) {
+				horariosCreados.add(agendaMedicoHorarioDAO.save(horario));
+			}else {
+				horariosCreados.add(horarioEspecifico.get());
+			}
+		}
+
+		return horariosCreados;
 	}
 
 	@Override
 	public Optional<AgendaMedicoHorario> buscarPorRangoHorarioYFecha(String horaDesde, String horaHasta,
 			Optional<AgendaMedicoFecha> agendaMedicoFecha) {
-		return agendaMedicoHorarioDAO.findByHoraDesdeAndHoraHastaAndAgendaMedicoFecha(horaDesde, horaHasta, agendaMedicoFecha);
+		return agendaMedicoHorarioDAO.findByHoraDesdeAndHoraHastaAndAgendaMedicoFecha(horaDesde, horaHasta, agendaMedicoFecha.get());
 	}
 	
 	public ResponseEntity<Void> deleteByID(Long idAgendaMedicoHorario) {
 		agendaMedicoHorarioDAO.deleteById(idAgendaMedicoHorario);
+		return ResponseEntity.ok(null);
+	}
+	
+	@Transactional(readOnly = false)
+	public ResponseEntity<Void> deleteHorarios(List <AgendaMedicoHorario> horariosAgenda) {
+		
+		for (AgendaMedicoHorario horario : horariosAgenda) {
+			agendaMedicoHorarioDAO.deleteById(horario.getId());
+		}
 		return ResponseEntity.ok(null);
 	}
 }

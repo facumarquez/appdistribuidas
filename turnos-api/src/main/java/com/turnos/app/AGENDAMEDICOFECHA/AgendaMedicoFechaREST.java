@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.turnos.app.AGENDAMEDICO.AgendaMedico;
 import com.turnos.app.AGENDAMEDICO.AgendaMedicoServiceImpl;
+import com.turnos.app.AGENDAMEDICOHORARIO.AgendaMedicoHorario;
 import com.turnos.app.AGENDAMEDICOTURNO.AgendaMedicoTurno;
 import com.turnos.app.AGENDAMEDICOTURNO.AgendaMedicoTurnoServiceImpl;
 import com.turnos.app.ESPECIALIDAD.Especialidad;
@@ -58,13 +59,7 @@ public class AgendaMedicoFechaREST {
 	@PostMapping
 	public ResponseEntity<List<AgendaMedicoFecha>> crearFechasAgendaMedico(@RequestBody List<AgendaMedicoFecha> fechasAgenda){
 		
-		List<AgendaMedicoFecha> fechasCreadas= new ArrayList<AgendaMedicoFecha>();
-		
-		for (AgendaMedicoFecha fecha : fechasAgenda) {
-			fechasCreadas.add(agendaMedicoFechaService.crearFechasDeAgenda(fecha));
-		}
-		
-		return ResponseEntity.ok(fechasCreadas);
+		return ResponseEntity.ok(agendaMedicoFechaService.crearFechasDeAgenda(fechasAgenda));
 	}
 	
 	
@@ -192,5 +187,12 @@ public class AgendaMedicoFechaREST {
 		else {
 			return ResponseEntity.noContent().build();
 		}
+	}
+ 	
+	@PostMapping(path = "/Horarios")
+	public ResponseEntity<List<AgendaMedicoHorario>> obtenerHorariosDeFechas(@RequestBody List<AgendaMedicoFecha> fechasAgenda){
+		
+		return ResponseEntity.ok(agendaMedicoFechaService.buscarHorariosPorFechas(fechasAgenda));
+		
 	}
 }
