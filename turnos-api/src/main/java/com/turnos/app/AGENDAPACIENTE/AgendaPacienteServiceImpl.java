@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.turnos.app.AGENDAMEDICOTURNO.AgendaMedicoTurno;
 import com.turnos.app.AGENDAMEDICOTURNO.AgendaMedicoTurnoDAO;
 import com.turnos.app.AGENDAMEDICOTURNO.EstadoTurno;
+import com.turnos.app.HELPERS.TurnoHelper;
 
 @Service
 @Transactional(readOnly = false)
@@ -25,6 +26,16 @@ public class AgendaPacienteServiceImpl implements AgendaPacienteService {
 	public AgendaPaciente guardarAgenda(AgendaPaciente agenda) {
 
 		return agendaPacienteDAO.save(agenda);
+	}
+	
+	@Transactional(readOnly = false)
+	public AgendaPaciente confirmarTurnoAgenda(AgendaPaciente agenda) throws Exception {
+		
+		if(TurnoHelper.sePuedeConfirmarElTurno(agenda.getFechaTurno(), agenda.getTurnoDesde())) {
+			return agendaPacienteDAO.save(agenda);
+		}else {
+			throw new Exception("El turno puede ser confirmado desde 12 hasta 1 hora antes");
+		}
 	}
 	
 	@Transactional(readOnly = false)

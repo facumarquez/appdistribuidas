@@ -36,7 +36,7 @@ public class AgendaPacienteREST {
 		if (agendaPaciente.getPaciente().getIdUsuario().equals(agendaPaciente.getMedico().getIdUsuario())) {
 			throw new Exception("Paciente y médico no pueden ser la misma persona");
 		}
-		
+		//TODO:validar que no tenga un turno el mismo dia y horario
 		AgendaPaciente nuevaAgendaPaciente = agendaPacienteService.guardarAgenda_ReservarTurno(agendaPaciente);
 		return ResponseEntity.ok(nuevaAgendaPaciente);
 	}
@@ -84,6 +84,7 @@ public class AgendaPacienteREST {
  			if (agendaPaciente.get().getTurno().getEstado().equals(EstadoTurno.ANULADO)){
 				 throw new Exception("El turno no puede confirmarse porque está anulado");
 			}
+ 			
  			if (agendaPaciente.get().getTurno().getEstado().equals(EstadoTurno.RESERVADO)){
  				agendaPaciente.get().getTurno().setEstado(EstadoTurno.CONFIRMADO);
  	 		}
@@ -91,7 +92,7 @@ public class AgendaPacienteREST {
  		 else {
 			return ResponseEntity.noContent().build();
  		 }
- 		return ResponseEntity.ok(agendaPacienteService.guardarAgenda(agendaPaciente.get()));	
+ 		return ResponseEntity.ok(agendaPacienteService.confirmarTurnoAgenda(agendaPaciente.get()));	
     }
  	
     //PUT: http://localhost:1317/AgendaPacientes/1/AnularTurno

@@ -4,6 +4,7 @@ import java.text.SimpleDateFormat;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 
@@ -46,5 +47,35 @@ public class TurnoHelper {
 		String turnoHasta = new SimpleDateFormat("HH:mm").format(calendario.getTime()).toString();
 		
 		return new AgendaMedicoTurno(turnoDesde, turnoHasta, EstadoTurno.DISPONIBLE, horario);
+	}
+	
+	public static boolean sePuedeConfirmarElTurno(String fecha, String horario) {
+		
+		Date ahora = new Date();
+		
+		int anio = Integer.valueOf(fecha.substring(0,4));
+		int mes = Integer.valueOf(fecha.substring(4,6))-1;
+		int dia = Integer.valueOf(fecha.substring(6,8));
+		int hora = Integer.valueOf(horario.substring(0,2));
+		int minuto = Integer.valueOf(horario.substring(3,5));
+		
+		GregorianCalendar calendarioTurno = (GregorianCalendar) GregorianCalendar.getInstance();
+		calendarioTurno.set(anio, mes, dia, hora,minuto);
+		Date fechaHoraTurno = calendarioTurno.getTime();
+		
+		
+		Calendar calendarUnaHoraAntes = Calendar.getInstance();
+		Calendar calendarDoceHorasAntes = Calendar.getInstance();
+		calendarUnaHoraAntes.setTime(fechaHoraTurno);
+		calendarDoceHorasAntes.setTime(fechaHoraTurno);
+	      
+		calendarUnaHoraAntes.add(Calendar.HOUR, -1);
+		calendarDoceHorasAntes.add(Calendar.HOUR, -12);
+
+		Date fechaUnaHoraAntes = calendarUnaHoraAntes.getTime();
+		Date fecha12HorasAntes = calendarDoceHorasAntes.getTime();
+		
+
+		return fecha12HorasAntes.compareTo(ahora) * ahora.compareTo(fechaUnaHoraAntes) >= 0;
 	}
 }
