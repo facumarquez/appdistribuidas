@@ -86,13 +86,13 @@ public class AgendaPacienteREST {
 			}
  			
  			if (agendaPaciente.get().getTurno().getEstado().equals(EstadoTurno.RESERVADO)){
- 				agendaPaciente.get().getTurno().setEstado(EstadoTurno.CONFIRMADO);
+ 				ResponseEntity.ok(agendaPacienteService.confirmarTurnoAgenda(agendaPaciente.get()));	
  	 		}
  		 }
  		 else {
 			return ResponseEntity.noContent().build();
  		 }
- 		return ResponseEntity.ok(agendaPacienteService.confirmarTurnoAgenda(agendaPaciente.get()));	
+		return null;
     }
  	
     //PUT: http://localhost:1317/AgendaPacientes/1/AnularTurno

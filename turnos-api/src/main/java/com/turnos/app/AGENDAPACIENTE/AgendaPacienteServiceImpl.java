@@ -28,14 +28,14 @@ public class AgendaPacienteServiceImpl implements AgendaPacienteService {
 		return agendaPacienteDAO.save(agenda);
 	}
 	
-	@Transactional(readOnly = false)
+	
 	public AgendaPaciente confirmarTurnoAgenda(AgendaPaciente agenda) throws Exception {
 		
-		if(TurnoHelper.sePuedeConfirmarElTurno(agenda.getFechaTurno(), agenda.getTurnoDesde())) {
-			return agendaPacienteDAO.save(agenda);
-		}else {
+		if(!TurnoHelper.sePuedeConfirmarElTurno(agenda.getFechaTurno(), agenda.getTurnoDesde())) {
 			throw new Exception("El turno puede ser confirmado desde 12 hasta 1 hora antes");
 		}
+		agenda.getTurno().setEstado(EstadoTurno.CONFIRMADO);
+		return agendaPacienteDAO.save(agenda);
 	}
 	
 	@Transactional(readOnly = false)
