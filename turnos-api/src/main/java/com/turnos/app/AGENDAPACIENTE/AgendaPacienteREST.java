@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.turnos.app.AGENDAMEDICOTURNO.EstadoTurno;
 import com.turnos.app.HELPERS.FechaHelper;
+import com.turnos.app.HELPERS.TurnoHelper;
 import com.turnos.app.PACIENTE.Paciente;
 import com.turnos.app.PACIENTE.PacientesServiceImpl;
 
@@ -109,7 +110,12 @@ public class AgendaPacienteREST {
  				throw new Exception("No se puede anular un turno cancelado");
  			}
  			agendaPaciente.get().getTurno().setEstado(EstadoTurno.ANULADO);
- 			return ResponseEntity.ok(agendaPacienteService.guardarAgenda(agendaPaciente.get()));
+ 			
+ 			if(!TurnoHelper.sePuedeAnularElTurnoSinGenerarCargos(agendaPaciente.get().getFechaTurno(), agendaPaciente.get().getTurnoDesde())) {
+ 				throw new Exception("Se generarán cargos en su cte. cte. por no anular el turno 12hs antes");
+ 			}else {
+ 				return ResponseEntity.ok(agendaPacienteService.guardarAgenda(agendaPaciente.get()));
+ 			}
  		 }
  		 else {
 			return ResponseEntity.noContent().build();

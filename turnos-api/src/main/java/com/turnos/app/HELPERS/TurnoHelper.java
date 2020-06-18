@@ -78,4 +78,29 @@ public class TurnoHelper {
 
 		return fecha12HorasAntes.compareTo(ahora) * ahora.compareTo(fechaUnaHoraAntes) >= 0;
 	}
+	
+	public static boolean sePuedeAnularElTurnoSinGenerarCargos(String fecha, String horario) {
+		
+		Date ahora = new Date();
+		
+		int anio = Integer.valueOf(fecha.substring(0,4));
+		int mes = Integer.valueOf(fecha.substring(4,6))-1;
+		int dia = Integer.valueOf(fecha.substring(6,8));
+		int hora = Integer.valueOf(horario.substring(0,2));
+		int minuto = Integer.valueOf(horario.substring(3,5));
+		
+		GregorianCalendar calendarioTurno = (GregorianCalendar) GregorianCalendar.getInstance();
+		calendarioTurno.set(anio, mes, dia, hora,minuto);
+		Date fechaHoraTurno = calendarioTurno.getTime();
+		
+		
+		Calendar calendarDoceHorasAntes = Calendar.getInstance();
+		calendarDoceHorasAntes.setTime(fechaHoraTurno);
+	      
+		calendarDoceHorasAntes.add(Calendar.HOUR, -12);
+
+		Date fecha12HorasAntes = calendarDoceHorasAntes.getTime();
+		
+		return ahora.compareTo(fecha12HorasAntes) <= 0;
+	}
 }
