@@ -111,10 +111,12 @@ public class AgendaPacienteREST {
  			}
  			agendaPaciente.get().getTurno().setEstado(EstadoTurno.ANULADO);
  			
+ 			agendaPaciente = Optional.of(agendaPacienteService.guardarAgenda(agendaPaciente.get()));
+ 			
  			if(!TurnoHelper.sePuedeAnularElTurnoSinGenerarCargos(agendaPaciente.get().getFechaTurno(), agendaPaciente.get().getTurnoDesde())) {
  				throw new Exception("Se generarán cargos en su cte. cte. por no anular el turno 12hs antes");
  			}else {
- 				return ResponseEntity.ok(agendaPacienteService.guardarAgenda(agendaPaciente.get()));
+ 				return ResponseEntity.ok(agendaPaciente.get());
  			}
  		 }
  		 else {
