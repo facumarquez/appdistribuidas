@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.turnos.app.AGENDAMEDICOTURNO.EstadoTurno;
+import com.turnos.app.COLAESPERAPACIENTE.ColaEsperaPaciente;
 import com.turnos.app.HELPERS.FechaHelper;
 import com.turnos.app.HELPERS.TurnoHelper;
 import com.turnos.app.PACIENTE.Paciente;
@@ -37,7 +38,6 @@ public class AgendaPacienteREST {
 		if (agendaPaciente.getPaciente().getIdUsuario().equals(agendaPaciente.getMedico().getIdUsuario())) {
 			throw new Exception("Paciente y médico no pueden ser la misma persona");
 		}
-		//TODO:validar que no tenga un turno el mismo dia y horario
 		AgendaPaciente nuevaAgendaPaciente = agendaPacienteService.guardarAgenda_ReservarTurno(agendaPaciente);
 		return ResponseEntity.ok(nuevaAgendaPaciente);
 	}
@@ -120,4 +120,11 @@ public class AgendaPacienteREST {
 			return ResponseEntity.noContent().build();
  		 }	
     }
+ 	
+ 	// POST: http://localhost:1317/AgendaPacientes/ColaEspera
+	@PostMapping
+	public ResponseEntity<ColaEsperaPaciente> agregarAColaDeEspera(@RequestBody ColaEsperaPaciente colaEspera) throws Exception{
+		
+		return ResponseEntity.ok(agendaPacienteService.agregarAColaDeEspera(colaEspera));
+	}
 }

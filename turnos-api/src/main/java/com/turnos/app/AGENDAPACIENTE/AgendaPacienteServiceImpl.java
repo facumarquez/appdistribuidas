@@ -12,6 +12,8 @@ import org.springframework.transaction.annotation.Transactional;
 import com.turnos.app.AGENDAMEDICOTURNO.AgendaMedicoTurno;
 import com.turnos.app.AGENDAMEDICOTURNO.AgendaMedicoTurnoDAO;
 import com.turnos.app.AGENDAMEDICOTURNO.EstadoTurno;
+import com.turnos.app.COLAESPERAPACIENTE.ColaEsperaPaciente;
+import com.turnos.app.COLAESPERAPACIENTE.ColaEsperaPacienteDAO;
 import com.turnos.app.HELPERS.TurnoHelper;
 import com.turnos.app.PACIENTE.Paciente;
 import com.turnos.app.PACIENTE.PacientesDAO;
@@ -28,6 +30,9 @@ public class AgendaPacienteServiceImpl implements AgendaPacienteService {
 	
 	@Autowired
 	PacientesDAO pacienteDAO;
+	
+	@Autowired
+	ColaEsperaPacienteDAO colaEsperaPacienteDAO;
 	
 	@Transactional(readOnly = false)
 	public AgendaPaciente anularTurnoAgenda(AgendaPaciente agenda) {
@@ -95,5 +100,10 @@ public class AgendaPacienteServiceImpl implements AgendaPacienteService {
 	@Transactional(readOnly = true)
 	public Optional<AgendaPaciente> findById(Long id) {
 		return agendaPacienteDAO.findById(id);
+	}
+	
+	@Transactional(readOnly = true)
+	public ColaEsperaPaciente agregarAColaDeEspera(ColaEsperaPaciente colaEspera) {
+		return colaEsperaPacienteDAO.save(colaEspera);
 	}
 }
