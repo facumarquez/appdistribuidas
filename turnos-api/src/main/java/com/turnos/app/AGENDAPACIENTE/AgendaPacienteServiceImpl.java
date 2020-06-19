@@ -23,11 +23,17 @@ public class AgendaPacienteServiceImpl implements AgendaPacienteService {
 	AgendaMedicoTurnoDAO agendaMedicoTurnoDAO;
 	
 	@Transactional(readOnly = false)
-	public AgendaPaciente guardarAgenda(AgendaPaciente agenda) {
+	public AgendaPaciente anularTurnoAgenda(AgendaPaciente agenda) {
 
-		return agendaPacienteDAO.save(agenda);
+		AgendaMedicoTurno turno = agenda.getTurno();
+		
+		turno.setEstado(EstadoTurno.DISPONIBLE);
+		agendaMedicoTurnoDAO.save(turno);
+		agenda.setTurno(null);
+		
+		AgendaPaciente agendaPacienteNuevo = agendaPacienteDAO.save(agenda);
+		return agendaPacienteNuevo;
 	}
-	
 	
 	public AgendaPaciente confirmarTurnoAgenda(AgendaPaciente agenda) throws Exception {
 		

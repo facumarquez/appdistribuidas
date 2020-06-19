@@ -31,7 +31,7 @@ public class AgendaPaciente {
 	
 	
 	@ManyToOne
-    @JoinColumn(name = "id_turno",nullable=false)
+    @JoinColumn(name = "id_turno",nullable=true)
 	private AgendaMedicoTurno turno;
 	
 
@@ -53,32 +53,32 @@ public class AgendaPaciente {
 
 	@Transient
 	public Especialidad getEspecialidad() {
-		return this.getTurno().getAgendaMedicoHorario().getAgendaMedicoFecha().getEspecialidad();
+		return this.getTurno() == null ? null : this.getTurno().getAgendaMedicoHorario().getAgendaMedicoFecha().getEspecialidad();
 	}
 	
 	@Transient
 	public Medico getMedico() {
-		return this.getTurno().getAgendaMedicoHorario().getAgendaMedicoFecha().getAgendaMedico().getMedico();
+		return this.getTurno() == null ? null :  this.getTurno().getAgendaMedicoHorario().getAgendaMedicoFecha().getAgendaMedico().getMedico();
 	}
 	
 	@Transient
 	public String getFechaTurno() {
-		return this.getTurno().getAgendaMedicoHorario().getAgendaMedicoFecha().getFecha();
+		return this.getTurno() == null ? "-" : this.getTurno().getAgendaMedicoHorario().getAgendaMedicoFecha().getFecha();
 	}
 
 	@Transient
 	public String getTurnoDesde() {
-		return this.getTurno().getTurnoDesde();
+		return this.getTurno() == null ? "-" :this.getTurno().getTurnoDesde();
 	}
 	
 	@Transient
 	public String getTurnoHasta() {
-		return this.getTurno().getTurnoHasta();
+		return this.getTurno() == null ? "-" : this.getTurno().getTurnoHasta();
 	}
 	
 	@Transient
 	public String getEstadoTurno() {
-		return this.getTurno().getEstado().toString();
+		return this.getTurno() == null ? "-" : this.getTurno().getEstado().toString();
 	}
 
 	public Long getId() {
