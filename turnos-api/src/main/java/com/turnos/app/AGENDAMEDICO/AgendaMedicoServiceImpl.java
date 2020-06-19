@@ -27,8 +27,13 @@ public class AgendaMedicoServiceImpl implements AgendaMedicoService {
 	AgendaMedicoTurnoDAO agendaMedicoTurnoDAO;
 	
 	
-	public AgendaMedico crearAgenda(AgendaMedico agenda) {
-		return agendaMedicoDAO.save(agenda);
+	public AgendaMedico crearAgenda(AgendaMedico agenda) throws Exception {
+		
+		if(TurnoHelper.rangoDeAgendaMedicoPermitida(agenda.getAnio(), agenda.getMes())) {
+			return agendaMedicoDAO.save(agenda);
+		}else {
+			throw new Exception("Se puede generar la agenda de los 2 meses siguientes al actual");
+		}
 	}
 
 	@Override

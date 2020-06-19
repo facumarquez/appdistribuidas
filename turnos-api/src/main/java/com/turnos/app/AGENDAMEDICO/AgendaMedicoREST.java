@@ -38,9 +38,11 @@ public class AgendaMedicoREST {
 
  	// POST: http://localhost:1317/AgendaMedicos
 	@PostMapping
-	public ResponseEntity<AgendaMedico> crearAgendaMedico(@RequestBody AgendaMedico agendaMedico){
+	public ResponseEntity<AgendaMedico> crearAgendaMedico(@RequestBody AgendaMedico agendaMedico) throws Exception{
+		
 		AgendaMedico nuevaAgendaMedico = agendaMedicoService.crearAgenda(agendaMedico);
 		return ResponseEntity.ok(nuevaAgendaMedico);
+		
 	}
 	
  	// GET: http://localhost:1317/AgendaMedicos/1/1/2020

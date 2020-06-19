@@ -103,4 +103,27 @@ public class TurnoHelper {
 		
 		return ahora.compareTo(fecha12HorasAntes) <= 0;
 	}
+	
+	public static boolean rangoDeAgendaMedicoPermitida(int anio, int mes) {
+		
+		int anioAgenda = anio;
+		int mesAgenda = mes;
+		int diaAgenda = 1;
+		
+		GregorianCalendar calendarioAgenda = (GregorianCalendar) GregorianCalendar.getInstance();
+		calendarioAgenda.set(anioAgenda, mesAgenda -1, diaAgenda);
+		Date periodoAgenda = calendarioAgenda.getTime();
+		
+		Date ahora = new Date();
+		GregorianCalendar calendarioAhora = (GregorianCalendar) GregorianCalendar.getInstance();
+		calendarioAhora.setTime(ahora);
+		calendarioAhora.set(Calendar.DAY_OF_MONTH,1);
+		ahora = calendarioAhora.getTime();
+		
+		calendarioAhora.add(Calendar.MONTH, 2);
+		Date periodoAgendaHastaDosMeses = calendarioAhora.getTime(); 
+				
+		
+		return periodoAgenda.compareTo(ahora) > 0 &&  periodoAgenda.compareTo(periodoAgendaHastaDosMeses) <= 0;
+	}
 }

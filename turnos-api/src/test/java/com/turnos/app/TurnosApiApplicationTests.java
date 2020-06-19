@@ -65,4 +65,28 @@ class TurnosApiApplicationTests {
 		assertEquals(true,fecha12HorasAntes.compareTo(ahora) * ahora.compareTo(fechaUnaHoraAntes) >= 0);
 
 	}
+	
+	@Test
+	public void rangoDeAgendaMedicoPermitida() {
+		
+		int anioAgenda = 2020;
+		int mesAgenda = 8;
+		int diaAgenda = 1;
+		
+		GregorianCalendar calendarioAgenda = (GregorianCalendar) GregorianCalendar.getInstance();
+		calendarioAgenda.set(anioAgenda, mesAgenda -1, diaAgenda);
+		Date periodoAgenda = calendarioAgenda.getTime();
+		
+		Date ahora = new Date();
+		GregorianCalendar calendarioAhora = (GregorianCalendar) GregorianCalendar.getInstance();
+		calendarioAhora.setTime(ahora);
+		calendarioAhora.set(Calendar.DAY_OF_MONTH,1);
+		ahora = calendarioAhora.getTime();
+		
+		calendarioAhora.add(Calendar.MONTH, 2);
+		Date periodoAgendaHastaDosMeses = calendarioAhora.getTime(); 
+
+		assertEquals(true, periodoAgenda.compareTo(ahora) > 0 &&  periodoAgenda.compareTo(periodoAgendaHastaDosMeses) <= 0 );
+		
+	}
 }
