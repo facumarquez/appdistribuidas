@@ -72,7 +72,7 @@ public class AgendaPacienteREST {
  		
  		 Optional<AgendaPaciente> agendaPaciente = agendaPacienteService.findById(idAgendaPaciente);
  		 if(agendaPaciente.isPresent()) {
-  			if (agendaPaciente.get().getTurno() == null){
+  			if (agendaPaciente.get().getTurno().getEstado().equals(EstadoTurno.DISPONIBLE)) {
 				 throw new Exception("No puede confirmar un turno anulado");
 			}
   			
@@ -83,7 +83,6 @@ public class AgendaPacienteREST {
  			if (agendaPaciente.get().getTurno().getEstado().equals(EstadoTurno.CONFIRMADO)){
 				 throw new Exception("El turno ya ha sido confirmado");
 			}
- 			//TODO: ver si validar estado disponible....
  			if (agendaPaciente.get().getTurno().getEstado().equals(EstadoTurno.RESERVADO)){
  				ResponseEntity.ok(agendaPacienteService.confirmarTurnoAgenda(agendaPaciente.get()));	
  	 		}
@@ -100,13 +99,14 @@ public class AgendaPacienteREST {
  		
  		 Optional<AgendaPaciente> agendaPaciente = agendaPacienteService.findById(idAgendaPaciente);
  		 if(agendaPaciente.isPresent()) {
- 			if (agendaPaciente.get().getTurno() == null){
+ 			if (agendaPaciente.get().getTurno().getEstado().equals(EstadoTurno.DISPONIBLE)){
  				throw new Exception("El turno ya ha sido anulado");
  			}
  			
  			if (agendaPaciente.get().getTurno().getEstado().equals(EstadoTurno.CANCELADO)){
  				throw new Exception("No se puede anular un turno cancelado");
  			}
+ 			
  			
  			if(!TurnoHelper.sePuedeAnularElTurnoSinGenerarCargos(agendaPaciente.get().getFechaTurno(), agendaPaciente.get().getTurnoDesde())) {
  				Optional.of(agendaPacienteService.anularTurnoAgenda(agendaPaciente.get()));
