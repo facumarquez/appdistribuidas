@@ -11,5 +11,4 @@ public interface AgendaMedicoTurnoDAO extends JpaRepository<AgendaMedicoTurno, L
 
 	Optional<AgendaMedicoTurno> findByTurnoDesdeAndTurnoHastaAndAgendaMedicoHorario(String turnoDesde,String turnoHasta, 
 																				  Optional<AgendaMedicoHorario> agendaMedicoHorario);
-	
 }

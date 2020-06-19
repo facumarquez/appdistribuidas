@@ -1,7 +1,9 @@
 package com.turnos.app.AGENDAPACIENTE;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -11,6 +13,8 @@ import com.turnos.app.AGENDAMEDICOTURNO.AgendaMedicoTurno;
 import com.turnos.app.AGENDAMEDICOTURNO.AgendaMedicoTurnoDAO;
 import com.turnos.app.AGENDAMEDICOTURNO.EstadoTurno;
 import com.turnos.app.HELPERS.TurnoHelper;
+import com.turnos.app.PACIENTE.Paciente;
+import com.turnos.app.PACIENTE.PacientesDAO;
 
 @Service
 @Transactional(readOnly = false)
@@ -21,6 +25,9 @@ public class AgendaPacienteServiceImpl implements AgendaPacienteService {
 	
 	@Autowired
 	AgendaMedicoTurnoDAO agendaMedicoTurnoDAO;
+	
+	@Autowired
+	PacientesDAO pacienteDAO;
 	
 	@Transactional(readOnly = false)
 	public AgendaPaciente anularTurnoAgenda(AgendaPaciente agenda) {
@@ -40,14 +47,44 @@ public class AgendaPacienteServiceImpl implements AgendaPacienteService {
 	}
 	
 	@Transactional(readOnly = false)
-	public AgendaPaciente guardarAgenda_ReservarTurno(AgendaPaciente agenda) {
+	public AgendaPaciente guardarAgenda_ReservarTurno(AgendaPaciente agenda) throws Exception {
 		
-		AgendaPaciente agendaPacienteNuevo = agendaPacienteDAO.save(agenda);
-		AgendaMedicoTurno turno = agendaPacienteNuevo.getTurno();
-		turno.setEstado(EstadoTurno.RESERVADO);
-		agendaMedicoTurnoDAO.save(turno);
-		agendaPacienteNuevo.setTurno(turno);
-		return agendaPacienteNuevo;
+		List<AgendaPaciente> agendasDelPaciente = new ArrayList<AgendaPaciente>();
+		
+		Optional<Paciente> paciente = pacienteDAO.findById(agenda.getPaciente().getIdUsuario());
+		
+		if (paciente.isPresent()) {
+			agendasDelPaciente = paciente.get().getAgendas();
+			
+			List<AgendaPaciente> turnosSuperpuestos = agendasDelPaciente.stream().filter
+						(t->t.getFechaTurno().equals(agenda.getFechaTurno())).filter
+							(t-> t.getTurnoDesde().equals(agenda.getTurnoDesde())).collect(Collectors.toList()); 
+			
+ 			
+ 			if(turnosSuperpuestos.size() == 1) {
+ 				throw new Exception("Ya posee un turno en el mismo horario");
+ 			}
+ 			
+ 			agendasDelPaciente = paciente.get().getAgendas();
+ 			
+ 			List<AgendaPaciente> turnosMismaEspecialidad = agendasDelPaciente.stream().filter
+					(t->t.getEspecialidad().getId().equals(agenda.getEspecialidad().getId())).filter
+						(t-> t.getFechaTurno().equals(agenda.getFechaTurno())).collect(Collectors.toList()); 
+ 			
+ 			if(turnosMismaEspecialidad.size() == 1) {
+ 				throw new Exception("Ya posee un turno de la especialidad seleccionada en el día");
+ 			}
+ 			
+ 			AgendaPaciente agendaPacienteNuevo = agendaPacienteDAO.save(agenda);
+ 			AgendaMedicoTurno turno = agendaPacienteNuevo.getTurno();
+ 			turno.setEstado(EstadoTurno.RESERVADO);
+ 			agendaMedicoTurnoDAO.save(turno);
+ 			agendaPacienteNuevo.setTurno(turno);
+ 			return agendaPacienteNuevo;
+ 
+		}else {
+			throw new Exception("Error al obtener la agenda del paciente");
+		}
 	}
 
 	@Transactional(readOnly = true)
