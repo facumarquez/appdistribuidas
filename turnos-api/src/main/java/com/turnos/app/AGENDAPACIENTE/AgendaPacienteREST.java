@@ -122,7 +122,7 @@ public class AgendaPacienteREST {
     }
  	
  	// POST: http://localhost:1317/AgendaPacientes/ColaEspera
-	@PostMapping
+ 	@PostMapping(value="/ColaEspera")
 	public ResponseEntity<ColaEsperaPaciente> agregarAColaDeEspera(@RequestBody ColaEsperaPaciente colaEspera) throws Exception{
 		
 		return ResponseEntity.ok(agendaPacienteService.agregarAColaDeEspera(colaEspera));
