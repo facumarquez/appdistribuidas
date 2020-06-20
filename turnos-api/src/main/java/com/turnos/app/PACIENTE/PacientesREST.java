@@ -65,17 +65,15 @@ public class PacientesREST {
 		return ResponseEntity.ok(null);
 	}
 	
-	
-	//TODO: borrar aca y en la documentacion porque no hace falta....
  	// GET: http://localhost:1317/Pacientes/1/pagoAlDia/
  	@RequestMapping(value="/{idPaciente}/pagoAlDia/")
-	public boolean pacienteAlDia(@PathVariable("idPaciente") Long id){		
+	public boolean pacienteAlDia(@PathVariable("idPaciente") Long id) throws Exception{		
 		Optional<Paciente> paciente = pacientesService.findById(id);
 		if(paciente.isPresent()) {
 			return paciente.get().getCuotaAlDia();
 		}
 		else {
-			return false;
+			throw new Exception("No se encontró el paciente ");
 		}	
 	}
 }
