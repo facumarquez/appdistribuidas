@@ -163,13 +163,14 @@ public class AgendaMedicoFechaREST {
 		}
 	}
  	
- 	// GET: http://localhost:1317/AgendaMedicoFechas/1/TurnosDisponibles
- 	@RequestMapping(value="/{idAgendaMedicoFecha}/TurnosDisponibles")
- 	public ResponseEntity<List<AgendaMedicoTurno>> getTurnosDeUnafechaEspecifica(@PathVariable("idAgendaMedicoFecha") Long idAgendaMedicoFecha){	
+ 	// GET: http://localhost:1317/AgendaMedicoFechas/1/M/TurnosDisponibles
+ 	@RequestMapping(value="/{idAgendaMedicoFecha}/{horario}/TurnosDisponibles")
+ 	public ResponseEntity<List<AgendaMedicoTurno>> getTurnosDeUnaFechaYHorarioEspecifico(@PathVariable("idAgendaMedicoFecha") Long idAgendaMedicoFecha,
+ 																								@PathVariable("horario") String horario){	
 
  		Optional<AgendaMedicoFecha> agendaMedicoFecha = agendaMedicoFechaService.findById(idAgendaMedicoFecha);
  		
- 		List<AgendaMedicoTurno> turnos = agendaMedicoTurnoService.obtenerTurnosPorFecha(agendaMedicoFecha.get());
+ 		List<AgendaMedicoTurno> turnos = agendaMedicoTurnoService.obtenerTurnosPorFechaYRangoHorario(agendaMedicoFecha.get(),horario);
  		
  		if(turnos != null & turnos.size() > 0) {
 			return ResponseEntity.ok(turnos);

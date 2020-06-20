@@ -1,5 +1,6 @@
 package com.turnos.app.AGENDAMEDICOTURNO;
 
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -68,14 +69,28 @@ public class AgendaMedicoTurnoServiceImpl implements AgendaMedicoTurnoService{
 		return ResponseEntity.ok(null);
 	}
 	
- 	public List<AgendaMedicoTurno> obtenerTurnosPorFecha(AgendaMedicoFecha agendaMedicoFecha) {
- 			
- 		List <AgendaMedicoTurno> turnosDisponibles = new ArrayList<AgendaMedicoTurno>();
+ 	public List<AgendaMedicoTurno> obtenerTurnosPorFechaYRangoHorario(AgendaMedicoFecha agendaMedicoFecha, String rangoHorario) {
  		
+ 		String horaHasta = "12:00";
+ 		List <AgendaMedicoTurno> turnosDisponibles = new ArrayList<AgendaMedicoTurno>();
+ 		 		
  		for (AgendaMedicoHorario  horario : agendaMedicoFecha.getHorarios()) {
- 			//traigo los turnos libres solamente....
-			turnosDisponibles.addAll(horario.getTurnos().stream().filter
-						(t->t.getEstado().equals(EstadoTurno.DISPONIBLE)).collect(Collectors.toList())); 
+
+ 			//traigo los turnos libres de mañana solamente....
+			if (rangoHorario.equals("M")) {
+				turnosDisponibles.addAll(horario.getTurnos().stream().filter
+												(t -> LocalTime.parse(t.getTurnoDesde()).compareTo(LocalTime.parse(horaHasta))< 0)
+												.filter(t->t.getEstado().equals(EstadoTurno.DISPONIBLE))
+												.collect(Collectors.toList()));
+			}
+			
+			//traigo los turnos libres de tarde solamente....
+			if (rangoHorario.equals("T")) {
+				turnosDisponibles.addAll(horario.getTurnos().stream().filter
+												(t -> LocalTime.parse(t.getTurnoDesde()).compareTo(LocalTime.parse(horaHasta))>= 0)
+												.filter(t->t.getEstado().equals(EstadoTurno.DISPONIBLE))
+												.collect(Collectors.toList()));
+			}
  		}
  			
  		//ordeno los turnos por campo desde
