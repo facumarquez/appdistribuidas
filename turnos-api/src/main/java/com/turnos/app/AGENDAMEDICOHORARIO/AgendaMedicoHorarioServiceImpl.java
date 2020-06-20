@@ -10,6 +10,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.turnos.app.AGENDAMEDICOFECHA.AgendaMedicoFecha;
+import com.turnos.app.AGENDAMEDICOTURNO.AgendaMedicoTurno;
+import com.turnos.app.AGENDAMEDICOTURNO.EstadoTurno;
 
 @Service
 @Transactional(readOnly = false)
@@ -55,8 +57,24 @@ public class AgendaMedicoHorarioServiceImpl implements AgendaMedicoHorarioServic
 		return agendaMedicoHorarioDAO.findByHoraDesdeAndHoraHastaAndAgendaMedicoFecha(horaDesde, horaHasta, agendaMedicoFecha.get());
 	}
 	
-	public ResponseEntity<Void> deleteByID(Long idAgendaMedicoHorario) {
-		agendaMedicoHorarioDAO.deleteById(idAgendaMedicoHorario);
+	public ResponseEntity<Void> deleteByID(Long idAgendaMedicoHorario) throws Exception {
+		
+		Optional<AgendaMedicoHorario> horario = agendaMedicoHorarioDAO.findById(idAgendaMedicoHorario);
+		
+		if (horario.isPresent()) {
+			List<AgendaMedicoTurno> turnosDelHorario = horario.get().getTurnos();
+			if (turnosDelHorario != null) {
+				for (AgendaMedicoTurno turno : turnosDelHorario) {
+					if (turno.getEstado().equals(EstadoTurno.RESERVADO)) {
+						throw new Exception("No se puede eliminar el horario porque tiene turnos reservados");
+					}
+				}
+			}
+			agendaMedicoHorarioDAO.deleteById(idAgendaMedicoHorario);
+		}else {
+			throw new Exception("Error al obtener el horario");
+		}
+
 		return ResponseEntity.ok(null);
 	}
 	

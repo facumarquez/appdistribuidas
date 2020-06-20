@@ -66,7 +66,7 @@ public class AgendaMedicoHorarioREST {
  	
 	//DELETE: http://localhost:1317/AgendaMedicoHorarios/1
 	@DeleteMapping(value="/{idAgendaMedicoHorario}")
-	public ResponseEntity<Void> deleteAgendaMedicoHorario(@PathVariable("idAgendaMedicoHorario") Long id){
+	public ResponseEntity<Void> deleteHorario(@PathVariable("idAgendaMedicoHorario") Long id) throws Exception{
 		agendaMedicoHorarioService.deleteByID(id);
 		return ResponseEntity.ok(null);
 	}
