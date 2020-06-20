@@ -51,8 +51,20 @@ public class AgendaMedicoTurnoServiceImpl implements AgendaMedicoTurnoService{
 		return agendaMedicoTurnoDAO.findByTurnoDesdeAndTurnoHastaAndAgendaMedicoHorario(turnoDesde, turnoHasta, agendaMedicoHorario);
 	}
 	
-	public ResponseEntity<Void> deleteByID(Long idAgendaMedicoTurno) {
-		agendaMedicoTurnoDAO.deleteById(idAgendaMedicoTurno);
+	public ResponseEntity<Void> deleteByID(Long idAgendaMedicoTurno) throws Exception {
+		
+		Optional<AgendaMedicoTurno> turno = agendaMedicoTurnoDAO.findById(idAgendaMedicoTurno);
+		
+		if (turno.isPresent()) {
+			if (turno.get().getEstado().equals(EstadoTurno.RESERVADO)) {
+				throw new Exception("No se puede eliminar un turno reservado por un paciente");
+			}else {
+				agendaMedicoTurnoDAO.deleteById(idAgendaMedicoTurno);
+			}
+		}else {
+			throw new Exception("Error al obtener el turno");
+		}
+
 		return ResponseEntity.ok(null);
 	}
 	
