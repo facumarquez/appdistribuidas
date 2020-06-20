@@ -166,9 +166,13 @@ public class AgendaMedicoFechaREST {
  	// GET: http://localhost:1317/AgendaMedicoFechas/1/M/TurnosDisponibles
  	@RequestMapping(value="/{idAgendaMedicoFecha}/{horario}/TurnosDisponibles")
  	public ResponseEntity<List<AgendaMedicoTurno>> getTurnosDeUnaFechaYHorarioEspecifico(@PathVariable("idAgendaMedicoFecha") Long idAgendaMedicoFecha,
- 																								@PathVariable("horario") String horario){	
+ 																								@PathVariable("horario") String horario) throws Exception{	
 
  		Optional<AgendaMedicoFecha> agendaMedicoFecha = agendaMedicoFechaService.findById(idAgendaMedicoFecha);
+ 		
+ 		if(!agendaMedicoFecha.isPresent()) {
+ 			throw new Exception("Error al obtener la fecha");
+ 		}
  		
  		List<AgendaMedicoTurno> turnos = agendaMedicoTurnoService.obtenerTurnosPorFechaYRangoHorario(agendaMedicoFecha.get(),horario);
  		
@@ -180,16 +184,16 @@ public class AgendaMedicoFechaREST {
 		}
 	}
  	
- 	// GET: http://localhost:1317/AgendaMedicoFechas/20200101/Medicos/1/TurnosDisponibles
- 	@RequestMapping(value="/{fecha}/Medicos/{idMedico}/TurnosDisponibles")
+ 	// GET: http://localhost:1317/AgendaMedicoFechas/20200101/M/Medicos/1/TurnosDisponibles
+ 	@RequestMapping(value="/{fecha}/{horario}/Medicos/{idMedico}/TurnosDisponibles")
  	public ResponseEntity<List<AgendaMedicoTurno>> getTurnosDeUnMedicoEspecifico(@PathVariable("fecha") String fecha,
- 																					@PathVariable("idMedico") long idMedico) throws Exception{	
+ 																				 @PathVariable("horario") String horario,
+ 																				 @PathVariable("idMedico") long idMedico) throws Exception{	
 
- 		Optional<Medico> medico = medicoService.findById(idMedico);
  		
  		List<AgendaMedicoFecha> fechasAgenda = agendaMedicoFechaService.findByFecha(fecha);
  		
- 		List<AgendaMedicoTurno> turnos = agendaMedicoTurnoService.obtenerTurnosPorFechaYMedico(fechasAgenda,medico.get());
+ 		List<AgendaMedicoTurno> turnos = agendaMedicoTurnoService.obtenerTurnosPorFecha_Horario_Medico(fechasAgenda,horario,idMedico);
 
  		if(turnos != null & turnos.size() > 0) {
 			return ResponseEntity.ok(turnos);
@@ -199,6 +203,7 @@ public class AgendaMedicoFechaREST {
 		}
 	}
  	
+ 	//Documentar
 	@PostMapping(path = "/Horarios")
 	public ResponseEntity<List<AgendaMedicoHorario>> obtenerHorariosDeFechas(@RequestBody List<AgendaMedicoFecha> fechasAgenda){
 		

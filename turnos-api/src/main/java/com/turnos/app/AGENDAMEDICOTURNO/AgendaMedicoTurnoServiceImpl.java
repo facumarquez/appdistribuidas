@@ -15,7 +15,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.turnos.app.AGENDAMEDICOFECHA.AgendaMedicoFecha;
 import com.turnos.app.AGENDAMEDICOHORARIO.AgendaMedicoHorario;
-import com.turnos.app.MEDICO.Medico;
 
 @Service
 @Transactional(readOnly = false)
@@ -103,13 +102,14 @@ public class AgendaMedicoTurnoServiceImpl implements AgendaMedicoTurnoService{
  		return turnosDisponibles;
  	}
  	
- 	public List<AgendaMedicoTurno> obtenerTurnosPorFechaYMedico(List<AgendaMedicoFecha> fechasAgenda, Medico medico) throws Exception {
-			
+ 	public List<AgendaMedicoTurno> obtenerTurnosPorFecha_Horario_Medico(List<AgendaMedicoFecha> fechasAgenda, String rangoHorario, 
+ 																				long idMedico) throws Exception {
+ 		
  		
  		AgendaMedicoFecha fechaDelMedico;
  		List <AgendaMedicoTurno> turnosDisponibles = new ArrayList<AgendaMedicoTurno>();
  		
- 		fechasAgenda.stream().filter(f->f.getAgendaMedico().getMedico().equals(medico)).collect(Collectors.toList());
+ 		fechasAgenda = fechasAgenda.stream().filter(f->f.getAgendaMedico().getMedico().getIdUsuario().equals(idMedico)).collect(Collectors.toList());
  		
  		if (fechasAgenda.size() != 1) {
  			throw new Exception("Ocurrió un problema al obtener los turnos del médico especificado");
@@ -117,12 +117,8 @@ public class AgendaMedicoTurnoServiceImpl implements AgendaMedicoTurnoService{
  			fechaDelMedico = fechasAgenda.get(0);
  		}
  		
- 		for (AgendaMedicoHorario  horario : fechaDelMedico.getHorarios()) {
- 			//traigo los turnos libres solamente....
-			turnosDisponibles.addAll(horario.getTurnos().stream().filter
-						(t->t.getEstado().equals(EstadoTurno.DISPONIBLE)).collect(Collectors.toList())); 
- 		}
- 			
+ 		turnosDisponibles = this.obtenerTurnosPorFechaYRangoHorario(fechaDelMedico, rangoHorario);
+ 		
  		//ordeno los turnos por campo desde
  		Comparator<AgendaMedicoTurno> comparadorTurnos = (AgendaMedicoTurno t1, AgendaMedicoTurno t2) -> {
  			return (t1.getTurnoDesde().compareTo(t2.getTurnoDesde()));
