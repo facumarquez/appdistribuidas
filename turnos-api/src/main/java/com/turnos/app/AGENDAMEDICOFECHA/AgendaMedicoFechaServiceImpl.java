@@ -39,6 +39,11 @@ public class AgendaMedicoFechaServiceImpl implements AgendaMedicoFechaService{
 		return agendaMedicoFechaDAO.findByFecha(fecha);
 	}
 	
+	@Transactional(readOnly = true)
+	public List<AgendaMedicoFecha> findByFechaAndEspecialidad(String fecha,Especialidad especialidad) {
+		return agendaMedicoFechaDAO.findByFechaAndEspecialidad(fecha, especialidad);
+	}
+	
 	
 	@Override
 	@Transactional(readOnly = false)

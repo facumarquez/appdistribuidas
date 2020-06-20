@@ -120,6 +120,7 @@ public class AgendaMedicoFechaREST {
  																					@PathVariable("horario") String horario){	
  	 		
  		HashSet <AgendaMedicoFecha> fechasConTurnosDisponibles = new HashSet<AgendaMedicoFecha>();
+ 		
  		Optional<Especialidad> especialidad = especialidadService.findById(idEspecialidad);
  		List<AgendaMedico> agendasDeMedicos = agendaMedicoService.findByPeriodo(mes, anio);
  		List <AgendaMedicoFecha> fechas = new ArrayList<AgendaMedicoFecha>();
@@ -137,14 +138,22 @@ public class AgendaMedicoFechaREST {
  		}
  	}
  	
- 	// GET: http://localhost:1317/AgendaMedicoFechas/20200101/MedicosDisponibles
- 	@RequestMapping(value="/{fecha}/MedicosDisponibles")
- 	public ResponseEntity<List<Medico>> getMedicosPorFechaDeAtencion(@PathVariable("fecha") String fecha){	
+ 	// GET: http://localhost:1317/AgendaMedicoFechas/20200101/M/Especialidad/1/MedicosDisponibles
+ 	@RequestMapping(value="/{fecha}/{horario}/Especialidad/{idEspecialidad}/MedicosDisponibles")
+ 	public ResponseEntity<List<Medico>> getMedicosPorFechaDeAtencion_Especialidad_Horario(@PathVariable("fecha") String fecha,
+ 																				@PathVariable("horario") String horario,
+ 																				@PathVariable("idEspecialidad") long idEspecialidad){	
 
+ 		Optional<Especialidad> especialidad = especialidadService.findById(idEspecialidad);
  		
- 		List<AgendaMedicoFecha> fechasAgenda = agendaMedicoFechaService.findByFecha(fecha);
+ 		List<AgendaMedicoFecha> fechasAgenda = agendaMedicoFechaService.findByFechaAndEspecialidad(fecha,especialidad.get());
  		
- 		List<Medico> medicos = medicoService.obtenerMedicosPorFecha(fechasAgenda);
+ 		HashSet<AgendaMedicoFecha> fechasFiltradasPorHorario = agendaMedicoFechaService.buscarFechasConTurnosDisponibles(fechasAgenda, horario);
+ 		
+ 		List<AgendaMedicoFecha> fechasFiltradas = new ArrayList<AgendaMedicoFecha>();
+ 		fechasFiltradas.addAll(fechasFiltradasPorHorario);
+ 		
+ 		List<Medico> medicos = medicoService.obtenerMedicosPorFecha(fechasFiltradas);
  		
  		if(medicos != null & medicos.size() > 0) {
 			return ResponseEntity.ok(medicos);

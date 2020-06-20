@@ -59,14 +59,12 @@ public class MedicosServiceImpl implements MedicosService {
 	public List<Medico> obtenerMedicosPorFecha(List<AgendaMedicoFecha> fechasAgenda) {
 		
 		HashSet<Medico> medicos = new HashSet<Medico>();
-		
 		List<Medico> medicosOrdenado = new ArrayList<Medico>();
-		
- 		for (AgendaMedicoFecha fecha : fechasAgenda) {
+	
+		for (AgendaMedicoFecha fecha : fechasAgenda) {
 			medicos.add(fecha.getAgendaMedico().getMedico());
 		}
-		
- 		medicosOrdenado.addAll(medicos);
+		medicosOrdenado.addAll(medicos);
  		
 		Comparator<Medico> comparadorMedicos = (Medico m1, Medico m2) -> {
  			return (m1.getApellido().compareTo(m2.getApellido()));
