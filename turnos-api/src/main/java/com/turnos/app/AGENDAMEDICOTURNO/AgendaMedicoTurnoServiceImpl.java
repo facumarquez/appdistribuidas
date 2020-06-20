@@ -121,13 +121,39 @@ public class AgendaMedicoTurnoServiceImpl implements AgendaMedicoTurnoService{
  		
  		turnosDisponibles = this.obtenerTurnosPorFechaYRangoHorario(fechaDelMedico, rangoHorario);
  		
+ 		/*
  		//ordeno los turnos por campo desde
  		Comparator<AgendaMedicoTurno> comparadorTurnos = (AgendaMedicoTurno t1, AgendaMedicoTurno t2) -> {
  			return (t1.getTurnoDesde().compareTo(t2.getTurnoDesde()));
  		};
  		
  		Collections.sort(turnosDisponibles, comparadorTurnos);
+ 		*/
+ 		return turnosDisponibles;
+ 	}
+ 	
+ 	public List<AgendaMedicoTurno> obtenerTurnosPorFecha_Horario_Especialidad(List<AgendaMedicoFecha> fechasAgenda, String rangoHorario, 
+																							long idEspecialidad) throws Exception {
+
+ 		List <AgendaMedicoTurno> turnosDisponibles = new ArrayList<AgendaMedicoTurno>();
+
+ 		fechasAgenda = fechasAgenda.stream().filter(f->f.getEspecialidad().getId().equals(idEspecialidad)).collect(Collectors.toList());
  		
+ 		if (fechasAgenda.size() == 0) {
+ 			throw new Exception("Ocurrió un problema al obtener los turnos de los médicos");
+ 		}
+
+ 		for (AgendaMedicoFecha fecha : fechasAgenda) {
+ 			turnosDisponibles.addAll(this.obtenerTurnosPorFechaYRangoHorario(fecha, rangoHorario));
+		}
+ 		
+ 		//ordeno los turnos por campo desde
+ 		Comparator<AgendaMedicoTurno> comparadorTurnos = (AgendaMedicoTurno t1, AgendaMedicoTurno t2) -> {
+ 			return (t1.getTurnoDesde().compareTo(t2.getTurnoDesde()));
+ 		};
+
+ 		Collections.sort(turnosDisponibles, comparadorTurnos);
+
  		return turnosDisponibles;
  	}
 }
