@@ -103,13 +103,15 @@ public class AgendaMedicoTurnoServiceImpl implements AgendaMedicoTurnoService{
  	}
  	
  	public List<AgendaMedicoTurno> obtenerTurnosPorFecha_Horario_Medico(List<AgendaMedicoFecha> fechasAgenda, String rangoHorario, 
- 																				long idMedico) throws Exception {
+ 																				long idMedico,long idEspecialidad) throws Exception {
  		
  		
  		AgendaMedicoFecha fechaDelMedico;
  		List <AgendaMedicoTurno> turnosDisponibles = new ArrayList<AgendaMedicoTurno>();
  		
- 		fechasAgenda = fechasAgenda.stream().filter(f->f.getAgendaMedico().getMedico().getIdUsuario().equals(idMedico)).collect(Collectors.toList());
+ 		fechasAgenda = fechasAgenda.stream().filter(f->f.getAgendaMedico().getMedico().getIdUsuario().equals(idMedico))
+ 												.filter(f->f.getEspecialidad().getId().equals(idEspecialidad))
+ 															.collect(Collectors.toList());
  		
  		if (fechasAgenda.size() != 1) {
  			throw new Exception("Ocurrió un problema al obtener los turnos del médico especificado");

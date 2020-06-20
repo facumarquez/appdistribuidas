@@ -184,16 +184,17 @@ public class AgendaMedicoFechaREST {
 		}
 	}
  	
- 	// GET: http://localhost:1317/AgendaMedicoFechas/20200101/M/Medicos/1/TurnosDisponibles
- 	@RequestMapping(value="/{fecha}/{horario}/Medicos/{idMedico}/TurnosDisponibles")
+ 	// GET: http://localhost:1317/AgendaMedicoFechas/20200101/M/Medicos/1/Especialidades/1/TurnosDisponibles
+ 	@RequestMapping(value="/{fecha}/{horario}/Medicos/{idMedico}/Especialidades/{idEspecialidad}/TurnosDisponibles")
  	public ResponseEntity<List<AgendaMedicoTurno>> getTurnosDeUnMedicoEspecifico(@PathVariable("fecha") String fecha,
  																				 @PathVariable("horario") String horario,
- 																				 @PathVariable("idMedico") long idMedico) throws Exception{	
+ 																				 @PathVariable("idMedico") long idMedico,
+ 																				@PathVariable("idEspecialidad") long idEspecialidad) throws Exception{	
 
  		
  		List<AgendaMedicoFecha> fechasAgenda = agendaMedicoFechaService.findByFecha(fecha);
  		
- 		List<AgendaMedicoTurno> turnos = agendaMedicoTurnoService.obtenerTurnosPorFecha_Horario_Medico(fechasAgenda,horario,idMedico);
+ 		List<AgendaMedicoTurno> turnos = agendaMedicoTurnoService.obtenerTurnosPorFecha_Horario_Medico(fechasAgenda,horario,idMedico,idEspecialidad);
 
  		if(turnos != null & turnos.size() > 0) {
 			return ResponseEntity.ok(turnos);
@@ -202,6 +203,26 @@ public class AgendaMedicoFechaREST {
 			return ResponseEntity.noContent().build();
 		}
 	}
+ 	
+ 	// GET: http://localhost:1317/AgendaMedicoFechas/20200101/M/Medicos/1/TurnosDisponibles
+ 	@RequestMapping(value="/{fecha}/{horario}/Medicos/{idMedico}/TurnosDisponibles")
+ 	public ResponseEntity<List<AgendaMedicoTurno>> getTurnosDeTodosLosMedicos(@PathVariable("fecha") String fecha,
+ 																				 @PathVariable("horario") String horario,
+ 																				 @PathVariable("idMedico") long idMedico) throws Exception{	
+
+ 		
+ 		List<AgendaMedicoFecha> fechasAgenda = agendaMedicoFechaService.findByFecha(fecha);
+ 		
+ 		List<AgendaMedicoTurno> turnos = agendaMedicoTurnoService.obtenerTurnosPorFecha_Horario_Medico(fechasAgenda,horario,idMedico,0);
+
+ 		if(turnos != null & turnos.size() > 0) {
+			return ResponseEntity.ok(turnos);
+		}
+		else {
+			return ResponseEntity.noContent().build();
+		}
+	}
+ 	
  	
  	//Documentar
 	@PostMapping(path = "/Horarios")
