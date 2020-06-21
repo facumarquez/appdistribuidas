@@ -90,14 +90,14 @@ public class AgendaMedicoFechaServiceImpl implements AgendaMedicoFechaService{
 		if (horario.equals("M")) {
 			turnosDisponibles = turnosDisponibles.stream().filter
 											(t -> LocalTime.parse(t.getTurnoDesde()).compareTo(LocalTime.parse(horaHasta))< 0).filter
-	 										(t->t.getAgendaMedicoHorario().getAgendaMedicoFecha().getFecha().compareTo(fechaJapones) >= 0)
+	 										(t->t.getAgendaMedicoHorario().getAgendaMedicoFecha().getFecha().compareTo(fechaJapones) > 0)
 											.collect(Collectors.toList());
 		}
 		
 		if (horario.equals("T")) {
 			turnosDisponibles = turnosDisponibles.stream().filter
 											(t -> LocalTime.parse(t.getTurnoDesde()).compareTo(LocalTime.parse(horaHasta))>= 0).filter
-											(t->t.getAgendaMedicoHorario().getAgendaMedicoFecha().getFecha().compareTo(fechaJapones) >= 0)
+											(t->t.getAgendaMedicoHorario().getAgendaMedicoFecha().getFecha().compareTo(fechaJapones) > 0)
 											.collect(Collectors.toList());
 			}
  					
