@@ -2,6 +2,7 @@ package com.turnos.app.AGENDAMEDICOFECHA;
 
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
@@ -17,6 +18,7 @@ import com.turnos.app.AGENDAMEDICOHORARIO.AgendaMedicoHorarioDAO;
 import com.turnos.app.AGENDAMEDICOTURNO.AgendaMedicoTurno;
 import com.turnos.app.AGENDAMEDICOTURNO.EstadoTurno;
 import com.turnos.app.ESPECIALIDAD.Especialidad;
+import com.turnos.app.HELPERS.FechaHelper;
 
 @Service
 @Transactional(readOnly = false)
@@ -73,6 +75,9 @@ public class AgendaMedicoFechaServiceImpl implements AgendaMedicoFechaService{
 	
 	public HashSet <AgendaMedicoFecha>  buscarFechasConTurnosDisponibles(List <AgendaMedicoFecha> fechas, String horario) {
 		
+		Date fechaActual = new Date();
+		String fechaJapones = FechaHelper.convertirFechaAFormatoJapones(fechaActual);
+		
 		String horaHasta = "12:00";
 		HashSet <AgendaMedicoFecha>  fechasConTurnosDisponibles = new HashSet<AgendaMedicoFecha>();
 		
@@ -84,13 +89,15 @@ public class AgendaMedicoFechaServiceImpl implements AgendaMedicoFechaService{
 		
 		if (horario.equals("M")) {
 			turnosDisponibles = turnosDisponibles.stream().filter
-											(t -> LocalTime.parse(t.getTurnoDesde()).compareTo(LocalTime.parse(horaHasta))< 0)
+											(t -> LocalTime.parse(t.getTurnoDesde()).compareTo(LocalTime.parse(horaHasta))< 0).filter
+	 										(t->t.getAgendaMedicoHorario().getAgendaMedicoFecha().getFecha().compareTo(fechaJapones) > 0)
 											.collect(Collectors.toList());
 		}
 		
 		if (horario.equals("T")) {
 			turnosDisponibles = turnosDisponibles.stream().filter
-											(t -> LocalTime.parse(t.getTurnoDesde()).compareTo(LocalTime.parse(horaHasta))>= 0)
+											(t -> LocalTime.parse(t.getTurnoDesde()).compareTo(LocalTime.parse(horaHasta))>= 0).filter
+											(t->t.getAgendaMedicoHorario().getAgendaMedicoFecha().getFecha().compareTo(fechaJapones) > 0)
 											.collect(Collectors.toList());
 			}
  					
