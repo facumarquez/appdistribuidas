@@ -59,6 +59,22 @@ public class AgendaPacienteServiceImpl implements AgendaPacienteService {
 		Optional<Paciente> paciente = pacienteDAO.findById(agenda.getPaciente().getIdUsuario());
 		
 		if (paciente.isPresent()) {
+			
+			agendasDelPaciente = paciente.get().getAgendas();
+			
+			List<AgendaPaciente> turnosAnulado = agendasDelPaciente.stream().filter
+						(t->t.getTurno().getId().equals(agenda.getTurno().getId())).filter
+						(t->t.getTurno().getEstado().equals(EstadoTurno.DISPONIBLE)).
+						collect(Collectors.toList()); 
+			
+ 			if(turnosAnulado.size() == 1) {
+ 				AgendaMedicoTurno turno = agenda.getTurno();
+ 	 			turno.setEstado(EstadoTurno.RESERVADO);
+ 	 			agendaMedicoTurnoDAO.save(turno);
+ 	 			agenda.setTurno(turno);
+ 	 			return agenda;
+ 			}
+ 			
 			agendasDelPaciente = paciente.get().getAgendas();
 			
 			List<AgendaPaciente> turnosSuperpuestos = agendasDelPaciente.stream().filter
