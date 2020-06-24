@@ -2,7 +2,9 @@ package com.turnos.app.AGENDAMEDICOFECHA;
 
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
@@ -49,7 +51,7 @@ public class AgendaMedicoFechaServiceImpl implements AgendaMedicoFechaService{
 	
 	@Override
 	@Transactional(readOnly = false)
-	public List<AgendaMedicoFecha> crearFechasDeAgenda(List <AgendaMedicoFecha> fechasAgenda) {
+	public List<AgendaMedicoFecha> crearFechasDeAgenda(List <AgendaMedicoFecha> fechasAgenda) throws Exception {
 		
 		List<AgendaMedicoFecha> fechasCreadas = new ArrayList<AgendaMedicoFecha>();
 		
@@ -59,11 +61,13 @@ public class AgendaMedicoFechaServiceImpl implements AgendaMedicoFechaService{
 			if (!fechaEspecifica.isPresent()) {
 				fechasCreadas.add(agendaMedicoFechaDAO.save(fecha));
 			}else {
+				if (!fecha.getEspecialidad().getId().equals(fechaEspecifica.get().getEspecialidad().getId())){
+					throw new Exception("No se crearon la/las fechas porque la fecha " + FechaHelper.convertirFechaAFormatoddMMyyyy(fechaEspecifica.get().getFecha()) + 
+																							" ha sido cargada anteriormente con otra especialidad. Seleccione un rango correcto.");
+				}
 				fechasCreadas.add(fechaEspecifica.get());
 			}
-			
 		}
-		//TODO: ver como validar que ya hay una fecha con otra especialidad para el mismo dia......
 		return fechasCreadas;
 	}
 
@@ -121,5 +125,27 @@ public class AgendaMedicoFechaServiceImpl implements AgendaMedicoFechaService{
 			}
 		}
 		return horarios;
+	}
+	
+	public boolean puedeModificarFechaAgenda(AgendaMedico agendaMedico,String fecha) throws Exception {
+		
+		Calendar calendario = Calendar.getInstance();
+		
+		int mes = calendario.get(Calendar.MONTH) + 1;
+		
+		if(agendaMedico.getMes() != mes) {
+			return true;
+		}
+		
+		calendario.add((GregorianCalendar.DAY_OF_MONTH), 7);
+		
+		Date fechaConSieteDiasAgregados = calendario.getTime();
+		String fechaConSieteDiasAgregadosFormateada = FechaHelper.convertirFechaAFormatoJapones(fechaConSieteDiasAgregados);
+		
+		if(fecha.compareTo(fechaConSieteDiasAgregadosFormateada) >= 0) {
+			return true;
+		}else {
+			throw new Exception("Sólo puede modificar las fechas de la semana siguiente a la actual");
+		}
 	}
 }

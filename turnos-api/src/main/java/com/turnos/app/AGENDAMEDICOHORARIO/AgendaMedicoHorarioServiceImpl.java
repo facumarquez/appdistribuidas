@@ -10,8 +10,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.turnos.app.AGENDAMEDICOFECHA.AgendaMedicoFecha;
+import com.turnos.app.AGENDAMEDICOFECHA.AgendaMedicoFechaDAO;
 import com.turnos.app.AGENDAMEDICOTURNO.AgendaMedicoTurno;
+import com.turnos.app.AGENDAMEDICOTURNO.AgendaMedicoTurnoDAO;
 import com.turnos.app.AGENDAMEDICOTURNO.EstadoTurno;
+import com.turnos.app.HELPERS.FechaHelper;
 
 @Service
 @Transactional(readOnly = false)
@@ -19,6 +22,12 @@ public class AgendaMedicoHorarioServiceImpl implements AgendaMedicoHorarioServic
 	
 	@Autowired
 	AgendaMedicoHorarioDAO agendaMedicoHorarioDAO;
+	
+	@Autowired
+	AgendaMedicoTurnoDAO agendaMedicoTurnoDAO;
+	
+	@Autowired
+	AgendaMedicoFechaDAO agendaMedicoFechaDAO;
 	
 	
 	@Transactional(readOnly = true)
@@ -66,11 +75,15 @@ public class AgendaMedicoHorarioServiceImpl implements AgendaMedicoHorarioServic
 			if (turnosDelHorario != null) {
 				for (AgendaMedicoTurno turno : turnosDelHorario) {
 					if (turno.getEstado().equals(EstadoTurno.RESERVADO)) {
-						throw new Exception("No se puede eliminar el horario porque tiene turnos reservados");
+						throw new Exception("El turno de las " + turno.getTurnoDesde() + " del día " +
+								FechaHelper.convertirFechaAFormatoddMMyyyy(turno.getAgendaMedicoHorario().getAgendaMedicoFecha().getFecha()) +
+								" está reservado por un paciente.");
+					}else {
+						agendaMedicoTurnoDAO.deleteById(turno.getId());
 					}
 				}
 			}
-			agendaMedicoHorarioDAO.deleteById(idAgendaMedicoHorario);
+			agendaMedicoHorarioDAO.deleteById(horario.get().getId());
 		}else {
 			throw new Exception("Error al obtener el horario");
 		}
@@ -78,11 +91,17 @@ public class AgendaMedicoHorarioServiceImpl implements AgendaMedicoHorarioServic
 		return ResponseEntity.ok(null);
 	}
 	
-	@Transactional(readOnly = false)
-	public ResponseEntity<Void> deleteHorarios(List <AgendaMedicoHorario> horariosAgenda) {
+	@Transactional(rollbackFor = Exception.class, readOnly = false)
+	public ResponseEntity<Void> deleteHorarios(List <AgendaMedicoFecha> fechasAgenda) throws Exception {
 		
-		for (AgendaMedicoHorario horario : horariosAgenda) {
-			agendaMedicoHorarioDAO.deleteById(horario.getId());
+		for (AgendaMedicoFecha fecha : fechasAgenda) {
+			List <AgendaMedicoHorario> horariosAgenda = agendaMedicoHorarioDAO.findByAgendaMedicoFecha(fecha);
+			if (horariosAgenda != null &&  horariosAgenda.size() > 0) {
+				for (AgendaMedicoHorario horario : horariosAgenda) {
+					this.deleteByID(horario.getId());
+				}
+			}
+			agendaMedicoFechaDAO.deleteById(fecha.getId());
 		}
 		return ResponseEntity.ok(null);
 	}

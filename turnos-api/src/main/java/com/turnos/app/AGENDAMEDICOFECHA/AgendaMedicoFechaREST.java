@@ -55,9 +55,10 @@ public class AgendaMedicoFechaREST {
 	}
 
  	//TODO: documentar.....
+ 	//TODO: testear......
  	// POST: http://localhost:1317/AgendaMedicoFechas
 	@PostMapping
-	public ResponseEntity<List<AgendaMedicoFecha>> crearFechasAgendaMedico(@RequestBody List<AgendaMedicoFecha> fechasAgenda){
+	public ResponseEntity<List<AgendaMedicoFecha>> crearFechasAgendaMedico(@RequestBody List<AgendaMedicoFecha> fechasAgenda) throws Exception{
 		
 		return ResponseEntity.ok(agendaMedicoFechaService.crearFechasDeAgenda(fechasAgenda));
 	}
@@ -230,5 +231,24 @@ public class AgendaMedicoFechaREST {
 		
 		return ResponseEntity.ok(agendaMedicoFechaService.buscarHorariosPorFechas(fechasAgenda));
 		
+	}
+	
+ 	// GET: http://localhost:1317/AgendaMedicoFechas/20200101/M/Especialidades/1/TurnosDisponibles
+ 	@RequestMapping(value="/{fecha}/AgendaMedicos/{idAgendaMedico}/PuedeModificar")
+ 	public ResponseEntity<Boolean> puedeModificarLaAgenda(@PathVariable("idAgendaMedico") long idAgendaMedicoFecha,
+ 																	@PathVariable("fecha") String fecha) throws Exception{	
+
+ 		boolean puedeModificar = false;
+ 		
+ 		Optional<AgendaMedicoFecha> agendaMedicoFecha = agendaMedicoFechaService.findById(idAgendaMedicoFecha);
+ 		
+ 		puedeModificar = agendaMedicoFechaService.puedeModificarFechaAgenda(agendaMedicoFecha.get().getAgendaMedico(), fecha);
+ 		
+ 		if(puedeModificar) {
+			return ResponseEntity.ok(true);
+		}
+		else {
+			return ResponseEntity.ok(false);
+		}
 	}
 }

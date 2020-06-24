@@ -91,10 +91,11 @@ public class AgendaMedicoHorarioREST {
  	
  	//TODO:Documentar y probar
 	//DELETE: http://localhost:1317/AgendaMedicoHorarios
-	@DeleteMapping(value="/")
-	public ResponseEntity<Void> deleteHorarios(@RequestBody List<AgendaMedicoHorario> horariosAgenda){
+	//@DeleteMapping(value="/")
+	@PostMapping(path = "/EliminarHorarios")
+	public ResponseEntity<Void> deleteHorarios(@RequestBody List<AgendaMedicoFecha> fechasAgenda) throws Exception{
 		
-		agendaMedicoHorarioService.deleteHorarios(horariosAgenda);
+		agendaMedicoHorarioService.deleteHorarios(fechasAgenda);
 		return ResponseEntity.ok(null);
 	}
 }

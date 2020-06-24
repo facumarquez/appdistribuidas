@@ -9,7 +9,7 @@ import com.turnos.app.ESPECIALIDAD.Especialidad;
 public interface AgendaMedicoFechaService {
 	
 	
-	public List<AgendaMedicoFecha> crearFechasDeAgenda(List<AgendaMedicoFecha> fechasAgenda);
+	public List<AgendaMedicoFecha> crearFechasDeAgenda(List<AgendaMedicoFecha> fechasAgenda) throws Exception;
 	
 	public List<AgendaMedicoFecha> buscarFechasPorEspecialidadYAgendaMedico(Optional<Especialidad> especialidad,
 																						Optional<AgendaMedico> agendaMedico);
