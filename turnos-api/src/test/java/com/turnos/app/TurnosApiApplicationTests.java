@@ -11,7 +11,10 @@ import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import com.turnos.app.AGENDAMEDICO.AgendaMedico;
+import com.turnos.app.AGENDAMEDICOFECHA.AgendaMedicoFechaServiceImpl;
 import com.turnos.app.AGENDAMEDICOTURNO.AgendaMedicoTurno;
+import com.turnos.app.HELPERS.FechaHelper;
 import com.turnos.app.HELPERS.TurnoHelper;
 
 @SpringBootTest
@@ -70,7 +73,7 @@ class TurnosApiApplicationTests {
 	public void rangoDeAgendaMedicoPermitida() {
 		
 		int anioAgenda = 2020;
-		int mesAgenda = 8;
+		int mesAgenda = 7;
 		int diaAgenda = 1;
 		
 		GregorianCalendar calendarioAgenda = (GregorianCalendar) GregorianCalendar.getInstance();
@@ -87,6 +90,31 @@ class TurnosApiApplicationTests {
 		Date periodoAgendaHastaDosMeses = calendarioAhora.getTime(); 
 
 		assertEquals(true, periodoAgenda.compareTo(ahora) > 0 &&  periodoAgenda.compareTo(periodoAgendaHastaDosMeses) <= 0 );
+		
+	}
+	
+	@Test
+	public void testFechaJaponesAddMMyyyy() {
+		
+		String  fechaFormateada = FechaHelper.convertirFechaAFormatoddMMyyyy("20200622");
+
+		assertEquals(fechaFormateada, "22/06/2020");
+		
+	}
+	
+	@Test
+	public void puedeModificarFechaAgenda() throws Exception {
+		
+		AgendaMedicoFechaServiceImpl agendaMedicoFechaService = new AgendaMedicoFechaServiceImpl();
+		
+		AgendaMedico agendaMedico = new AgendaMedico();
+		
+		agendaMedico.setAnio(2020);
+		agendaMedico.setMes(6);
+				
+		boolean res = agendaMedicoFechaService.puedeModificarFechaAgenda(agendaMedico, "20200629");
+		
+		assertEquals(true, res);
 		
 	}
 }
