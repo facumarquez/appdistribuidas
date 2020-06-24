@@ -23,19 +23,6 @@ public class AgendaMedicoREST {
 	private MedicosServiceImpl medicoService;
     
 	
-	
-// 	// GET: http://localhost:1317/AgendaMedicos/1
-// 	@RequestMapping(value="/{idAgendaMedico}")
-//	public ResponseEntity<AgendaMedico> getAgendaMedicoByID(@PathVariable("idAgendaMedico") Long id){		
-//		Optional<AgendaMedico> optionalAgendaMedico = agendaMedicoService.findById(id);
-//		if(optionalAgendaMedico.isPresent()) {
-//			return ResponseEntity.ok(optionalAgendaMedico.get());
-//		}
-//		else {
-//			return ResponseEntity.noContent().build();
-//		}	
-//	}
-
  	// POST: http://localhost:1317/AgendaMedicos
 	@PostMapping
 	public ResponseEntity<AgendaMedico> crearAgendaMedico(@RequestBody AgendaMedico agendaMedico) throws Exception{
