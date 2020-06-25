@@ -3,6 +3,8 @@ package com.turnos.app.AGENDAMEDICOFECHA;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashSet;
@@ -47,6 +49,12 @@ public class AgendaMedicoFechaServiceImpl implements AgendaMedicoFechaService{
 	public List<AgendaMedicoFecha> findByFechaAndEspecialidad(String fecha,Especialidad especialidad) {
 		return agendaMedicoFechaDAO.findByFechaAndEspecialidad(fecha, especialidad);
 	}
+	
+	@Transactional(readOnly = true)
+	public Optional<AgendaMedicoFecha> findByFechaAndAgendaMedico(String fecha,AgendaMedico agendaMedico) {
+		return agendaMedicoFechaDAO.findByFechaAndAgendaMedico(fecha, agendaMedico);
+	}
+	
 	
 	
 	@Override
@@ -147,5 +155,24 @@ public class AgendaMedicoFechaServiceImpl implements AgendaMedicoFechaService{
 		}else {
 			throw new Exception("Sólo puede modificar las fechas de la semana siguiente a la actual");
 		}
+	}
+	
+	public List<AgendaMedicoTurno> buscarTurnosPorFecha(AgendaMedicoFecha fecha) {
+		
+		List<AgendaMedicoHorario> horarios = fecha.getHorarios();
+		List<AgendaMedicoTurno> turnos = new ArrayList<AgendaMedicoTurno>();
+		
+		for (AgendaMedicoHorario horario : horarios) {
+			turnos.addAll(horario.getTurnos());
+		}
+		
+		//ordeno los turnos por campo desde
+ 		Comparator<AgendaMedicoTurno> comparadorTurnos = (AgendaMedicoTurno t1, AgendaMedicoTurno t2) -> {
+ 			return (t1.getTurnoDesde().compareTo(t2.getTurnoDesde()));
+ 		};
+ 		
+ 		Collections.sort(turnos, comparadorTurnos);
+ 		
+		return turnos;
 	}
 }

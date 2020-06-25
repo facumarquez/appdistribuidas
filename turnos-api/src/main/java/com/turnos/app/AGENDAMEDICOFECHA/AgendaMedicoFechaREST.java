@@ -251,4 +251,19 @@ public class AgendaMedicoFechaREST {
 			return ResponseEntity.ok(false);
 		}
 	}
+ 	
+ 	// GET: http://localhost:1317/AgendaMedicoFechas/1/Turnos
+ 	@RequestMapping(value="/{idAgendaMedicoFecha}/Turnos")
+ 	public ResponseEntity<List<AgendaMedicoTurno>> obtenerTurnosDeFecha(@PathVariable("idAgendaMedicoFecha") long idAgendaMedicoFecha){	
+
+ 		Optional <AgendaMedicoFecha> fecha = agendaMedicoFechaService.findById(idAgendaMedicoFecha);
+ 		
+ 		if(fecha.isPresent()) {
+ 			List<AgendaMedicoTurno> turnos = agendaMedicoFechaService.buscarTurnosPorFecha(fecha.get());
+			return ResponseEntity.ok(turnos);
+		}
+		else {
+			return ResponseEntity.noContent().build();
+		}
+	}
 }

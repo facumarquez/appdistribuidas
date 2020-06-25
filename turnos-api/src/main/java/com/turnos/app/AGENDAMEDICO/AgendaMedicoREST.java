@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.turnos.app.AGENDAMEDICOFECHA.AgendaMedicoFecha;
+import com.turnos.app.AGENDAMEDICOFECHA.AgendaMedicoFechaServiceImpl;
 import com.turnos.app.MEDICO.Medico;
 import com.turnos.app.MEDICO.MedicosServiceImpl;
 
@@ -21,6 +23,9 @@ public class AgendaMedicoREST {
     
     @Autowired
 	private MedicosServiceImpl medicoService;
+    
+    @Autowired
+	private AgendaMedicoFechaServiceImpl agendaMedicoFechaService;
     
 	
  	// POST: http://localhost:1317/AgendaMedicos
@@ -56,7 +61,27 @@ public class AgendaMedicoREST {
 			agendaMedicoService.confirmarAgenda(idAgendaMedico);
 			return true;
 		} catch (Exception e) {
+			//TODO: arreglar
 			return false;
 		}		
 	}
+	
+	// GET: http://localhost:1317/AgendaMedico/1/20200101
+	 @RequestMapping(value="/{idAgendaMedico}/{fecha}")
+	 public ResponseEntity<AgendaMedicoFecha> obtenerFechaEspecificaDeAgenda(@PathVariable("idAgendaMedico") long idAgendaMedico,
+			 																		@PathVariable("fecha") String fecha){	
+
+		Optional <AgendaMedico> agendaMedico = agendaMedicoService.findById(idAgendaMedico);
+		
+		if (agendaMedico.isPresent()){
+			Optional <AgendaMedicoFecha> agendaMedicofecha = agendaMedicoFechaService.findByFechaAndAgendaMedico(fecha, agendaMedico.get());
+			if(agendaMedicofecha.isPresent()) {
+				return ResponseEntity.ok(agendaMedicofecha.get());
+			}else {
+				return ResponseEntity.noContent().build();
+			}
+		}else {
+			return ResponseEntity.noContent().build();
+		}
+	 }
 }
