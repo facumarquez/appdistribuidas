@@ -78,6 +78,5 @@ public class AgendaMedicoTurnoREST {
 		
 		agendaMedicoTurnoService.deleteByID(id);
 		return ResponseEntity.ok(null);
-		
 	}
 }

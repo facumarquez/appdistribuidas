@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.turnos.app.AGENDAMEDICOFECHA.AgendaMedicoFecha;
+import com.turnos.app.AGENDAMEDICOFECHA.AgendaMedicoFechaDAO;
 import com.turnos.app.AGENDAMEDICOHORARIO.AgendaMedicoHorario;
 import com.turnos.app.AGENDAMEDICOTURNO.AgendaMedicoTurno;
 import com.turnos.app.AGENDAMEDICOTURNO.AgendaMedicoTurnoDAO;
@@ -25,6 +26,9 @@ public class AgendaMedicoServiceImpl implements AgendaMedicoService {
 	
 	@Autowired
 	AgendaMedicoTurnoDAO agendaMedicoTurnoDAO;
+	
+	@Autowired
+	AgendaMedicoFechaDAO agendaMedicoFechaDAO;
 	
 	
 	public AgendaMedico crearAgenda(AgendaMedico agenda) throws Exception {
@@ -52,7 +56,7 @@ public class AgendaMedicoServiceImpl implements AgendaMedicoService {
 	}
 	
 	@Transactional(rollbackFor = Exception.class,readOnly = true)
-	public ResponseEntity<Void> confirmarAgenda(Long idAgendaMedico) throws Exception {
+	public ResponseEntity<Void> generarTurnos(Long idAgendaMedico) throws Exception {
 		
 		List <AgendaMedicoFecha> fechas = new ArrayList<AgendaMedicoFecha>();
 		List <AgendaMedicoHorario> horarios = new ArrayList<AgendaMedicoHorario>();
@@ -65,15 +69,17 @@ public class AgendaMedicoServiceImpl implements AgendaMedicoService {
 			for (AgendaMedicoFecha fecha : fechas) {
 				horarios = fecha.getHorarios();
 				for (AgendaMedicoHorario horario : horarios) {
-					turnos = TurnoHelper.generarTurnos(horario.getHoraDesde(),horario.getHoraHasta(),horario); 
-					for (AgendaMedicoTurno turno : turnos) {
-						Optional<AgendaMedicoTurno> turnoExistente = agendaMedicoTurnoDAO.findByTurnoDesdeAndTurnoHastaAndAgendaMedicoHorario
-																(turno.getTurnoDesde(), turno.getTurnoHasta(), Optional.of(turno.getAgendaMedicoHorario()));
-						//TODO: ver si ahace falta
-						if (!turnoExistente.isPresent())
-							agendaMedicoTurnoDAO.save(turno);
-						else
-							throw new Exception("Las franjas horarias se superponen. Operación cancelada");
+					if (horario.getTurnos() == null || horario.getTurnos().size() == 0) {
+						turnos = TurnoHelper.generarTurnos(horario.getHoraDesde(),horario.getHoraHasta(),horario); 
+						for (AgendaMedicoTurno turno : turnos) {
+							Optional<AgendaMedicoTurno> turnoExistente = agendaMedicoTurnoDAO.findByTurnoDesdeAndTurnoHastaAndAgendaMedicoHorario
+																	(turno.getTurnoDesde(), turno.getTurnoHasta(), Optional.of(turno.getAgendaMedicoHorario()));
+							//TODO: ver si ahace falta
+							if (!turnoExistente.isPresent())
+								agendaMedicoTurnoDAO.save(turno);
+							else
+								throw new Exception("Las franjas horarias se superponen. Operación cancelada");
+						}	
 					}
 				}
 			}
@@ -87,5 +93,20 @@ public class AgendaMedicoServiceImpl implements AgendaMedicoService {
 	
 	public List<AgendaMedico> findByPeriodo(int mes, int anio) {
 		return agendaMedicoDAO.findByMesAndAnio(mes,anio);
+	}
+	
+	@Transactional(readOnly = false)
+	public Void eliminarFechasHuerfanas(Long idAgendaMedico) {
+		
+		Optional<AgendaMedico> agenda = agendaMedicoDAO.findById(idAgendaMedico);
+		
+		if (agenda.isPresent()) {
+			for (AgendaMedicoFecha fecha : agenda.get().getFechas()) {
+				if(fecha.getHorarios() == null || fecha.getHorarios().size() == 0) {
+					agendaMedicoFechaDAO.deleteById(fecha.getId());
+				}
+			}
+		}
+		return null;
 	}
 }

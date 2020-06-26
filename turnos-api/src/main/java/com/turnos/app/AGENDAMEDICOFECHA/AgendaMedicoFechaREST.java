@@ -234,22 +234,32 @@ public class AgendaMedicoFechaREST {
 	}
 	
  	// GET: http://localhost:1317/AgendaMedicoFechas/20200101/M/Especialidades/1/TurnosDisponibles
- 	@RequestMapping(value="/{fecha}/AgendaMedicos/{idAgendaMedico}/PuedeModificar")
- 	public ResponseEntity<Boolean> puedeModificarLaAgenda(@PathVariable("idAgendaMedico") long idAgendaMedicoFecha,
- 																	@PathVariable("fecha") String fecha) throws Exception{	
+ 	@RequestMapping(value="/{fecha}/AgendaMedicos/{idAgendaMedico}/PuedeModificarAgenda")
+ 	public ResponseEntity<Boolean> puedeModificarLaAgenda(@PathVariable("fecha") String fecha, 
+ 															@PathVariable("idAgendaMedico") long idAgendaMedico) throws Exception{	
 
  		boolean puedeModificar = false;
  		
- 		Optional<AgendaMedicoFecha> agendaMedicoFecha = agendaMedicoFechaService.findById(idAgendaMedicoFecha);
+ 		Optional<AgendaMedico> agendaMedico = agendaMedicoService.findById(idAgendaMedico);
  		
- 		puedeModificar = agendaMedicoFechaService.puedeModificarFechaAgenda(agendaMedicoFecha.get().getAgendaMedico(), fecha);
- 		
- 		if(puedeModificar) {
-			return ResponseEntity.ok(true);
-		}
-		else {
-			return ResponseEntity.ok(false);
-		}
+ 		if (agendaMedico.isPresent()) {
+ 			Optional<AgendaMedicoFecha> agendaMedicoFecha = agendaMedicoFechaService.findByFechaAndAgendaMedico(fecha, agendaMedico.get());
+ 			if (agendaMedicoFecha.isPresent()){
+ 				puedeModificar = agendaMedicoFechaService.puedeModificarFechaAgenda(agendaMedicoFecha.get().getAgendaMedico(), fecha);
+ 		 		
+ 				if(puedeModificar) {
+ 					return ResponseEntity.ok(true);
+ 				}
+ 				else {
+ 					return ResponseEntity.ok(false);
+ 				}
+ 			}else {
+ 				return ResponseEntity.ok(false);
+ 			}
+ 		}else {
+ 			ResponseEntity.ok(false);
+ 		}
+ 		return null;
 	}
  	
  	// GET: http://localhost:1317/AgendaMedicoFechas/1/Turnos

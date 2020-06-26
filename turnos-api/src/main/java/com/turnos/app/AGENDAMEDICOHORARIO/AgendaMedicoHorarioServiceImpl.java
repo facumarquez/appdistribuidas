@@ -41,7 +41,7 @@ public class AgendaMedicoHorarioServiceImpl implements AgendaMedicoHorarioServic
 	}
 	
 	@Override
-	@Transactional(readOnly = false)
+	@Transactional(rollbackFor = Exception.class, readOnly = false)
 	public List<AgendaMedicoHorario> crearHorariosDeAgenda(List <AgendaMedicoHorario> horariosAgenda) {
 		
 		List<AgendaMedicoHorario> horariosCreados = new ArrayList<AgendaMedicoHorario>();
@@ -66,6 +66,8 @@ public class AgendaMedicoHorarioServiceImpl implements AgendaMedicoHorarioServic
 		return agendaMedicoHorarioDAO.findByHoraDesdeAndHoraHastaAndAgendaMedicoFecha(horaDesde, horaHasta, agendaMedicoFecha.get());
 	}
 	
+	//TODO: ver si sacar transactional
+	@Transactional(rollbackFor = Exception.class, readOnly = false)
 	public ResponseEntity<Void> deleteByID(Long idAgendaMedicoHorario) throws Exception {
 		
 		Optional<AgendaMedicoHorario> horario = agendaMedicoHorarioDAO.findById(idAgendaMedicoHorario);

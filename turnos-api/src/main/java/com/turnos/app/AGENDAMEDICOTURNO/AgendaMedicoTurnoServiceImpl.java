@@ -51,6 +51,7 @@ public class AgendaMedicoTurnoServiceImpl implements AgendaMedicoTurnoService{
 		return agendaMedicoTurnoDAO.findByTurnoDesdeAndTurnoHastaAndAgendaMedicoHorario(turnoDesde, turnoHasta, agendaMedicoHorario);
 	}
 	
+	@Transactional(rollbackFor = Exception.class, readOnly = false)
 	public ResponseEntity<Void> deleteByID(Long idAgendaMedicoTurno) throws Exception {
 		
 		Optional<AgendaMedicoTurno> turno = agendaMedicoTurnoDAO.findById(idAgendaMedicoTurno);

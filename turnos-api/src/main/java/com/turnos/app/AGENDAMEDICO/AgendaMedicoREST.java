@@ -3,6 +3,7 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -54,16 +55,14 @@ public class AgendaMedicoREST {
 	}
  	
  	// POST: http://localhost:1317/AgendaMedicos/1/ConfirmarAgenda
-	@PostMapping(value="/{idAgendaMedico}/ConfirmarAgenda")
-	public boolean confirmarAgendaMedico(@PathVariable("idAgendaMedico") Long idAgendaMedico){
+	@PostMapping(value="/{idAgendaMedico}/GenerarTurnos")
+	public boolean generarTurnos(@PathVariable("idAgendaMedico") Long idAgendaMedico) throws Exception{
 		//TODO: validar que el periodo sea mayor o igual al mes del sistema
-		try {
-			agendaMedicoService.confirmarAgenda(idAgendaMedico);
-			return true;
-		} catch (Exception e) {
-			//TODO: arreglar
-			return false;
-		}		
+
+		agendaMedicoService.generarTurnos(idAgendaMedico);
+			
+		return true;
+
 	}
 	
 	// GET: http://localhost:1317/AgendaMedico/1/20200101
@@ -84,4 +83,13 @@ public class AgendaMedicoREST {
 			return ResponseEntity.noContent().build();
 		}
 	 }
+	 
+	//DELETE: http://localhost:1317/AgendaMedico/1/EliminarFechasHuerfanas
+	@DeleteMapping(value="/{idAgendaMedico}/EliminarFechasHuerfanas")
+	public ResponseEntity<Void> eliminarFechasHuerfanas(@PathVariable("idAgendaMedico") Long idAgendaMedico){
+		
+		agendaMedicoService.eliminarFechasHuerfanas(idAgendaMedico);
+		
+		return ResponseEntity.ok(null);
+	}
 }

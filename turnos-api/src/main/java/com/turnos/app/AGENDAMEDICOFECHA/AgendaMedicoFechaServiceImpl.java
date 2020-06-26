@@ -58,7 +58,7 @@ public class AgendaMedicoFechaServiceImpl implements AgendaMedicoFechaService{
 	
 	
 	@Override
-	@Transactional(readOnly = false)
+	@Transactional(rollbackFor = Exception.class, readOnly = false)
 	public List<AgendaMedicoFecha> crearFechasDeAgenda(List <AgendaMedicoFecha> fechasAgenda) throws Exception {
 		
 		List<AgendaMedicoFecha> fechasCreadas = new ArrayList<AgendaMedicoFecha>();
@@ -70,8 +70,10 @@ public class AgendaMedicoFechaServiceImpl implements AgendaMedicoFechaService{
 				fechasCreadas.add(agendaMedicoFechaDAO.save(fecha));
 			}else {
 				if (!fecha.getEspecialidad().getId().equals(fechaEspecifica.get().getEspecialidad().getId())){
-					throw new Exception("No se crearon la/las fechas porque la fecha " + FechaHelper.convertirFechaAFormatoddMMyyyy(fechaEspecifica.get().getFecha()) + 
-																							" ha sido cargada anteriormente con otra especialidad. Seleccione un rango correcto.");
+					throw new Exception("No se crearon la/las fechas porque la fecha " + 
+														FechaHelper.convertirFechaAFormatoddMMyyyy(fechaEspecifica.get().getFecha()) + 
+															" ha sido cargada anteriormente con la especialidad " +
+															 fecha.getEspecialidad().getNombre() + ". Seleccione un rango correcto.");
 				}
 				fechasCreadas.add(fechaEspecifica.get());
 			}

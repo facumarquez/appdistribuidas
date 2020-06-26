@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.turnos.app.AGENDAMEDICOFECHA.AgendaMedicoFecha;
@@ -71,23 +70,6 @@ public class AgendaMedicoHorarioREST {
 		return ResponseEntity.ok(null);
 	}
 	
-    //PUT: http://localhost:1317/AgendaMedicoHorarios/1/
- 	@RequestMapping(value = "/{idAgendaMedicoHorario}/", method = RequestMethod.PUT)
-    public ResponseEntity<AgendaMedicoHorario> modificarHorarioAgenda(@PathVariable("idAgendaMedicoHorario") long idHorario,
-    																								@RequestBody AgendaMedicoHorario nuevoHorario) {
- 		
- 		 Optional<AgendaMedicoHorario> horario = agendaMedicoHorarioService.findById(idHorario);
- 		 if(horario.isPresent()) {
- 			horario.get().setHoraDesde(nuevoHorario.getHoraDesde().trim());
- 			horario.get().setHoraHasta(nuevoHorario.getHoraHasta().trim());
-   			//return ResponseEntity.ok(agendaMedicoHorarioService.guardarHorarioDeAgenda(horario.get()));
-   			//TODO: ver como arrelgar esto....
- 			return ResponseEntity.ok(null);
-   		 }
-   		 else {
-  			return ResponseEntity.noContent().build();
-   		 }	
-    }
  	
  	//TODO:Documentar y probar
 	//DELETE: http://localhost:1317/AgendaMedicoHorarios
