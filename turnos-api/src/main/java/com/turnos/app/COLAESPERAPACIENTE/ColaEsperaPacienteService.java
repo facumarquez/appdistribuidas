@@ -9,6 +9,6 @@ public interface ColaEsperaPacienteService {
 	
 	public ColaEsperaPaciente agregarPacienteAColaDeEspera(ColaEsperaPaciente colaEsperaPaciente);
 	
-	public Optional<ColaEsperaPaciente> findByPacienteAndEspecialidad(Paciente paciente,Especialidad especialidad);
+	public Optional<ColaEsperaPaciente> findByPacienteAndEspecialidadAndFecha(Paciente paciente,Especialidad especialidad,String fecha);
 
 }

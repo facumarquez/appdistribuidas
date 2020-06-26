@@ -10,5 +10,5 @@ import com.turnos.app.PACIENTE.Paciente;
 
 public interface ColaEsperaPacienteDAO extends JpaRepository<ColaEsperaPaciente, Long>  {
 
-	Optional<ColaEsperaPaciente> findByPacienteAndEspecialidad(Paciente paciente, Especialidad especialidad);
+	Optional<ColaEsperaPaciente> findByPacienteAndEspecialidadAndFecha(Paciente paciente, Especialidad especialidad, String fecha);
 }

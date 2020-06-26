@@ -51,7 +51,7 @@ public class AgendaPacienteServiceImpl implements AgendaPacienteService {
 		return agendaPacienteDAO.save(agenda);
 	}
 	
-	@Transactional(readOnly = false)
+	@Transactional(rollbackFor = Exception.class, readOnly = false)
 	public AgendaPaciente guardarAgenda_ReservarTurno(AgendaPaciente agenda) throws Exception {
 		
 		List<AgendaPaciente> agendasDelPaciente = new ArrayList<AgendaPaciente>();
@@ -66,7 +66,7 @@ public class AgendaPacienteServiceImpl implements AgendaPacienteService {
 						(t->t.getTurno().getId().equals(agenda.getTurno().getId())).filter
 						(t->t.getTurno().getEstado().equals(EstadoTurno.DISPONIBLE)).
 						collect(Collectors.toList()); 
-			
+			//si lo retoma se lo reservo......
  			if(turnosAnulado.size() == 1) {
  				AgendaMedicoTurno turno = agenda.getTurno();
  	 			turno.setEstado(EstadoTurno.RESERVADO);
@@ -118,8 +118,14 @@ public class AgendaPacienteServiceImpl implements AgendaPacienteService {
 		return agendaPacienteDAO.findById(id);
 	}
 	
-	@Transactional(readOnly = true)
-	public ColaEsperaPaciente agregarAColaDeEspera(ColaEsperaPaciente colaEspera) {
-		return colaEsperaPacienteDAO.save(colaEspera);
+	@Transactional(readOnly = false)
+	public ColaEsperaPaciente agregarAColaDeEspera(ColaEsperaPaciente colaEspera) throws Exception {
+		
+		Optional<ColaEsperaPaciente> colaExistente = colaEsperaPacienteDAO.findByPacienteAndEspecialidadAndFecha(colaEspera.getPaciente(), colaEspera.getEspecialidad(),
+																										colaEspera.getFecha());
+		if (!colaExistente.isPresent())
+			return colaEsperaPacienteDAO.save(colaEspera);
+		else
+			throw new Exception("Ya se encuentra en cola de espera");
 	}
 }

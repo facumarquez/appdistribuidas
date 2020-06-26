@@ -18,8 +18,8 @@ public class ColaEsperaPacienteServiceImpl implements ColaEsperaPacienteService 
 
 
 	@Transactional(readOnly = true)
-	public Optional<ColaEsperaPaciente> findByPacienteAndEspecialidad(Paciente paciente,Especialidad especialidad) {
-		return colaEsperaPacienteDAO.findByPacienteAndEspecialidad(paciente, especialidad);
+	public Optional<ColaEsperaPaciente> findByPacienteAndEspecialidadAndFecha(Paciente paciente,Especialidad especialidad, String fecha) {
+		return colaEsperaPacienteDAO.findByPacienteAndEspecialidadAndFecha(paciente, especialidad, fecha);
 	}
 
 
