@@ -110,7 +110,7 @@ public class AgendaPacienteREST {
  			
  			if(!TurnoHelper.sePuedeAnularElTurnoSinGenerarCargos(agendaPaciente.get().getFechaTurno(), agendaPaciente.get().getTurnoDesde())) {
  				Optional.of(agendaPacienteService.anularTurnoAgenda(agendaPaciente.get()));
- 				throw new Exception("Se generarán cargos en su cte. cte. por no anular el turno 12hs antes");
+ 				throw new Exception("El turno ha sido anulado. Se generarán cargos dado que el mismo no ha sido cancelado 12 hs antes.");
  			}else {
  				agendaPaciente  = Optional.of(agendaPacienteService.anularTurnoAgenda(agendaPaciente.get()));
  				return ResponseEntity.ok(agendaPaciente.get());
