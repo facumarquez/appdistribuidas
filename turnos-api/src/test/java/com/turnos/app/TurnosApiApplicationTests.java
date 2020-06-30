@@ -2,6 +2,7 @@ package com.turnos.app;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -39,8 +40,8 @@ class TurnosApiApplicationTests {
 		
 		Date ahora = new Date();
 		
-		String fecha = "20200618";
-		String horario = "05:29";
+		String fecha = "20200630";
+		String horario = "17:00";
 		
 		int anio = Integer.valueOf(fecha.substring(0,4));
 		int mes = Integer.valueOf(fecha.substring(4,6))-1;
@@ -110,11 +111,20 @@ class TurnosApiApplicationTests {
 		AgendaMedico agendaMedico = new AgendaMedico();
 		
 		agendaMedico.setAnio(2020);
-		agendaMedico.setMes(6);
+		agendaMedico.setMes(7);
 				
-		boolean res = agendaMedicoFechaService.puedeModificarFechaAgenda(agendaMedico, "20200629");
+		boolean res = agendaMedicoFechaService.puedeModificarFechaAgenda(agendaMedico, "20200708");
 		
 		assertEquals(true, res);
+		
+	}
+	
+	@Test
+	public void compararHorarios() throws ParseException {
+		
+		String hora1 = "09:00"; 
+		String hora2 = "10:00";
+		assertEquals(true, (hora1.compareTo(hora2) < 0));
 		
 	}
 }
