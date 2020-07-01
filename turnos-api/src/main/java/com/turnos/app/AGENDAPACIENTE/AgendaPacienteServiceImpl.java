@@ -67,7 +67,7 @@ public class AgendaPacienteServiceImpl implements AgendaPacienteService {
 						(t->t.getTurno().getEstado().equals(EstadoTurno.DISPONIBLE)).
 						collect(Collectors.toList()); 
 			//si lo retoma se lo reservo......
- 			if(turnosAnulado.size() >= 1) {
+ 			if(turnosAnulado.size() == 1) {
  				AgendaMedicoTurno turno = agenda.getTurno();
  	 			turno.setEstado(EstadoTurno.RESERVADO);
  	 			agendaMedicoTurnoDAO.save(turno);
