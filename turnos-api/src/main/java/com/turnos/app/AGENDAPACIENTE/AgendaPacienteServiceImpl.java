@@ -67,7 +67,7 @@ public class AgendaPacienteServiceImpl implements AgendaPacienteService {
 						(t->t.getTurno().getEstado().equals(EstadoTurno.DISPONIBLE)).
 						collect(Collectors.toList()); 
 			//si lo retoma se lo reservo......
- 			if(turnosAnulado.size() == 1) {
+ 			if(turnosAnulado.size() >= 1) {
  				AgendaMedicoTurno turno = agenda.getTurno();
  	 			turno.setEstado(EstadoTurno.RESERVADO);
  	 			agendaMedicoTurnoDAO.save(turno);
@@ -77,14 +77,15 @@ public class AgendaPacienteServiceImpl implements AgendaPacienteService {
  			
 			agendasDelPaciente = paciente.get().getAgendas();
 			
+			//valido que no tenga otro turno en el mismo horario...
 			List<AgendaPaciente> turnosSuperpuestos = agendasDelPaciente.stream().filter
 						(t->t.getFechaTurno().equals(agenda.getFechaTurno())).filter
 							(t-> t.getTurnoDesde().equals(agenda.getTurnoDesde())).filter
-							(t-> t.getEstadoTurno().equals(EstadoTurno.DISPONIBLE))
+							(t-> t.getEstadoTurno().equals(EstadoTurno.RESERVADO) || t.getEstadoTurno().equals(EstadoTurno.CONFIRMADO))
 							.collect(Collectors.toList()); 
 			
  			
- 			if(turnosSuperpuestos.size() == 1) {
+ 			if(turnosSuperpuestos.size() >= 1) {
  				throw new Exception("Ya posee un turno en el mismo horario");
  			}
  			
@@ -93,10 +94,10 @@ public class AgendaPacienteServiceImpl implements AgendaPacienteService {
  			List<AgendaPaciente> turnosMismaEspecialidad = agendasDelPaciente.stream().filter
 					(t->t.getEspecialidad().getId().equals(agenda.getEspecialidad().getId())).filter
 						(t-> t.getFechaTurno().equals(agenda.getFechaTurno())).filter
-						(t-> t.getEstadoTurno().equals(EstadoTurno.DISPONIBLE))
+						(t-> t.getEstadoTurno().equals(EstadoTurno.RESERVADO) || t.getEstadoTurno().equals(EstadoTurno.CONFIRMADO))
 						.collect(Collectors.toList()); 
  			
- 			if(turnosMismaEspecialidad.size() == 1) {
+ 			if(turnosMismaEspecialidad.size() >= 1) {
  				throw new Exception("Ya posee un turno de la especialidad seleccionada en el día");
  			}
  			
