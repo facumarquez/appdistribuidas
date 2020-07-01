@@ -35,11 +35,15 @@ public class AgendaPacienteServiceImpl implements AgendaPacienteService {
 	ColaEsperaPacienteDAO colaEsperaPacienteDAO;
 	
 	@Transactional(readOnly = false)
-	public AgendaPaciente anularTurnoAgenda(AgendaPaciente agenda) {
+	public Void anularTurnoAgenda(AgendaPaciente agenda) {
 
 		agenda.getTurno().setEstado(EstadoTurno.DISPONIBLE);
 		
-		return agendaPacienteDAO.save(agenda);
+		agendaPacienteDAO.save(agenda);
+		
+		agendaPacienteDAO.deleteById(agenda.getId());
+		
+		return null;
 	}
 	
 	public AgendaPaciente confirmarTurnoAgenda(AgendaPaciente agenda) throws Exception {
@@ -60,21 +64,6 @@ public class AgendaPacienteServiceImpl implements AgendaPacienteService {
 		
 		if (paciente.isPresent()) {
 			
-			agendasDelPaciente = paciente.get().getAgendas();
-			
-			List<AgendaPaciente> turnosAnulado = agendasDelPaciente.stream().filter
-						(t->t.getTurno().getId().equals(agenda.getTurno().getId())).filter
-						(t->t.getTurno().getEstado().equals(EstadoTurno.DISPONIBLE)).
-						collect(Collectors.toList()); 
-			//si lo retoma se lo reservo......
- 			if(turnosAnulado.size() == 1) {
- 				AgendaMedicoTurno turno = agenda.getTurno();
- 	 			turno.setEstado(EstadoTurno.RESERVADO);
- 	 			agendaMedicoTurnoDAO.save(turno);
- 	 			agenda.setTurno(turno);
- 	 			return agenda;
- 			}
- 			
 			agendasDelPaciente = paciente.get().getAgendas();
 			
 			//valido que no tenga otro turno en el mismo horario...

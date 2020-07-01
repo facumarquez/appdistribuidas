@@ -72,10 +72,6 @@ public class AgendaPacienteREST {
  		
  		 Optional<AgendaPaciente> agendaPaciente = agendaPacienteService.findById(idAgendaPaciente);
  		 if(agendaPaciente.isPresent()) {
-  			if (agendaPaciente.get().getTurno().getEstado().equals(EstadoTurno.DISPONIBLE)) {
-				 throw new Exception("No puede confirmar un turno anulado");
-			}
-  			
  			if (agendaPaciente.get().getTurno().getEstado().equals(EstadoTurno.CANCELADO)){
  				 throw new Exception("El turno ha sido cancelado por el sistema debido a un problema con el profesional. "
  				 		+ "Será contactado para su reprogramación");
@@ -93,27 +89,20 @@ public class AgendaPacienteREST {
 		return null;
     }
  	
-    //PUT: http://localhost:1317/AgendaPacientes/1/AnularTurno
- 	@RequestMapping(value = "/{idAgendaPaciente}/AnularTurno", method = RequestMethod.PUT)
-    public ResponseEntity<AgendaPaciente> anularTurnoPaciente(@PathVariable("idAgendaPaciente") long idAgendaPaciente) throws Exception {
+    //POST: http://localhost:1317/AgendaPacientes/1/AnularTurno
+ 	@RequestMapping(value = "/{idAgendaPaciente}/AnularTurno", method = RequestMethod.POST)
+    public ResponseEntity<Void> anularTurnoPaciente(@PathVariable("idAgendaPaciente") long idAgendaPaciente) throws Exception {
  		
  		 Optional<AgendaPaciente> agendaPaciente = agendaPacienteService.findById(idAgendaPaciente);
+ 		
  		 if(agendaPaciente.isPresent()) {
- 			if (agendaPaciente.get().getTurno().getEstado().equals(EstadoTurno.DISPONIBLE)){
- 				throw new Exception("El turno ya ha sido anulado");
- 			}
- 			
- 			if (agendaPaciente.get().getTurno().getEstado().equals(EstadoTurno.CANCELADO)){
- 				throw new Exception("No se puede anular un turno cancelado");
- 			}
- 			
- 			
+  			
  			if(!TurnoHelper.sePuedeAnularElTurnoSinGenerarCargos(agendaPaciente.get().getFechaTurno(), agendaPaciente.get().getTurnoDesde())) {
- 				Optional.of(agendaPacienteService.anularTurnoAgenda(agendaPaciente.get()));
+ 				agendaPacienteService.anularTurnoAgenda(agendaPaciente.get());
  				throw new Exception("El turno ha sido anulado. Se generarán cargos dado que el mismo no ha sido cancelado 12 hs antes.");
  			}else {
- 				agendaPaciente  = Optional.of(agendaPacienteService.anularTurnoAgenda(agendaPaciente.get()));
- 				return ResponseEntity.ok(agendaPaciente.get());
+ 				agendaPacienteService.anularTurnoAgenda(agendaPaciente.get());
+ 				return ResponseEntity.ok(null);
  			}
  		 }
  		 else {
