@@ -1,4 +1,5 @@
 package com.turnos.app.ESPECIALIDAD;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -22,7 +23,16 @@ public class EspecialidadesREST {
 	@GetMapping
 	public ResponseEntity<List<Especialidad>> getEspecialidades(){		
 		List<Especialidad> especialidades = especialidadesDAO.findAll();
-		return ResponseEntity.ok(especialidades);
+		
+		List<Especialidad> especialidadesConMedicosAsignados = new ArrayList<Especialidad>();
+				
+		for (Especialidad especialidad : especialidades) {
+			if (especialidad.getMedicos() != null && especialidad.getMedicos().size() > 0) {
+				especialidadesConMedicosAsignados.add(especialidad);
+			}
+		}
+		
+		return ResponseEntity.ok(especialidadesConMedicosAsignados);
 	}
 	
 	// GET: http://localhost:1317/Especialidades/1

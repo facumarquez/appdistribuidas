@@ -2,11 +2,9 @@ package com.turnos.app.AGENDAMEDICOFECHA;
 
 import java.time.LocalTime;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
@@ -73,7 +71,7 @@ public class AgendaMedicoFechaServiceImpl implements AgendaMedicoFechaService{
 					throw new Exception("No se crearon la/las fechas porque la fecha " + 
 														FechaHelper.convertirFechaAFormatoddMMyyyy(fechaEspecifica.get().getFecha()) + 
 															" ha sido cargada anteriormente con la especialidad " +
-															 fecha.getEspecialidad().getNombre() + ". Seleccione un rango correcto.");
+															fechaEspecifica.get().getEspecialidad().getNombre() + ". Seleccione un rango correcto.");
 				}
 				fechasCreadas.add(fechaEspecifica.get());
 			}
@@ -135,28 +133,6 @@ public class AgendaMedicoFechaServiceImpl implements AgendaMedicoFechaService{
 			}
 		}
 		return horarios;
-	}
-	
-	public boolean puedeModificarFechaAgenda(AgendaMedico agendaMedico,String fecha) throws Exception {
-		
-		Calendar calendario = Calendar.getInstance();
-		
-		int mes = calendario.get(Calendar.MONTH) + 1;
-		
-		if(agendaMedico.getMes() != mes) {
-			return true;
-		}
-		
-		calendario.add((GregorianCalendar.DAY_OF_MONTH), 7);
-		
-		Date fechaConSieteDiasAgregados = calendario.getTime();
-		String fechaConSieteDiasAgregadosFormateada = FechaHelper.convertirFechaAFormatoJapones(fechaConSieteDiasAgregados);
-		
-		if(fecha.compareTo(fechaConSieteDiasAgregadosFormateada) >= 0) {
-			return true;
-		}else {
-			throw new Exception("Sólo puede modificar las fechas de la semana siguiente a la actual");
-		}
 	}
 	
 	public List<AgendaMedicoTurno> buscarTurnosPorFecha(AgendaMedicoFecha fecha) {

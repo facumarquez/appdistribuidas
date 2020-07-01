@@ -79,7 +79,9 @@ public class AgendaPacienteServiceImpl implements AgendaPacienteService {
 			
 			List<AgendaPaciente> turnosSuperpuestos = agendasDelPaciente.stream().filter
 						(t->t.getFechaTurno().equals(agenda.getFechaTurno())).filter
-							(t-> t.getTurnoDesde().equals(agenda.getTurnoDesde())).collect(Collectors.toList()); 
+							(t-> t.getTurnoDesde().equals(agenda.getTurnoDesde())).filter
+							(t-> t.getEstadoTurno().equals(EstadoTurno.DISPONIBLE))
+							.collect(Collectors.toList()); 
 			
  			
  			if(turnosSuperpuestos.size() == 1) {
@@ -90,7 +92,9 @@ public class AgendaPacienteServiceImpl implements AgendaPacienteService {
  			
  			List<AgendaPaciente> turnosMismaEspecialidad = agendasDelPaciente.stream().filter
 					(t->t.getEspecialidad().getId().equals(agenda.getEspecialidad().getId())).filter
-						(t-> t.getFechaTurno().equals(agenda.getFechaTurno())).collect(Collectors.toList()); 
+						(t-> t.getFechaTurno().equals(agenda.getFechaTurno())).filter
+						(t-> t.getEstadoTurno().equals(EstadoTurno.DISPONIBLE))
+						.collect(Collectors.toList()); 
  			
  			if(turnosMismaEspecialidad.size() == 1) {
  				throw new Exception("Ya posee un turno de la especialidad seleccionada en el día");

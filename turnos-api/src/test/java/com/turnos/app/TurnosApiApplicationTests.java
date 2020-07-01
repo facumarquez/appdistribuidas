@@ -12,8 +12,6 @@ import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import com.turnos.app.AGENDAMEDICO.AgendaMedico;
-import com.turnos.app.AGENDAMEDICOFECHA.AgendaMedicoFechaServiceImpl;
 import com.turnos.app.AGENDAMEDICOTURNO.AgendaMedicoTurno;
 import com.turnos.app.HELPERS.FechaHelper;
 import com.turnos.app.HELPERS.TurnoHelper;
@@ -100,22 +98,6 @@ class TurnosApiApplicationTests {
 		String  fechaFormateada = FechaHelper.convertirFechaAFormatoddMMyyyy("20200622");
 
 		assertEquals(fechaFormateada, "22/06/2020");
-		
-	}
-	
-	@Test
-	public void puedeModificarFechaAgenda() throws Exception {
-		
-		AgendaMedicoFechaServiceImpl agendaMedicoFechaService = new AgendaMedicoFechaServiceImpl();
-		
-		AgendaMedico agendaMedico = new AgendaMedico();
-		
-		agendaMedico.setAnio(2020);
-		agendaMedico.setMes(7);
-				
-		boolean res = agendaMedicoFechaService.puedeModificarFechaAgenda(agendaMedico, "20200708");
-		
-		assertEquals(true, res);
 		
 	}
 	
