@@ -76,7 +76,7 @@ public class AgendaMedicoHorarioServiceImpl implements AgendaMedicoHorarioServic
 			List<AgendaMedicoTurno> turnosDelHorario = horario.get().getTurnos();
 			if (turnosDelHorario != null) {
 				for (AgendaMedicoTurno turno : turnosDelHorario) {
-					if (turno.getEstado().equals(EstadoTurno.RESERVADO)) {
+					if (turno.getEstado().equals(EstadoTurno.RESERVADO) || turno.getEstado().equals(EstadoTurno.CONFIRMADO)) {
 						throw new Exception("El turno de las " + turno.getTurnoDesde() + " del día " +
 								FechaHelper.convertirFechaAFormatoddMMyyyy(turno.getAgendaMedicoHorario().getAgendaMedicoFecha().getFecha()) +
 								" está reservado por un paciente.");
