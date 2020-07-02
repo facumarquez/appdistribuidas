@@ -30,7 +30,6 @@ public class AgendaMedicoServiceImpl implements AgendaMedicoService {
 	@Autowired
 	AgendaMedicoFechaDAO agendaMedicoFechaDAO;
 	
-	
 	public AgendaMedico crearAgenda(AgendaMedico agenda) throws Exception {
 		
 		if(TurnoHelper.rangoDeAgendaMedicoPermitida(agenda.getAnio(), agenda.getMes())) {

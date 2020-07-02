@@ -14,7 +14,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.turnos.app.AGENDAMEDICOFECHA.AgendaMedicoFecha;
+import com.turnos.app.AGENDAMEDICOFECHA.AgendaMedicoFechaDAO;
 import com.turnos.app.AGENDAMEDICOHORARIO.AgendaMedicoHorario;
+import com.turnos.app.AGENDAMEDICOHORARIO.AgendaMedicoHorarioDAO;
 
 @Service
 @Transactional(readOnly = false)
@@ -22,6 +24,12 @@ public class AgendaMedicoTurnoServiceImpl implements AgendaMedicoTurnoService{
 	
 	@Autowired
 	AgendaMedicoTurnoDAO agendaMedicoTurnoDAO;
+	
+	@Autowired
+	AgendaMedicoFechaDAO agendaMedicoFechaDAO;
+	
+	@Autowired
+	AgendaMedicoHorarioDAO agendaMedicoHorarioDAO;
 	
 	//TODO: ver mas adelante si hace falta....
 	@Transactional(readOnly = false)
@@ -60,7 +68,19 @@ public class AgendaMedicoTurnoServiceImpl implements AgendaMedicoTurnoService{
 			if (turno.get().getEstado().equals(EstadoTurno.RESERVADO) || turno.get().getEstado().equals(EstadoTurno.CONFIRMADO)) {
 				throw new Exception("No se puede eliminar un turno reservado por un paciente");
 			}else {
+				AgendaMedicoHorario horarioTurno = turno.get().getAgendaMedicoHorario();
+				AgendaMedicoFecha fechaTurno = turno.get().getAgendaMedicoHorario().getAgendaMedicoFecha();
+				
+				List<AgendaMedicoTurno> turnosHorario = horarioTurno.getTurnos();
+				turnosHorario.remove(turno.get());
 				agendaMedicoTurnoDAO.deleteById(idAgendaMedicoTurno);
+				if(turnosHorario == null || turnosHorario.size() == 0) {
+					agendaMedicoHorarioDAO.deleteById(horarioTurno.getId());
+					fechaTurno.getHorarios().remove(horarioTurno);
+					if (fechaTurno.getHorarios() == null || fechaTurno.getHorarios().size() == 0) {
+						agendaMedicoFechaDAO.deleteById(fechaTurno.getId());
+					}
+				}
 			}
 		}else {
 			throw new Exception("Error al obtener el turno");
