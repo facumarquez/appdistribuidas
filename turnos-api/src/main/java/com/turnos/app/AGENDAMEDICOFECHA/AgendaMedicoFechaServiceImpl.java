@@ -132,6 +132,14 @@ public class AgendaMedicoFechaServiceImpl implements AgendaMedicoFechaService{
 				horarios.addAll(fechaBuscada.getHorarios());
 			}
 		}
+		
+		//ordeno los horarios por fecha y hora desde
+ 		Comparator<AgendaMedicoHorario> comparadorHorarios = (AgendaMedicoHorario h1, AgendaMedicoHorario h2) -> {
+ 			return ((h1.getAgendaMedicoFecha().getFecha() + h1.getHoraDesde()).compareTo((h2.getAgendaMedicoFecha().getFecha() + h2.getHoraDesde())));
+ 		};
+ 		
+ 		Collections.sort(horarios, comparadorHorarios);
+ 		
 		return horarios;
 	}
 	
