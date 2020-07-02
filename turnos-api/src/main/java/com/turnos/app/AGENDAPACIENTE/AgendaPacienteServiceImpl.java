@@ -70,7 +70,7 @@ public class AgendaPacienteServiceImpl implements AgendaPacienteService {
 			List<AgendaPaciente> turnosSuperpuestos = agendasDelPaciente.stream().filter
 						(t->t.getFechaTurno().equals(agenda.getFechaTurno())).filter
 							(t-> t.getTurnoDesde().equals(agenda.getTurnoDesde())).filter
-							(t-> t.getEstadoTurno().equals(EstadoTurno.RESERVADO) || t.getEstadoTurno().equals(EstadoTurno.CONFIRMADO))
+							(t-> t.getEstadoTurno().equals(EstadoTurno.RESERVADO.toString()) || t.getEstadoTurno().equals(EstadoTurno.CONFIRMADO.toString()))
 							.collect(Collectors.toList()); 
 			
  			
@@ -83,7 +83,7 @@ public class AgendaPacienteServiceImpl implements AgendaPacienteService {
  			List<AgendaPaciente> turnosMismaEspecialidad = agendasDelPaciente.stream().filter
 					(t->t.getEspecialidad().getId().equals(agenda.getEspecialidad().getId())).filter
 						(t-> t.getFechaTurno().equals(agenda.getFechaTurno())).filter
-						(t-> t.getEstadoTurno().equals(EstadoTurno.RESERVADO) || t.getEstadoTurno().equals(EstadoTurno.CONFIRMADO))
+						(t-> t.getEstadoTurno().equals(EstadoTurno.RESERVADO.toString()) || t.getEstadoTurno().equals(EstadoTurno.CONFIRMADO.toString()))
 						.collect(Collectors.toList()); 
  			
  			if(turnosMismaEspecialidad.size() >= 1) {
